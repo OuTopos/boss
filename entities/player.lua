@@ -35,19 +35,21 @@ function player.new(map, x, y, z)
 	self.fixtures.anchor:getBody():setFixedRotation(true)
 	self.fixtures.anchor:setUserData({type = "player", callbacks = self})
 
-
 	self.test = {}
 
 	function self.test.beginContact(a, b, contact)
 		print("JADÅ!!!")
 	end
 
-
 	function self.setJoystick(joystick)
 		self.joystick = joystick
 	end
 
+	self.abilities = {}
 
+	function self.setAbility(slot, ability)
+		self.abilities[slot] = ability
+	end
 
 	self.weapon = {}
 	self.weapon.data = {}
@@ -60,8 +62,6 @@ function player.new(map, x, y, z)
 	self.fixtures.weapon:setUserData(self.weapon.data)
 	self.fixtures.weapon:setSensor(true)
 	self.fixtures.weapon:setMask(1)
-
-
 
 	-- Movement variables
 	self.velocity = 700 * self.scale
@@ -78,84 +78,36 @@ function player.new(map, x, y, z)
 	-- ANIMATION
 	local animation = yama.animations.new()
 
-	-- SPRITE
-	--local tileset = "LPC/body/male/light"
-	--images.quads.add(tileset, self.width, self.height)
-
 	local tileset = yama.assets.tilesets["body"]
-	print(tileset.tiles[1])
 	local sprite = scene.newSceneEntity()
+
 	sprite.drawable = tileset.tiles[1]
 	sprite.normalmap = yama.assets.loadImage("lightingtest/body_normal")
 	sprite.depthmap = yama.assets.loadImage("lightingtest/body_depth")
-
-
 
 	local tilesetArrow = "directionarrow"
 	--images.load(tilesetArrow):setFilter("linear", "linear")
 	local spriteArrow = yama.buffers.newDrawable(yama.assets.loadImage(tilesetArrow), self.x, self.y-16, 640, 1, self.sx, self.sy, -24, 12)
 	--sprite.shader = glow_effect
 
-	--[[local fire = love.graphics.newImage("images/part2.png");
-
-	self.p = love.graphics.newParticleSystem(fire, 1000)
-	self.p:setEmissionRate(1000)
-	self.p:setSpeed(300, 400)
-	self.p:setSizes(2, 1)
-	self.p:setColors(220, 105, 20, 255, 194, 30, 18, 0)
-	self.p:setPosition(400, 300)
-	self.p:setLifetime(0.1)
-	self.p:setParticleLife(0.2)
-	self.p:setDirection(0)
-	self.p:setSpread(360)
-	self.p:setTangentialAcceleration(1000)
-	self.p:setRadialAcceleration(-2000)
-	self.p:stop()
-
-	self.spores = yama.buffers.newDrawable(self.p, 0, 0, 24)
-	self.spores.blendmode = "additive"
-	--]]
-	
-	--table.insert(bufferBatch.data, self.spores)
 	table.insert(bufferBatch.data, sprite)
-	--table.insert(bufferBatch.data, self.fx)
-
-	--local tilesetOversized = "tilesets/lpcfemaletest"
-	--local spriteOversized = yama.buffers.newSprite(images.load(tilesetOversized), images.quads.data[tilesetOversized][1], x-64, y+radius-64, z, r, sx, sy, ox, oy)
-	
-	--table.insert(bufferBatch.data, spriteOversized)
-	
-	-- Physics
-	--local hitbox = physics.newObject(love.physics.newBody(vp.map.data.world, x, y, "dynamic"), love.physics.newRectangleShape(0, -8, 28, 48), self, true)
-
-	
-	--self.fixtures.weapon:getBody():setActive(false)
-
-	--joint = love.physics.newDistanceJoint( anchor:getBody(), self.fixtures.weapon:getBody(), -10, -10, 10, 10, false)
-
-	--local self.fixtures.weapon2 = love.physics.newFixture(love.physics.newBody(self.world, x, y-radius, "dynamic"), love.physics.newChainShape(false, 0, 0, 64, 0), 0)
-
-	--self.fixtures.weapon2:getBody():setActive(false)
-	--hitbox:setUserData(self)
-	--self.fixtures.weapon2:setSensor(true)
-
-	-- PATROL
-	--local patrol = yama.patrols.new(true, 32)
-	--patrol.set("1")
-
-	
-
-
 
 	function self.updateInput(dt)
 		local nx, ny = 0, 0
 		local fx, fy = 0, 0
 		local vmultiplier = 1
+
 		animation.timescale = 1
+
 		self.state = "stand"
 		self.fixtures.weapon:setMask(1)
 
 		if self.state == "stand" or self.state == "walk" then
+			if self.joystick:isGamepadDown("leftshoulder") then				
+				-- melee				
+			elseif self.joystick:isGamepadDown("rightshoulder") then
+				-- shoot
+			end
 
 			if love.keyboard.isDown("lctrl") or self.joystick:isDown(1) then
 				self.state = "sword"
@@ -205,8 +157,6 @@ function player.new(map, x, y, z)
 			end
 		end
 
-		
-
 		if self.state == "walk" then
 			if love.keyboard.isDown("lshift") or self.joystick:isDown(5) then
 				vmultiplier = vmultiplier * 3
@@ -221,7 +171,6 @@ function player.new(map, x, y, z)
 		if self.state == "sword" then
 			animation.timescale = 0.1
 		end
-
 
 		--if yama.tools.getDistance(0, 0, love.joystick.getAxis(self.joystick, 4), love.joystick.getAxis(self.joystick, 5)) > 0.2 then
 		if false then
@@ -267,14 +216,6 @@ function player.new(map, x, y, z)
 			end
 		end
 
-				--if entity.isTree then
-					--print("adding entity to triggers")
-					--local d, x1, y1, x2, y2 = love.physics.getDistance(b, anchor.fixture)
-					--d = getDistance(a:getBody():getX(), a:getBody():getY(), b:getBody():getX(), b:getBody():getY())
-					--print(d)
-					--triggers.add(entity)
-				--end
-		--end
 		userdata = nil
 	end
 
@@ -299,13 +240,7 @@ function player.new(map, x, y, z)
 	end
 	function self.getYvel()
 		return yvel
-	end
-	--function self.getDirection()
-	--	return self.direction
-	--end
-
-
-
+	end 
 
 	function self.teleport(mapname, spawn)
 		local newMap = yama.maps.load(mapname)
@@ -339,13 +274,6 @@ function player.new(map, x, y, z)
 			animation.update(dt, "humanoid_die")
 		end
 		sprite.drawable = tileset.tiles[animation.frame]
-
-		--self.spores.ox = self.x
-		--self.spores.oy = self.y
-
-		--self.p:setPosition(self.x, self.y - 64)
-		--self.p:start()
-		--self.p:update(dt)
 
 		self.setBoundingBox()
 
