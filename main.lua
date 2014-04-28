@@ -1,6 +1,7 @@
 require("strict")
 
 yama = require("yama")
+close = require("abilities.close")
 
 game = {}
 
@@ -24,7 +25,6 @@ function love.load()
 	game.scene = yama.scenes.new()
 	game.scene.enablePhysics()
 	game.scene.loadMap("test/start")
-
 	
 	-- todo: check joy
 	local nbJoy = love.joystick.getJoystickCount( )
@@ -32,7 +32,13 @@ function love.load()
 	game.players = {}
 	if nbJoy > 0 then 
 		for i=1, nbJoy do
-			local p = game.scene.newEntity("player", {1000, 500, 0})
+			local p = game.scene.newEntity("player", {1000, 500, 0}, { name = "Player "..i })
+
+			local ab = close.new(p)
+			ab.initialize()
+
+			p.setAbility("leftshoulder", ab)
+
 			p.setJoystick(love.joystick.getJoysticks()[i])		
 			table.insert(game.players, p)
 		end
@@ -41,15 +47,6 @@ function love.load()
 	end
 
 	game.boss = game.scene.newEntity("boss", {500,500, 0})
-	-- game.p1 = 
-	-- game.p1.setJoystick(love.joystick.getJoysticks()[1])
-
-	-- game.p2 = game.scene.newEntity("player", {1100, 500, 32})
-	-- game.p2.setJoystick(love.joystick.getJoysticks()[2])
-
-
-	-- game.p3 = game.scene.newEntity("player", {1200, 500, 32})
-	-- game.p4 = game.scene.newEntity("player", {1300, 500, 32})
 
 	game.vp1 = game.scene.newViewport()
 	game.vp1.camera.cx = love.window.getWidth() / 2

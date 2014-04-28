@@ -4,10 +4,11 @@ function player.new(map, x, y, z)
 	local self = {}
 	local scene = map
 
-	self.world = map.world
+	self.world = scene.world
 
-	self.name = "Jonas"
+	self.name = ""
 	self.type = "player"
+
 	self.properties = {}
 
 	-- ANCHOR/POSITION/SPRITE VARIABLES
@@ -26,23 +27,14 @@ function player.new(map, x, y, z)
 
 	self.scale = (self.sx + self.sy) / 2
 
-	-- PHYSICS OBJECTS
-	self.fixtures = {}
-
-	self.fixtures.anchor = love.physics.newFixture(love.physics.newBody(self.world, self.x, self.y, "dynamic"), love.physics.newCircleShape(self.radius * self.scale), self.mass)
-	self.fixtures.anchor:setRestitution(0)
-	self.fixtures.anchor:getBody():setLinearDamping(10)
-	self.fixtures.anchor:getBody():setFixedRotation(true)
-	self.fixtures.anchor:setUserData({type = "player", callbacks = self})
-
-	self.test = {}
-
-	function self.test.beginContact(a, b, contact)
-		print("JADÅ!!!")
-	end
+	self.buttonStates = {}
 
 	function self.setJoystick(joystick)
 		self.joystick = joystick
+	end
+
+	function self.setMask(mask)
+		self.mask = mask		
 	end
 
 	self.abilities = {}
@@ -51,17 +43,7 @@ function player.new(map, x, y, z)
 		self.abilities[slot] = ability
 	end
 
-	self.weapon = {}
-	self.weapon.data = {}
-	self.weapon.data.callbacks = self.test
-	self.weapon.data.type = "damage"
-	self.weapon.data.properties = {}
-	self.weapon.data.properties.physical = 3
 
-	self.fixtures.weapon = love.physics.newFixture(self.fixtures.anchor:getBody(), love.physics.newPolygonShape(0, 0, 16, -16, 32, -16, 32, 16, 16, 16), 0)
-	self.fixtures.weapon:setUserData(self.weapon.data)
-	self.fixtures.weapon:setSensor(true)
-	self.fixtures.weapon:setMask(1)
 
 	-- Movement variables
 	self.velocity = 700 * self.scale
@@ -93,6 +75,7 @@ function player.new(map, x, y, z)
 	table.insert(bufferBatch.data, sprite)
 
 	function self.updateInput(dt)
+					
 		local nx, ny = 0, 0
 		local fx, fy = 0, 0
 		local vmultiplier = 1
@@ -100,24 +83,22 @@ function player.new(map, x, y, z)
 		animation.timescale = 1
 
 		self.state = "stand"
-		self.fixtures.weapon:setMask(1)
+		self.fixtures.weapon:setMask(16)
 
 		if self.state == "stand" or self.state == "walk" then
-			if self.joystick:isGamepadDown("leftshoulder") then				
+			if self.joystick:isGamepadDown("leftshoulder") and not self.buttonStates["leftshoulder"] then				
 				-- melee				
+				self.abilities["leftshoulder"].execute()
+				self.buttonStates["leftshoulder"] = true
 			elseif self.joystick:isGamepadDown("rightshoulder") then
 				-- shoot
 			end
 
-			if love.keyboard.isDown("lctrl") or self.joystick:isDown(1) then
-				self.state = "sword"
-				wvx = 500 * math.cos(self.direction)
-				wvy = 500 * math.sin(self.direction)
-				self.fixtures.weapon:setMask()
-				vmultiplier = 1
-				--self.fixtures.weapon:getBody():setPosition(x, y)
-				--self.fixtures.weapon:getBody():setLinearVelocity(wvx, wvy)
-			elseif yama.tools.getDistance(0, 0, self.joystick:getAxis(1), self.joystick:getAxis(2)) > 0.2 then
+			if not self.joystick:isGamepadDown("leftshoulder") then
+				self.buttonStates["leftshoulder"] = false
+			end
+
+			if yama.tools.getDistance(0, 0, self.joystick:getAxis(1), self.joystick:getAxis(2)) > 0.2 then
 				self.state = "walk"
 				nx = self.joystick:getAxis(1)
 				ny = self.joystick:getAxis(2)
@@ -165,7 +146,6 @@ function player.new(map, x, y, z)
 		nx, ny = nil, nil
 		fx, fy = nil, nil
 		vmultiplier = nil
-
 	end
 
 	function self.updatePosition()
@@ -235,11 +215,43 @@ function player.new(map, x, y, z)
 	end
 
 	-- DEFAULT FUNCTIONS
-	function self.initialize(object)
+	function self.initialize(properties)
+		if properties then
+			self.name = properties.name
+		end
+
+		-- PHYSICS OBJECTS
+		self.fixtures = {}
+
+		self.fixtures.anchor = love.physics.newFixture(love.physics.newBody(self.world, self.x, self.y, "dynamic"), love.physics.newCircleShape(self.radius * self.scale), self.mass)
+		self.fixtures.anchor:setRestitution(0)
+		self.fixtures.anchor:getBody():setLinearDamping(10)
+		self.fixtures.anchor:getBody():setFixedRotation(true)
+		self.fixtures.anchor:setUserData({type = "pawn", callbacks = self, name = properties.name })
+
+		self.weapon = {}
+		self.weapon.data = {}
+		self.weapon.data.callbacks = self.test
+		self.weapon.data.type = "damage"
+		self.weapon.data.properties = {}
+		self.weapon.data.properties.physical = 3
+
+		self.fixtures.weapon = love.physics.newFixture(self.fixtures.anchor:getBody(), love.physics.newPolygonShape(0, 0, 16, -16, 32, -16, 32, 16, 16, 16), 0)
+		-- self.fixtures.weapon:setUserData(self.weapon.data)
+		self.fixtures.weapon:setSensor(true)
+		self.fixtures.weapon:setMask(16)		
+		
+		print("zUG ZUG ZU GU ZUUSUZG ".. properties.name)
+
 		print("PLAYER INITAD", self.fixtures.anchor.type())
+
 	end
 
 	function self.update(dt)
+		for k,v in pairs(self.abilities) do
+			v.update(dt)
+		end
+
 		cooldown = cooldown - dt
 		self.updateInput(dt)
 		self.updatePosition()
@@ -263,6 +275,7 @@ function player.new(map, x, y, z)
 		a = nil
 
 		scene.lights.position[1] = {math.floor(self.x + 0.5), math.floor(self.y + 0.5), 64}
+
 	end
 
 	function self.addToBuffer(vp)
@@ -293,6 +306,12 @@ function player.new(map, x, y, z)
 
 	--	--return x, y, width, height
 	end
+
+	function self.damage()
+		self.sx = self.sx*0.9
+		self.sy = self.sy*0.9
+	end
+
 	--function self.getBoundingCircle()
 	--	local x, y, width, height = self.getBoundingBox()
 	--	local cx, cy = x + width / 2, y + height / 2
@@ -301,8 +320,6 @@ function player.new(map, x, y, z)
 	--	return cx, cy, radius
 	--end
 	self.setBoundingBox()
-	map = nil
-	self.world = nil
 	
 	return self
 end

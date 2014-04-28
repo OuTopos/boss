@@ -33,7 +33,7 @@ function boss.new(map, x, y, z)
 	self.fixtures.anchor:setRestitution(0)
 	self.fixtures.anchor:getBody():setLinearDamping(10)
 	self.fixtures.anchor:getBody():setFixedRotation(true)
-	self.fixtures.anchor:setUserData({type = "boss", callbacks = self})
+	self.fixtures.anchor:setUserData({type = "pawn", callbacks = self, name = "i am the boss"})
 
 
 	self.test = {}
@@ -341,9 +341,13 @@ function boss.new(map, x, y, z)
 
 	--	return cx, cy, radius
 	--end
+
+	function self.damage()
+		self.sx = self.sx*0.9
+		self.sy = self.sy*0.9
+	end
+
 	self.setBoundingBox()
-	map = nil
-	self.world = nil
 	
 	return self
 end
