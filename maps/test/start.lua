@@ -1511,7 +1511,7 @@ return {
     {
       type = "objectgroup",
       name = "Collision",
-      visible = false,
+      visible = true,
       opacity = 1,
       properties = {
         ["type"] = "collision"
@@ -2163,6 +2163,101 @@ return {
             { x = 64, y = 32 },
             { x = 64, y = 0 }
           },
+          properties = {}
+        },
+        {
+          name = "",
+          type = "",
+          shape = "polyline",
+          x = 0,
+          y = 0,
+          width = 0,
+          height = 0,
+          visible = true,
+          polyline = {
+            { x = 0, y = 0 },
+            { x = 0, y = 1088 },
+            { x = 1888, y = 1088 },
+            { x = 1888, y = 0 },
+            { x = 0, y = 0 }
+          },
+          properties = {}
+        },
+        {
+          name = "",
+          type = "",
+          shape = "ellipse",
+          x = 832,
+          y = 480,
+          width = 32,
+          height = 32,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "",
+          type = "",
+          shape = "ellipse",
+          x = 928,
+          y = 384,
+          width = 32,
+          height = 32,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "",
+          type = "",
+          shape = "ellipse",
+          x = 480,
+          y = 832,
+          width = 32,
+          height = 32,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "",
+          type = "",
+          shape = "ellipse",
+          x = 608,
+          y = 832,
+          width = 32,
+          height = 32,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 640,
+          y = 160,
+          width = 96,
+          height = 160,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 736,
+          y = 160,
+          width = 192,
+          height = 96,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 928,
+          y = 160,
+          width = 96,
+          height = 160,
+          visible = true,
           properties = {}
         }
       }
