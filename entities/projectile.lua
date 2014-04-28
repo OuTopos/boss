@@ -115,24 +115,26 @@ function projectile.new( map, x, y, z )
 
 	-- CONTACT --
 	function self.beginContact( a, b, contact )
-		local userdata = b:getUserData( )
+		local userdataA, userdataB = a:getUserData(), b:getUserData()
+		if userdataB then
+			print("RUGZUGDUGUG", userdataA.owner, userdataB.name)
+			if userdataB.type == "pawn" and userdataA.owner ~= userdataB.name then
+				userdataB.callbacks.damage( self.weaponProperties.damageBody )
+
+				info(a:getUserData().name.." hit "..userdataB.name)
+			end
+		end
 		self.bounces = self.bounces + 1
 		if self.weaponProperties.nrBounces and self.bounces > self.weaponProperties.nrBounces then
-			if self.weaponProperties.blastRadius > 0 then
-				--print( "max bullet bounces reached! Killing bullet ")
-				contact:setRestitution( 0 )
-				self.destroy()
-			else
-				self.destroy()
-			end
+			self.destroy()
 		end
 	end
 	function self.endContact( a, b, contact )
-		local userdata = b:getUserData( )
-		if userdata then
-			if userdata.type == 'shield' then  
+		local userdataA, userdataB = a:getUserData(), b:getUserData()
+		if userdataB then
+			if userdataB.type == 'shield' then  
 				--print('bullet: shield end contact!')
-			elseif userdata.type == 'player' then
+			elseif userdataB.type == 'player' then
 				--print('bullet: body end contact!')
 			end
 		end
