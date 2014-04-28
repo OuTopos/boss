@@ -9,7 +9,7 @@ function love.load()
 
 	love.window.setTitle("Yama")
 	love.window.setIcon(love.image.newImageData("icon.png"))
-	love.window.setMode(1280, 720, {
+	love.window.setMode(1920, 1080, {
 		fullscreen = false,
 		fullscreentype = "desktop",
 		vsync = false,
@@ -51,7 +51,9 @@ function love.load()
 	-- game.p4 = game.scene.newEntity("player", {1300, 500, 32})
 
 	game.vp1 = game.scene.newViewport()
-	game.vp1.follow(game.players[1])
+	game.vp1.camera.cx = love.window.getWidth() / 2
+	game.vp1.camera.cy = love.window.getHeight() / 2
+	-- game.vp1.follow(game.players[1])
 
 	game.resize()
 end
