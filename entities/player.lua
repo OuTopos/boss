@@ -172,23 +172,23 @@ function player.new(map, x, y, z)
 	end
 
 	function self.shoot( dt )
-		-- BULLETS --
+		-- projectiles --
 
 		self.projectileSpawnCooldown = self.projectileSpawnCooldown - dt
 		if self.projectileSpawnCooldown <= 0 then
 			local leftover = math.abs( self.projectileSpawnCooldown )
 			self.projectileSpawnCooldown = self.weapon.properties.rps - leftover
 
-			local bulletSpawnPosX = self.x + 29*math.cos( self.aim )
-			local bulletSpawnPosY = self.y + 29*math.sin( self.aim )
+			-- calculate projectile spawn position and offset
+			local projectileSpawnPosX = self.x + 29*math.cos( self.aim )
+			local projectileSpawnPosY = self.y + 29*math.sin( self.aim )
 
-			local projectile = scene.newEntity( "projectile", {bulletSpawnPosX, bulletSpawnPosY, 0}, self.weapon.properties )
-
-
-			local spread = love.math.random(0,self.weapon.properties.spread)
-			spread = spread/100
+			-- create projectile
+			local projectile = scene.newEntity( "projectile", {projectileSpawnPosX, projectileSpawnPosY, 0}, self.weapon.properties )
 
 			-- calculate spread 
+			local spread = love.math.random(0,self.weapon.properties.spread)
+			spread = spread/100	
 			if spread > self.weapon.properties.spread then
 				spread = self.weapon.properties.spread
 			end
@@ -200,10 +200,10 @@ function player.new(map, x, y, z)
 			local vectorSpreadY = math.sin( aimSpread )
 
 			
-			local fxbullet = self.weapon.properties.impulseForce * vectorSpreadX
-			local fybullet = self.weapon.properties.impulseForce * vectorSpreadY
+			local fxprojectile = self.weapon.properties.impulseForce * vectorSpreadX
+			local fyprojectile = self.weapon.properties.impulseForce * vectorSpreadY
 
-			projectile.shoot( bulletSpawnPosX, bulletSpawnPosY, fxbullet, fybullet, self.weapon.properties )
+			projectile.shoot( projectileSpawnPosX, projectileSpawnPosY, fxprojectile, fyprojectile, self.weapon.properties )
 			projectile = nil
 		end
 	end
@@ -240,7 +240,7 @@ function player.new(map, x, y, z)
 		self.weapon.properties.nrBulletsPerShot = 1
 		self.weapon.properties.magCapacity = 50
 		self.weapon.properties.spread = 1
-		self.weapon.properties.nrBounces = 2
+		self.weapon.properties.nrBounces = 1
 		self.weapon.properties.blastRadius = 0
 		self.weapon.properties.lifetime = 5
 		self.weapon.properties.bulletWeight = 0.4
