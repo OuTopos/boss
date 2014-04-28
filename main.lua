@@ -32,7 +32,7 @@ function love.load()
 	game.players = {}
 	if nbJoy > 0 then 
 		for i=1, nbJoy do
-			local p = game.scene.newEntity("player", {1000, 500, 32})
+			local p = game.scene.newEntity("player", {1000, 500, 0})
 			p.setJoystick(love.joystick.getJoysticks()[i])		
 			table.insert(game.players, p)
 		end
@@ -40,6 +40,7 @@ function love.load()
 		assert("no joysticks found")
 	end
 
+	game.boss = game.scene.newEntity("boss", {500,500, 0})
 	-- game.p1 = 
 	-- game.p1.setJoystick(love.joystick.getJoysticks()[1])
 
@@ -54,6 +55,7 @@ function love.load()
 	game.vp1.camera.cx = love.window.getWidth() / 2
 	game.vp1.camera.cy = love.window.getHeight() / 2
 	-- game.vp1.follow(game.players[1])
+
 
 	game.resize()
 end

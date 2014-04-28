@@ -64,7 +64,7 @@ function player.new(map, x, y, z)
 
 
 	-- Movement variables
-	self.velocity = 250 * self.scale
+	self.velocity = 700 * self.scale
 	self.direction = 0
 	self.aim = 0
 	self.move = false
