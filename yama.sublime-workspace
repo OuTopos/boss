@@ -1,0 +1,336 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"fi",
+				"filesystem"
+			],
+			[
+				"sp",
+				"sprite"
+			],
+			[
+				"buf",
+				"buffer2"
+			],
+			[
+				"dep",
+				"depthmode"
+			],
+			[
+				"mesh",
+				"meshes"
+			],
+			[
+				"b",
+				"boundaries"
+			],
+			[
+				"pr",
+				"properties"
+			],
+			[
+				"vp",
+				"vpMinimap"
+			],
+			[
+				"load_t",
+				"load_tileset_time"
+			],
+			[
+				"th",
+				"thread"
+			],
+			[
+				"d",
+				"d"
+			],
+			[
+				"dra",
+				"drawable2"
+			],
+			[
+				"loa",
+				"loading"
+			],
+			[
+				"ti",
+				"tileheight"
+			],
+			[
+				"ca",
+				"canvas"
+			],
+			[
+				"ta",
+				"table"
+			],
+			[
+				"view",
+				"viewport"
+			],
+			[
+				"vi",
+				"viewports"
+			],
+			[
+				"spaw",
+				"spawn"
+			],
+			[
+				"fun",
+				"function	function"
+			],
+			[
+				"fu",
+				"function	function"
+			],
+			[
+				"y",
+				"y"
+			],
+			[
+				"i",
+				"i"
+			],
+			[
+				"line",
+				"lineheight"
+			],
+			[
+				"sta",
+				"stand"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "Packages/User/LOVE.sublime-build",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+		],
+		"width": 392.0
+	},
+	"console":
+	{
+		"height": 131.0,
+		"history":
+		[
+			"unload theme"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/yama.sublime-workspace",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/boot.lua",
+		"/C/Users/jonas.martensson/Desktop/Shader/main.lua",
+		"/C/Users/jonas.martensson/AppData/Roaming/Sublime Text 3/Packages/User/LuaLove.sublime-build",
+		"/C/Users/jonas.martensson/Desktop/Shader/conf.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/strict.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/capsules/dev/entities/player.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/main.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/yama.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/yama_buffers.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/scenes.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/yama_assets.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/capsules/dev/main.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/viewports.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/yama_hud.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/yama_gui.lua",
+		"/C/Users/jonas.martensson/ownCloud/Projects/LuaCModule/main.c",
+		"/C/Users/jonas.martensson/Desktop/maps.lua",
+		"/C/Users/jonas.martensson/Desktop/luatest/main.lua",
+		"/C/Users/jonas.martensson/Desktop/luatest/luatest.lua",
+		"/C/Users/jonas.martensson/Downloads/ADP_win/ADP/config.dat",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/ProFi.lua",
+		"/C/Polycode/Standalone/Examples/Lua/3D_Graphics/3DBasics/Scripts/3DBasics.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/capsules/dev/maps/test/start.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/scenes_maps_load_thread.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/capsules/dev/entities/mesh.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/entities.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/capsules/dev/entities/elisa.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/viewports_newbroken.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/b64350d6-344a-4196-bee4-d96dc2027470.dmp",
+		"/C/Polycode/Standalone/Examples/Lua/3D_Graphics/3DBasics/testmap.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/scenes_maps.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/enet_test/main.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/yama_maps.lua",
+		"/C/Polycode/Standalone/Examples/Lua/3D_Graphics/3DBasics/Scripts/assets.lua",
+		"/C/Users/jonas.martensson/Downloads/MultiLights2/multilights.glsl",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/maps.lua",
+		"/C/Users/jonas.martensson/Downloads/MultiLights2/main.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/capsules/cmyk/entities/player.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/yama_animations.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/Yama-dev/capsules/dev/tilesets/debug.lua",
+		"/C/Users/jonas.martensson/Downloads/3d-cube-and-xyY-colorspace/main.lua",
+		"/C/Users/jonas.martensson/Downloads/3d-cube-and-xyY-colorspace/assets/cube.vert",
+		"/C/Users/jonas.martensson/Downloads/3d-cube-and-xyY-colorspace/assets/cube.frag",
+		"/C/Users/jonas.martensson/Downloads/3d-cube-and-xyY-colorspace/lib/colorspace.lua",
+		"/C/Users/jonas.martensson/Downloads/3d-cube-and-xyY-colorspace/lib/math/vec3.lua",
+		"/C/Users/jonas.martensson/Google Drive/Projects/Love2D_0.9.0/GeometryTest/main.lua",
+		"/C/Users/jonas.martensson/Google Drive/Projects/Love2D_0.9.0/GeometryTest/yama_assets.lua",
+		"/C/Users/jonas.martensson/Documents/GitHub/enet_test/conf.lua",
+		"/C/Users/jonas.martensson/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Polycode/Standalone/Examples/Lua/3D_Graphics/3DBasics/Assets.lua",
+		"/C/Users/jonas.martensson/Desktop/User/Preferences.sublime-settings"
+	],
+	"find":
+	{
+		"height": 25.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"local",
+			"depth",
+			"self.meshes",
+			"locat",
+			"self.meshes[depth]",
+			"addToMeshes",
+			"paths",
+			"self",
+			"paths",
+			"self.data.",
+			"self.data",
+			"map",
+			"1",
+			"getistance",
+			"WEAPON",
+			"fixtures.feet",
+			"fixtures.anchor",
+			"filter",
+			"callback"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"meshData",
+			"self.meshes[layer][depth]",
+			"map.",
+			"map",
+			"fixtures.body",
+			"fixtures.feet"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 112.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "yama.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
