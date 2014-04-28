@@ -4,34 +4,29 @@ local yama = {}
 
 -- Paths
 P = {}
-P.LIB = "lib"
-P.SRC = "src"
-P.ASSETS = "assets"
-
-P.ENTITIES = P.SRC .. "/entities"
-
-P.TILESETS = P.ASSETS .. "/tilesets"
-P.IMAGES = P.ASSETS .. "/images"
-P.ANIMATIONS = P.ASSETS .. "/animations"
-P.MAPS = P.ASSETS .. "/maps"
+P.TILESETS = "tilesets"
+P.IMAGES = "images"
+P.ANIMATIONS = "animations"
+P.ENTITIES = "entities"
+P.MAPS = "maps"
 
 -- MODULES
-yama.assets         = require(P.LIB .. "/yama.assets")
-yama.animations     = require(P.LIB .. "/yama.animations")
-yama.entities       = require(P.LIB .. "/yama.entities")
-yama.scenes         = require(P.LIB .. "/yama.scenes")
-yama.viewports      = require(P.LIB .. "/yama.viewports")
-yama.gui            = require(P.LIB .. "/yama.gui")
-yama.hud            = require(P.LIB .. "/yama.hud")
-yama.physics        = require(P.LIB .. "/yama.physics")
+yama.assets         = require("yama.assets")
+yama.animations     = require("yama.animations")
+yama.entities       = require("yama.entities")
+yama.scenes         = require("yama.scenes")
+yama.viewports      = require("yama.viewports")
+yama.gui            = require("yama.gui")
+yama.hud            = require("yama.hud")
+yama.physics        = require("yama.physics")
 
-yama.tools		    = require(P.LIB .. "/yama.tools")
+yama.tools		    = require("yama.tools")
 
 -- Phase these out
 
-yama.buffers      	= require(P.LIB .. "/yama.buffers")
-yama.ai             = require(P.LIB .. "/yama.ai")
-yama.ai.patrols     = require(P.LIB .. "/yama.ai_patrols")
+yama.buffers      	= require("yama.buffers")
+yama.ai             = require("yama.ai")
+yama.ai.patrols     = require("yama.ai_patrols")
 
 -- VARIABLES
 yama.v = {}

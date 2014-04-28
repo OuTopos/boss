@@ -1,7 +1,7 @@
 require("strict")
 
-yama = require("lib/yama")
-close = require("src/abilities.close")
+yama = require("yama")
+close = require("abilities.close")
 
 game = {}
 
