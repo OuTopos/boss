@@ -25,14 +25,33 @@ function love.load()
 	game.scene.enablePhysics()
 	game.scene.loadMap("test/start")
 
-	game.p1 = game.scene.newEntity("player", {1000, 500, 32})
+	
+	-- todo: check joy
+	local nbJoy = love.joystick.getJoystickCount( )
+
+	game.players = {}
+	if nbJoy > 0 then 
+		for i=1, nbJoy do
+			local p = game.scene.newEntity("player", {1000, 500, 32})
+			p.setJoystick(love.joystick.getJoysticks()[i])		
+			table.insert(game.players, p)
+		end
+	else
+		assert("no joysticks found")
+	end
+
+	-- game.p1 = 
+	-- game.p1.setJoystick(love.joystick.getJoysticks()[1])
+
+	-- game.p2 = game.scene.newEntity("player", {1100, 500, 32})
+	-- game.p2.setJoystick(love.joystick.getJoysticks()[2])
+
+
+	-- game.p3 = game.scene.newEntity("player", {1200, 500, 32})
+	-- game.p4 = game.scene.newEntity("player", {1300, 500, 32})
 
 	game.vp1 = game.scene.newViewport()
-	game.vp1.follow(game.p1)
-
-
-	game.vp2 = game.scene.newViewport()
-	game.vp2.follow(game.p1)
+	game.vp1.follow(game.players[1])
 
 	game.resize()
 end
@@ -161,10 +180,5 @@ function love.threaderror(t, e)
 end
 
 function game.resize()
-	game.vp1.resize(love.window.getWidth() / 4, love.window.getHeight() / 2)
-	game.vp1.sx = 2
-	game.vp1.sy = 2
-
-	game.vp2.resize(love.window.getWidth() / 2, love.window.getHeight())
-	game.vp2.x = love.window.getWidth() / 2
+	game.vp1.resize(love.window.getWidth(), love.window.getHeight())
 end
