@@ -11,6 +11,8 @@ function player.new(map, x, y, z)
 
 	self.properties = {}
 
+	self.projectileSpawnCooldown = 0
+
 	-- ANCHOR/POSITION/SPRITE VARIABLES
 	self.radius = 10
 	self.mass = 1
@@ -92,6 +94,7 @@ function player.new(map, x, y, z)
 				self.buttonStates["leftshoulder"] = true
 			elseif self.joystick:isGamepadDown("rightshoulder") then
 				-- shoot
+				self.shoot( dt )
 			end
 
 			if not self.joystick:isGamepadDown("leftshoulder") then
@@ -148,6 +151,43 @@ function player.new(map, x, y, z)
 		vmultiplier = nil
 	end
 
+	function self.shoot( dt )
+		-- projectiles --
+
+		self.projectileSpawnCooldown = self.projectileSpawnCooldown - dt
+		if self.projectileSpawnCooldown <= 0 then
+			local leftover = math.abs( self.projectileSpawnCooldown )
+			self.projectileSpawnCooldown = self.weapon.properties.rps - leftover
+
+			-- calculate projectile spawn position and offset
+			local projectileSpawnPosX = self.x + 29*math.cos( self.aim )
+			local projectileSpawnPosY = self.y + 29*math.sin( self.aim )
+
+			-- create projectile
+			local projectile = scene.newEntity( "projectile", {projectileSpawnPosX, projectileSpawnPosY, 0}, self.weapon.properties )
+
+			-- calculate spread 
+			local spread = love.math.random(0,self.weapon.properties.spread)
+			spread = spread/100	
+			if spread > self.weapon.properties.spread then
+				spread = self.weapon.properties.spread
+			end
+			if love.math.random(0,1) == 1 then
+				spread = - spread
+			end
+			local aimSpread =  self.aim + spread
+			local vectorSpreadX = math.cos( aimSpread )
+			local vectorSpreadY = math.sin( aimSpread )
+
+			
+			local fxprojectile = self.weapon.properties.impulseForce * vectorSpreadX
+			local fyprojectile = self.weapon.properties.impulseForce * vectorSpreadY
+
+			projectile.shoot( projectileSpawnPosX, projectileSpawnPosY, fxprojectile, fyprojectile, self.weapon.properties )
+			projectile = nil
+		end
+	end
+
 	function self.updatePosition()
 
 		-- Position updates
@@ -167,6 +207,27 @@ function player.new(map, x, y, z)
 
 
 		--particle:setPosition(self.getX(), self.getY()-oy/2)
+	end
+
+	function self.weaponSetup()
+			-- WEAPON STUFF 
+		self.weapon.properties = {}
+		self.weapon.properties.name = 'bouncer'
+		self.weapon.properties.rps = 0.2
+		self.weapon.properties.damageBody = 6
+		self.weapon.properties.damageShield = 17
+		self.weapon.properties.impulseForce = 900
+		self.weapon.properties.nrBulletsPerShot = 1
+		self.weapon.properties.magCapacity = 50
+		self.weapon.properties.spread = 1
+		self.weapon.properties.nrBounces = 1
+		self.weapon.properties.blastRadius = 0
+		self.weapon.properties.lifetime = 5
+		self.weapon.properties.bulletWeight = 0.4
+		self.weapon.properties.sizeX = 1
+		self.weapon.properties.linearDamping = 0.5
+		self.weapon.properties.inertia = 0.2
+		self.weapon.properties.gravityScale = 0.01
 	end
 
 	-- CONTACT
@@ -244,7 +305,11 @@ function player.new(map, x, y, z)
 		print("zUG ZUG ZU GU ZUUSUZG ".. properties.name)
 
 		print("PLAYER INITAD", self.fixtures.anchor.type())
+<<<<<<< HEAD
 
+=======
+		self.weaponSetup()
+>>>>>>> 8dc95312af567ad501d978b0feab58c50f2ac986
 	end
 
 	function self.update(dt)
