@@ -114,4 +114,8 @@ animations.list.elisa_walk         = {delay = 0.08, first = 17, last = 24, loop 
 animations.list.elisa_jump         = {delay = 0.08, first = 106, last = 113, loop = true, finish = false, reverse = false}
 animations.list.elisa_idle         = {delay = 0.20, first = 1, last = 3, loop = true, finish = false, reverse = false}
 
+
+
+animations.list.coin              = {delay = 0.10, first = 1, last = 8, loop = true, finish = false, reverse = false}
+
 return animations

@@ -1,7 +1,7 @@
 require("strict")
 
-yama = require("yama")
-close = require("abilities.close")
+local yama = require("lib.yama")
+close = require("src.abilities.close")
 
 game = {}
 
@@ -9,7 +9,7 @@ function love.load()
 	yama.load()
 
 	love.window.setTitle("Yama")
-	love.window.setIcon(love.image.newImageData("icon.png"))
+	love.window.setIcon(love.image.newImageData("assets/images/icon.png"))
 	love.window.setMode(1920, 1080, {
 		fullscreen = false,
 		fullscreentype = "desktop",
