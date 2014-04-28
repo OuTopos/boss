@@ -32,9 +32,8 @@ function projectile.new( map, x, y, z )
 	local bufferBatch = yama.buffers.newBatch( self.x, self.y, self.z )
 
 	-- SPRITE (PLAYER)	
-	local bulletsprite = yama.buffers.newDrawable( yama.assets.loadImage( "bullet" ), self.x, self.y, self.z, r, sx, sy, ox, oy )
+	local bulletsprite = yama.buffers.newDrawable( yama.assets.loadImage( "projectile" ), self.x, self.y, self.z, r, sx, sy, ox, oy )
 
-	--local bulletsprite = yama.buffers.newDrawable( yama.assets.loadImage("bullet"), x, y, z, r, sx, sy, ox, oy )
 
 	table.insert( bufferBatch.data, bulletsprite )
 
@@ -116,8 +115,6 @@ function projectile.new( map, x, y, z )
 
 	-- CONTACT --
 	function self.beginContact( a, b, contact )
-		--print( 'bullet: beginContact')
-		--print( a:getBody( ):getMass() )
 		local userdata = b:getUserData( )
 		self.bounces = self.bounces + 1
 		if self.weaponProperties.nrBounces and self.bounces > self.weaponProperties.nrBounces then
@@ -126,17 +123,13 @@ function projectile.new( map, x, y, z )
 				contact:setRestitution( 0 )
 				self.destroy()
 			else
-				--print( "AWEVT&%&¤%/&%")
 				self.destroy()
 			end
 		end
 	end
 	function self.endContact( a, b, contact )
-		--print( 'bullet: beginContact')
-		--print( a:getBody( ):getMass() )
 		local userdata = b:getUserData( )
 		if userdata then
-			--print( a:getUserData().type, userdata.type )
 			if userdata.type == 'shield' then  
 				--print('bullet: shield end contact!')
 			elseif userdata.type == 'player' then
