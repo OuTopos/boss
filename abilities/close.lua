@@ -57,9 +57,8 @@ function close.new(player)
 		local userdataA, userdataB = a:getUserData(), b:getUserData()
 
 		if userdataB then
-			print("RUGZUGDUGUG", userdataA.owner, userdataB.name)
 			if userdataB.type == "pawn" and userdataA.owner ~= userdataB.name then
-				userdataB.callbacks.damage()
+				userdataB.callbacks.damage(2)
 
 				info(a:getUserData().name.." hit "..userdataB.name)
 			end

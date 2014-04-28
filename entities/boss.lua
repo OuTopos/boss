@@ -39,6 +39,7 @@ function boss.new(map, x, y, z)
 
 
 	self.test = {}
+	self.projectileSpawnCooldown = 0
 
 	function self.test.beginContact(a, b, contact)
 		print("JADÅ!!!")
@@ -273,20 +274,20 @@ function boss.new(map, x, y, z)
 	-- DEFAULT FUNCTIONS
 	function self.initialize(object)
 		print("boss INITAD", self.fixtures.anchor.type())
+		self.weaponSetup()
 	end
 
 	function self.update(dt)
 		cooldown = cooldown - dt
+
+		if cooldown < 0 then 
+			self.shoot(dt)
+			cooldown = 1
+		end
+
 		self.updateInput(dt)
 		self.updatePosition()
 
-		local a = nil
-
-		if self.move then
-			a = "walk"
-		else
-			a = "stand"
-		end
 		if self.state == "walk" or self.state == "stand" or self.state == "sword" then
 			animation.update(dt, "humanoid_"..self.state.."_"..yama.tools.getRelativeDirection(self.direction))
 		else
@@ -294,16 +295,7 @@ function boss.new(map, x, y, z)
 		end
 		sprite.drawable = tileset.tiles[animation.frame]
 
-		--self.spores.ox = self.x
-		--self.spores.oy = self.y
-
-		--self.p:setPosition(self.x, self.y - 64)
-		--self.p:start()
-		--self.p:update(dt)
-
 		self.setBoundingBox()
-
-		a = nil
 
 		scene.lights.position[1] = {math.floor(self.x + 0.5), math.floor(self.y + 0.5), 64}
 	end
@@ -343,6 +335,64 @@ function boss.new(map, x, y, z)
 
 	--	return cx, cy, radius
 	--end
+
+	function self.weaponSetup()
+			-- WEAPON STUFF 
+		self.weapon.properties = {}
+		self.weapon.properties.name = 'bouncer'
+		self.weapon.properties.rps = 0.2
+		self.weapon.properties.damageBody = 6
+		self.weapon.properties.damageShield = 17
+		self.weapon.properties.impulseForce = 900
+		self.weapon.properties.nrBulletsPerShot = 1
+		self.weapon.properties.magCapacity = 50
+		self.weapon.properties.spread = 1
+		self.weapon.properties.nrBounces = 10
+		self.weapon.properties.blastRadius = 0
+		self.weapon.properties.lifetime = 5
+		self.weapon.properties.bulletWeight = 0.4
+		self.weapon.properties.sizeX = 1
+		self.weapon.properties.linearDamping = 0.5
+		self.weapon.properties.inertia = 0.2
+		self.weapon.properties.gravityScale = 0.01
+	end
+
+	function self.shoot( dt )
+		-- projectiles --
+
+		self.projectileSpawnCooldown = self.projectileSpawnCooldown - dt
+		if self.projectileSpawnCooldown <= 0 then
+			local leftover = math.abs( self.projectileSpawnCooldown )
+			self.projectileSpawnCooldown = self.weapon.properties.rps - leftover
+
+			-- calculate projectile spawn position and offset
+			local projectileSpawnPosX = self.x + 29*math.cos( self.aim )
+			local projectileSpawnPosY = self.y + 29*math.sin( self.aim )
+
+			-- create projectile
+			local projectile = scene.newEntity( "projectile", {projectileSpawnPosX, projectileSpawnPosY, 0}, self.weapon.properties )
+
+			-- calculate spread 
+			local spread = love.math.random(0,self.weapon.properties.spread)
+			spread = spread/100	
+			if spread > self.weapon.properties.spread then
+				spread = self.weapon.properties.spread
+			end
+			if love.math.random(0,1) == 1 then
+				spread = - spread
+			end
+			local aimSpread =  self.aim + spread
+			local vectorSpreadX = math.cos( aimSpread )
+			local vectorSpreadY = math.sin( aimSpread )
+
+			
+			local fxprojectile = self.weapon.properties.impulseForce * vectorSpreadX
+			local fyprojectile = self.weapon.properties.impulseForce * vectorSpreadY
+
+			projectile.shoot( projectileSpawnPosX, projectileSpawnPosY, fxprojectile, fyprojectile, self.weapon.properties )
+			projectile = nil
+		end
+	end
 
 	function self.damage(damage)
 		self.health = self.health - damage
