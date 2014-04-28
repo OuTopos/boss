@@ -121,40 +121,22 @@ function player.new(map, x, y, z)
 				self.state = "walk"
 				nx = self.joystick:getAxis(1)
 				ny = self.joystick:getAxis(2)
+				
 				self.direction = math.atan2(ny, nx)
-				self.aim = self.direction
+
 				vmultiplier = yama.tools.getDistance(0, 0, self.joystick:getAxis(1), self.joystick:getAxis(2))
 				if vmultiplier >  1 then
 					vmultiplier = 1
-				end
-
-			elseif love.keyboard.isDown("right") or love.keyboard.isDown("left") or love.keyboard.isDown("down") or love.keyboard.isDown("up") then
-				self.state = "walk"
-				if love.keyboard.isDown("right") then
-					nx = nx+1
-				end
-				if love.keyboard.isDown("left") then
-					nx = nx-1
-				end
-				if love.keyboard.isDown("up") then
-					ny = ny-1
-				end
-				if love.keyboard.isDown("down") then
-					ny = ny+1
-				end
-				self.direction = math.atan2(ny, nx)
-				self.aim = self.direction
-			elseif love.keyboard.isDown(" ") then
-				patrol.update(self.fixtures.anchor:getBody():getX(), self.fixtures.anchor:getBody():getY())
-				if patrol.isActive() then
-					self.state = "walk"
-					nx, ny = patrol.getPoint()
-					self.direction = math.atan2(ny, nx)
-					self.aim = self.direction
-				else
-					self.state = "stand"
-				end
+				end			
 			end
+			
+			if yama.tools.getDistance(0, 0, self.joystick:getAxis(3), self.joystick:getAxis(4)) > 0.2 then
+				nx = self.joystick:getAxis(3)
+				ny = self.joystick:getAxis(4)
+
+				self.aim = math.atan2(ny, nx)
+			end
+
 		end
 
 		if self.state == "walk" then
@@ -163,10 +145,11 @@ function player.new(map, x, y, z)
 			end
 			fx = self.velocity * vmultiplier * math.cos(self.direction)
 			fy = self.velocity * vmultiplier * math.sin(self.direction)
-			self.fixtures.anchor:getBody():setAngle(self.direction)
 			self.fixtures.anchor:getBody():applyForce(fx, fy)
 			animation.timescale = vmultiplier
 		end
+
+		self.fixtures.anchor:getBody():setAngle(self.aim)
 
 		if self.state == "sword" then
 			animation.timescale = 0.1
@@ -191,7 +174,7 @@ function player.new(map, x, y, z)
 		--self.x, self.y = map.translatePosition(self.fixtures.anchor:getBody():getX(), self.fixtures.anchor:getBody():getY())
 		self.x, self.y = self.fixtures.anchor:getBody():getX(), self.fixtures.anchor:getBody():getY()
 		--self.x, self.y = math.floor(self.x + 0.5), math.floor(self.y + 0.5)
-		self.fixtures.anchor:getBody():setAngle(self.direction)
+		--self.fixtures.anchor:getBody():setAngle(self.direction)
 
 		yama.buffers.setBatchPosition(bufferBatch, self.x + self.aox, self.y + self.aoy)
 
@@ -269,7 +252,7 @@ function player.new(map, x, y, z)
 			a = "stand"
 		end
 		if self.state == "walk" or self.state == "stand" or self.state == "sword" then
-			animation.update(dt, "humanoid_"..self.state.."_"..yama.tools.getRelativeDirection(self.direction))
+			animation.update(dt, "humanoid_"..self.state.."_"..yama.tools.getRelativeDirection(self.aim))
 		else
 			animation.update(dt, "humanoid_die")
 		end
