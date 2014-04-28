@@ -64,6 +64,12 @@ function hud.draw(viewport, scene)
 				love.graphics.setColor(255, 255, 255, 255)
 				--love.graphics.print(i, left + 2, top + 2)
 				love.graphics.point(x, y)
+				if entities.list[i].health then
+					love.graphics.setColor(0, 0, 0, 255)
+					love.graphics.print(entities.list[i].health, x + 5, y + 5)
+					love.graphics.setColor(255, 255, 255, 255)
+					love.graphics.print(entities.list[i].health, x + 4, y + 4)
+				end
 				--love.graphics.setColor(0, 0, 0, 255)
 				--love.graphics.print(math.floor(x + 0.5), left + 2, top + 12)
 				--love.graphics.print(math.floor(y + 0.5), left + 2, top + 22)
