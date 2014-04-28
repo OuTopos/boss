@@ -305,11 +305,9 @@ function player.new(map, x, y, z)
 		print("zUG ZUG ZU GU ZUUSUZG ".. properties.name)
 
 		print("PLAYER INITAD", self.fixtures.anchor.type())
-<<<<<<< HEAD
 
-=======
 		self.weaponSetup()
->>>>>>> 8dc95312af567ad501d978b0feab58c50f2ac986
+
 	end
 
 	function self.update(dt)
