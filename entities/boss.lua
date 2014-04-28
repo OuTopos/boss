@@ -281,7 +281,7 @@ function boss.new(map, x, y, z)
 		cooldown = cooldown - dt
 
 		if cooldown < 0 then 
-			self.shoot(dt)
+			-- self.shoot(dt)
 			cooldown = 1
 		end
 
