@@ -105,7 +105,7 @@ function projectile.new( map, x, y, z )
 		
 		bulletsprite.x = x --math.floor(x + 0.5)
 		bulletsprite.y = y --math.floor(y-16 + 0.5)
-		bulletsprite.r = 0
+		bulletsprite.r = self.aim
 
 	end
 

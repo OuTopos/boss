@@ -10,7 +10,7 @@ function boss.new(map, x, y, z)
 	self.type = "boss"
 	self.properties = {}
 
-	self.health = 100
+	self.health = 50
 
 	-- ANCHOR/POSITION/SPRITE VARIABLES
 	self.radius = 10
@@ -396,6 +396,9 @@ function boss.new(map, x, y, z)
 
 	function self.damage(damage)
 		self.health = self.health - damage
+		if self.health <= 0 then
+			self.destroy()
+		end
 	end
 
 	self.setBoundingBox()

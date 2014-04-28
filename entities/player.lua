@@ -216,7 +216,7 @@ function player.new(map, x, y, z)
 		self.weapon.properties = {}
 		self.weapon.properties.name = 'bouncer'
 		self.weapon.properties.rps = 0.2
-		self.weapon.properties.damageBody = 6
+		self.weapon.properties.damageBody = 9
 		self.weapon.properties.damageShield = 17
 		self.weapon.properties.impulseForce = 900
 		self.weapon.properties.nrBulletsPerShot = 1
