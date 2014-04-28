@@ -9,6 +9,8 @@ function player.new(map, x, y, z)
 	self.name = ""
 	self.type = "player"
 
+	self.health = 100
+
 	self.properties = {}
 
 	self.projectileSpawnCooldown = 0
@@ -370,9 +372,8 @@ function player.new(map, x, y, z)
 	--	--return x, y, width, height
 	end
 
-	function self.damage()
-		self.sx = self.sx*0.9
-		self.sy = self.sy*0.9
+	function self.damage(damage)
+		self.health = self.health - damage
 	end
 
 	--function self.getBoundingCircle()

@@ -10,6 +10,8 @@ function boss.new(map, x, y, z)
 	self.type = "boss"
 	self.properties = {}
 
+	self.health = 100
+
 	-- ANCHOR/POSITION/SPRITE VARIABLES
 	self.radius = 10
 	self.mass = 1
@@ -342,9 +344,8 @@ function boss.new(map, x, y, z)
 	--	return cx, cy, radius
 	--end
 
-	function self.damage()
-		self.sx = self.sx*0.9
-		self.sy = self.sy*0.9
+	function self.damage(damage)
+		self.health = self.health - damage
 	end
 
 	self.setBoundingBox()
