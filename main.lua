@@ -1,9 +1,12 @@
 require("strict")
 
+-- yama should be local. have to fix.
 yama = require("lib.yama")
-close = require("src.abilities.close")
 
-game = {}
+local game = {}
+
+
+--local close = game.abilities.close
 
 function love.load()
 	yama.load()
@@ -21,6 +24,10 @@ function love.load()
 	})
 
 	love.graphics.setFont(love.graphics.newImageFont(yama.assets.loadImage("font")," abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\""))
+
+	-- All abilities loaded into game.abilities.
+	game.abilities = {}
+	yama.require("src/abilities", game.abilities)
 
 	game.scene = yama.scenes.new()
 	game.scene.enablePhysics()

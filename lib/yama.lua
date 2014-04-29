@@ -18,7 +18,6 @@ P.MAPS = P.ASSETS .. "/maps"
 -- MODULES
 yama.assets         = require(P.LIB .. "/yama.assets")
 yama.animations     = require(P.LIB .. "/yama.animations")
-yama.entities       = require(P.LIB .. "/yama.entities")
 yama.scenes         = require(P.LIB .. "/yama.scenes")
 yama.viewports      = require(P.LIB .. "/yama.viewports")
 yama.gui            = require(P.LIB .. "/yama.gui")
@@ -40,10 +39,56 @@ yama.v.timescale = 1
 yama.v.gcInterval = 10
 yama.v.gcTimer = 10
 
+
+
+
+
+
+
+-- DEBUG FUNCTIONS
+yama.debug = {}
+yama.debug.level = 2
+yama.debug.warning2error = false
+yama.debug.log = false
+
+function info(text, i)
+	if yama.debug.level >= 2 then
+		local info = debug.getinfo(i or 2, "lS")
+		print("Info: " .. info.short_src .. ":" .. info.currentline .. ": " .. text)
+	end
+end
+function warning(text, i)
+	if yama.debug.level >= 1 then
+		if yama.debug.warning2error then
+			error(text)
+		else
+			local info = debug.getinfo(i or 2, "lS")
+			print("Warning: " .. info.short_src .. ":" .. info.currentline .. ": " .. text)
+		end
+	end
+end
+
+
+-- TOOLS
+
+function yama.require(path, table)
+	if love.filesystem.exists(path) then
+		local files = love.filesystem.getDirectoryItems(path)
+		for k, file in ipairs(files) do
+			info("require(" .. path .. "/" .. file:gsub("%.lua", "") .. ")", 3)
+			table[file:gsub("%.lua", "")] = require(path .. "/" .. file:gsub("%.lua", ""))
+		end
+	end
+end
+
+
 function yama.load()
 	yama.assets.load()
 	yama.gui.load()
-	yama.entities.load()
+
+	-- Loading entities
+	yama.entities = {}
+	yama.require(P.ENTITIES, yama.entities)
 
 	--[[
 	local rgb = {0, 1, 0, 0}
@@ -76,16 +121,6 @@ function yama.draw()
 	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.printf("FPS: " .. love.timer.getFPS(), 2, 2, 100, "left")
 	--]]
-end
-
--- DEBUG FUNCTIONS
-function info(text, i)
-	local info = debug.getinfo(i or 2, "lS")
-	print("Info: " .. info.short_src .. ":" .. info.currentline .. ": " .. text)
-end
-function warning(text, i)
-	local info = debug.getinfo(i or 2, "lS")
-	print("Warning: " .. info.short_src .. ":" .. info.currentline .. ": " .. text)
 end
 
 return yama
