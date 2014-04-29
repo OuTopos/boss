@@ -310,6 +310,7 @@ function boss.new(map, x, y, z)
 		print("Destroying boss")
 		self.fixtures.anchor:getBody():destroy()
 		self.fixtures.weapon:getBody():destroy()
+		sprite.destroyed = true
 		self.destroyed = true
 	end
 

@@ -848,10 +848,12 @@ function scenes.new()
 			--table.sort(self.sceneEntities.dynamic, self.depthsorts.yz)
 
 			-- Drawing dynamic entities
-			for k = 1, #self.sceneEntities.dynamic do
+			for k = #self.sceneEntities.dynamic, 1, -1 do
 				local sceneEntity = self.sceneEntities.dynamic[k]
 				-- Check if inside viewport.
-				if sceneEntity.batch then
+				if sceneEntity.destroyed then
+					table.remove(self.sceneEntities.dynamic, k)
+				elseif sceneEntity.batch then
 					for k = 1, #sceneEntity.batch do
 						self.drawSceneEntity(sceneEntity.batch[k], viewport)
 					end
@@ -877,6 +879,16 @@ function scenes.new()
 			viewport.shader_light:send("screen_to_world", self.translationmatrix2)
 
 			love.graphics.draw(viewport.canvases[1])
+			love.graphics.setShader()
+
+			-- DRAW GUI
+			--yama.gui.draw(viewport)
+
+			-- DRAW DEBUG TEXT
+			yama.hud.draw(viewport, self)
+
+
+
 
 			-- DRAW MODES
 			if self.drawmode == 1 then
@@ -900,12 +912,6 @@ function scenes.new()
 				love.graphics.setShader()
 				love.graphics.draw(viewport.canvases[4], viewport.x, viewport.y, viewport.r, viewport.sx, viewport.sy, viewport.ox, viewport.oy)
 			end
-
-			-- DRAW GUI
-			--yama.gui.draw(viewport)
-
-			-- DRAW DEBUG TEXT
-			yama.hud.draw(viewport, self)
 		end
 	end
 

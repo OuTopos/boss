@@ -26,8 +26,7 @@ function love.load()
 	love.graphics.setFont(love.graphics.newImageFont(yama.assets.loadImage("font")," abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\""))
 
 	-- All abilities loaded into game.abilities.
-	game.abilities = {}
-	yama.require("src/abilities", game.abilities)
+	game.abilities = yama.requireDir("src/abilities")
 
 	game.scene = yama.scenes.new()
 	game.scene.enablePhysics()
