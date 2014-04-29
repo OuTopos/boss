@@ -5,9 +5,6 @@ yama = require("lib.yama")
 
 local game = {}
 
-
---local close = game.abilities.close
-
 function love.load()
 	yama.load()
 
@@ -28,7 +25,7 @@ function love.load()
 	-- All abilities loaded into game.abilities.
 	game.abilities = yama.requireDir("src/abilities")
 
-	game.scene = yama.scenes.new()
+	game.scene = yama.newScene()
 	game.scene.enablePhysics()
 	game.scene.loadMap("test/start")
 	
@@ -40,7 +37,7 @@ function love.load()
 		for i=1, nbJoy do
 			local p = game.scene.newEntity("player", {1000, 500, 0}, { name = "Player "..i })
 
-			local ab = close.new(p)
+			local ab = game.abilities.close.new(p)
 			ab.initialize()
 
 			p.setAbility("leftshoulder", ab)

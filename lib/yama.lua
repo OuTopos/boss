@@ -18,7 +18,11 @@ P.MAPS = P.ASSETS .. "/maps"
 -- MODULES
 --yama.assets         = require(P.LIB .. "/yama.assets")
 yama.animations     = require(P.LIB .. "/yama.animations")
+yama.newAnimation = yama.animations.new
+
 yama.scenes         = require(P.LIB .. "/yama.scenes")
+yama.newScene = yama.scenes.new
+
 yama.viewports      = require(P.LIB .. "/yama.viewports")
 yama.gui            = require(P.LIB .. "/yama.gui")
 yama.hud            = require(P.LIB .. "/yama.hud")

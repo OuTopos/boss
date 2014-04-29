@@ -62,7 +62,7 @@ function player.new(map, x, y, z)
 	local bufferBatch = yama.buffers.newBatch(self.x, self.y, self.z)
 
 	-- ANIMATION
-	local animation = yama.animations.new()
+	local animation = yama.newAnimation()
 
 	local tileset = yama.assets.tilesets["body"]
 	local sprite = scene.newSceneEntity()
