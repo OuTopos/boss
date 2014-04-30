@@ -23,7 +23,7 @@ function love.load()
 	love.graphics.setFont(love.graphics.newImageFont(yama.assets.loadImage("font")," abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\""))
 
 	-- All abilities loaded into game.abilities.
-	game.abilities = yama.requireDir("src/abilities")
+	game.skills = yama.requireDir("src/skills")
 
 	game.scene = yama.newScene()
 	game.scene.enablePhysics()
@@ -36,11 +36,15 @@ function love.load()
 	if nbJoy > 0 then 
 		for i=1, nbJoy do
 			local p = game.scene.newEntity("player", {1000, 500, 0}, { name = "Player "..i })
+			
+			local ab = game.skills.skill.new(game.scene)
+			ab.initialize({mandatory = { { name = "range", properties = {origin = p}, } } })
+			p.setAbility("rightshoulder", ab)
 
-			local ab = game.abilities.close.new(p)
-			ab.initialize()
-
+			local ab = game.skills.skill.new(game.scene)
+			ab.initialize({mandatory = { { name = "close", properties = {origin = p}, } } })
 			p.setAbility("leftshoulder", ab)
+
 
 			p.setJoystick(love.joystick.getJoysticks()[i])		
 			table.insert(game.players, p)

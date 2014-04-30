@@ -1,11 +1,9 @@
 local projectile = {}
 
-function projectile.new( map, x, y, z )
+function projectile.new(map, x, y, z )
 	local self = {}
-
-
-
 	local bulletUserdata = {}
+
 	bulletUserdata.name = "Unnamed"
 	bulletUserdata.type = "projectile"
 	bulletUserdata.properties = {}
@@ -28,20 +26,15 @@ function projectile.new( map, x, y, z )
 	self.bulletTimer = 0
 	self.bounces = 0
 
-	-- BUFFER BATCH
 	local bufferBatch = yama.buffers.newBatch( self.x, self.y, self.z )
-
-	-- SPRITE (PLAYER)	
 	local bulletsprite = yama.buffers.newDrawable( yama.assets.loadImage( "projectile" ), self.x, self.y, self.z, r, sx, sy, ox, oy )
-
 
 	table.insert( bufferBatch.data, bulletsprite )
 
-	function self.initialize( properties )
-
-		print("CREATED")
-
+	-- public functions
+	function self.initialize(properties)
 		self.weaponProperties = properties
+
 		-- Physics		
 		self.bullet = love.physics.newFixture(love.physics.newBody( map.world, self.x, self.y, "dynamic"), love.physics.newCircleShape( self.weaponProperties.sizeX ) )
 
@@ -59,7 +52,6 @@ function projectile.new( map, x, y, z )
 	end
 
 	function self.update( dt )
-
 		self.updatePosition( )
 
 		self.x = x
@@ -69,17 +61,34 @@ function projectile.new( map, x, y, z )
 		if self.bulletTimer <= self.weaponProperties.lifetime then
 			self.bulletTimer = self.bulletTimer + dt
 		else
-			--print( "bulletTimer ends! killing bullet")
 			self.bulletTimer = 0
 			self.destroy()
-			print("Bullet: update: lifetime run out!")
 		end
 	end
-	
-	function self.shoot( xpos, ypos, fx, fy, props )
-		self.weaponProperties = props
 
-		print("Bullet: shoot!")
+	function self.setPosition( x, y )
+		bullet.body:setPosition( x, y )
+		bullet.body:setLinearVelocity( 0, 0 )
+	end
+	
+	function self.getPosition( )
+		return x, y
+	end
+
+	function self.getXvel( )
+		return xvel
+	end
+
+	function self.getYvel( )
+		return yvel
+	end
+
+	function self.addToBuffer( vp )
+		vp.addToBuffer( bufferBatch )
+	end
+
+	function self.execute( xpos, ypos, fx, fy, props )
+		self.weaponProperties = props
 		self.bulletTimer = 0
 
 		self.bullet:setUserData( bulletUserdata )
@@ -93,6 +102,7 @@ function projectile.new( map, x, y, z )
 
 	end
 
+	-- private functions
 	function self.updatePosition( xn, yn )
 		x = self.bullet:getBody( ):getX( )
 		y = self.bullet:getBody( ):getY( )
@@ -113,11 +123,10 @@ function projectile.new( map, x, y, z )
 	animation.quad = 1
 	animation.dt = 0
 
-	-- CONTACT --
 	function self.beginContact( a, b, contact )
 		local userdataA, userdataB = a:getUserData(), b:getUserData()
 		if userdataB then
-			print("RUGZUGDUGUG", userdataA.owner, userdataB.name)
+
 			if userdataB.type == "pawn" and userdataA.owner ~= userdataB.name then
 				userdataB.callbacks.damage( self.weaponProperties.damageBody )
 
@@ -129,19 +138,17 @@ function projectile.new( map, x, y, z )
 			self.destroy()
 		end
 	end
+
 	function self.endContact( a, b, contact )
 		local userdataA, userdataB = a:getUserData(), b:getUserData()
 		if userdataB then
 			if userdataB.type == 'shield' then  
-				--print('bullet: shield end contact!')
 			elseif userdataB.type == 'player' then
-				--print('bullet: body end contact!')
 			end
 		end
 	end
 
-	function self.draw( )
-
+	function self.draw()
 		love.graphics.setColorMode( "modulate" )
 
 		love.graphics.setColor( 255, 255, 255, 255 );
@@ -150,34 +157,9 @@ function projectile.new( map, x, y, z )
 		if hud.enabled then
 			physics.draw( bullet, { 0, 255, 0, 102 } )
 		end
-
-	end
-
-	function self.addToBuffer( vp )
-		vp.addToBuffer( bufferBatch )
-	end
-
-
-	-- Basic functions
-	function self.setPosition( x, y )
-		bullet.body:setPosition( x, y )
-		bullet.body:setLinearVelocity( 0, 0 )
 	end
 	
-	function self.getPosition( )
-		return x, y
-	end
-
-	function self.getXvel( )
-		return xvel
-	end
-	function self.getYvel( )
-		return yvel
-	end
-
 	function self.destroy()
-
-			print("Bullet: Destroy!")
 			self.bullet:getBody():destroy()
 			self.destroyed = true
 	end

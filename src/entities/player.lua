@@ -96,7 +96,9 @@ function player.new(map, x, y, z)
 				self.buttonStates["leftshoulder"] = true
 			elseif self.joystick:isGamepadDown("rightshoulder") then
 				-- shoot
-				self.shoot( dt )
+				-- self.shoot( dt )
+				self.abilities["rightshoulder"].execute()
+				self.buttonStates["rightshoulder"] = true				
 			end
 
 			if not self.joystick:isGamepadDown("leftshoulder") then
