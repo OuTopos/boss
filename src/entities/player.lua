@@ -41,10 +41,10 @@ function player.new(map, x, y, z)
 		self.mask = mask		
 	end
 
-	self.abilities = {}
+	self.skills = {}
 
-	function self.setAbility(slot, ability)
-		self.abilities[slot] = ability
+	function self.setSkill(slot, skill)
+		self.skills[slot] = skill
 	end
 
 
@@ -92,12 +92,12 @@ function player.new(map, x, y, z)
 		if self.state == "stand" or self.state == "walk" then
 			if self.joystick:isGamepadDown("leftshoulder") and not self.buttonStates["leftshoulder"] then				
 				-- melee				
-				self.abilities["leftshoulder"].execute()
+				self.skills["leftshoulder"].execute()
 				self.buttonStates["leftshoulder"] = true
 			elseif self.joystick:isGamepadDown("rightshoulder") then
 				-- shoot
 				-- self.shoot( dt )
-				self.abilities["rightshoulder"].execute()
+				self.skills["rightshoulder"].execute()
 				self.buttonStates["rightshoulder"] = true				
 			end
 
@@ -315,7 +315,7 @@ function player.new(map, x, y, z)
 	end
 
 	function self.update(dt)
-		for k,v in pairs(self.abilities) do
+		for k,v in pairs(self.skills) do
 			v.update(dt)
 		end
 

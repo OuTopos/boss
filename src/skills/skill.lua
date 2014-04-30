@@ -1,13 +1,18 @@
 skill = {}
 
-function skill.new(map)
+function skill.new(game)
 	local self = {}
-	local scene = map
+
+	local game = game
+	local scene = game.scene
 
 	self.components = {}
 
 	-- public functions
-	function self.update(dt) 
+	function self.update(dt)
+ 		for i=1,#self.components do
+			self.components[i].update(dt)
+		end
 	end
 	
 	function self.execute()	
@@ -17,15 +22,19 @@ function skill.new(map)
 	end
 	
 	function self.initialize(properties)
+		-- WIP
+		-- Currently NEEDs a mandatory table.
+
 		-- properties can contain:
 
 		-- level = integer
 		-- mandatory = { {name="name", properties=properties}, ... }
-		-- 		
+		-- 
 
 		if properties.mandatory then
 			for k,v in pairs(properties.mandatory) do
-				local component = scene.newEntity(v.name, {0, 0, 0}, v.properties or {})
+				local component = game.skills[v.name].new(game.scene)
+				component.initialize(v.properties)
 
 				table.insert(self.components, component)
 			end

@@ -26,7 +26,7 @@ function close.new(player)
 
 		self.state = "active"
 
-		self.body = love.physics.newBody(player.world, self.x, self.y, "dynamic")
+		self.body = love.physics.newBody(self.origin.world, self.x, self.y, "dynamic")
 
 		self.shape = love.physics.newCircleShape(self.range)
 
@@ -35,13 +35,15 @@ function close.new(player)
 		self.fixture:setSensor(true)
 		-- self.fixture:setMask(player.mask)
 
-		self.body:setPosition(player.x, player.y)
+		self.body:setPosition(self.origin.x, self.origin.y)
 		self.body:setActive(true)
 	end
 
-	function self.initialize()
-		self.userdata.name =  "Sword of "..player.name
-		self.userdata.owner = player.name		
+	function self.initialize(properties)
+		self.origin = properties.origin
+	
+		self.userdata.name =  "Sword of "..self.origin.name
+		self.userdata.owner = self.origin.name		
 	end
 
 	function self.setRange(range)

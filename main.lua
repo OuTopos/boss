@@ -37,14 +37,14 @@ function love.load()
 		for i=1, nbJoy do
 			local p = game.scene.newEntity("player", {1000, 500, 0}, { name = "Player "..i })
 			
-			local ab = game.skills.skill.new(game.scene)
-			ab.initialize({mandatory = { { name = "range", properties = {origin = p}, } } })
-			p.setAbility("rightshoulder", ab)
+			-- Temporary to test
+			local ab = game.skills.skill.new(game)
+			ab.initialize({mandatory = { { name = "range", properties = { origin = p}, } } })
+			p.setSkill("rightshoulder", ab)
 
-			local ab = game.skills.skill.new(game.scene)
-			ab.initialize({mandatory = { { name = "close", properties = {origin = p}, } } })
-			p.setAbility("leftshoulder", ab)
-
+			local ab2 = game.skills.skill.new(game)
+			ab2.initialize({mandatory = { { name = "close", properties = { origin = p}, } } })
+			p.setSkill("leftshoulder", ab2)
 
 			p.setJoystick(love.joystick.getJoysticks()[i])		
 			table.insert(game.players, p)
