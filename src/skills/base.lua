@@ -1,9 +1,7 @@
-skill = {}
+base = {}
 
-function skill.new(game)
+function base.new(game, origin)
 	local self = {}
-
-	local game = game
 	local scene = game.scene
 
 	self.components = {}
@@ -33,7 +31,7 @@ function skill.new(game)
 
 		if properties.mandatory then
 			for k,v in pairs(properties.mandatory) do
-				local component = game.skills.components[v.name].new(game)
+				local component = game.skills.components[v.name].new(game, origin)
 				component.initialize(v.properties)
 
 				table.insert(self.components, component)
@@ -46,6 +44,4 @@ function skill.new(game)
 	return self
 end
 
-
-
-return skill
+return base

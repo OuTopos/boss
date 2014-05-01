@@ -129,7 +129,7 @@ function projectile.new(map, x, y, z )
 		local userdataA, userdataB = a:getUserData(), b:getUserData()
 		if userdataB then
 
-			if userdataB.type == "pawn" and userdataA.owner ~= userdataB.name then
+			if userdataB.type == "pawn" and userdataA.name ~= userdataB.name then
 				userdataB.callbacks.damage( self.weaponProperties.damageBody )
 
 				info(a:getUserData().name.." hit "..userdataB.name)

@@ -46,12 +46,12 @@ function love.load()
 			local p = game.scene.newEntity("player", {1000, 500, 0}, { name = "Player "..i })
 			
 			-- Temporary to test
-			local ab = game.skills.base.new(game)
-			ab.initialize({mandatory = { { name = "range", properties = { origin = p}, } } })
+			local ab = game.skills.base.new(game, p)
+			ab.initialize({mandatory = { { name = "range",  } } })
 			p.setSkill("rightshoulder", ab)
 
-			local ab2 = game.skills.base.new(game)
-			ab2.initialize({mandatory = { { name = "close", properties = { origin = p}, } } })
+			local ab2 = game.skills.base.new(game, p)
+			ab2.initialize({mandatory = { { name = "close", } } })
 			p.setSkill("leftshoulder", ab2)
 
 			p.setJoystick(love.joystick.getJoysticks()[i])		

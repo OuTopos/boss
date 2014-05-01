@@ -1,6 +1,6 @@
 close = {}
 
-function close.new(game)
+function close.new(game, origin)
 	local self = {}
 
 	self.range = 64
@@ -25,7 +25,7 @@ function close.new(game)
 
 		self.state = "active"
 
-		self.body = love.physics.newBody(self.origin.world, self.x, self.y, "dynamic")
+		self.body = love.physics.newBody(origin.world, self.x, self.y, "dynamic")
 
 		self.shape = love.physics.newCircleShape(self.range)
 
@@ -34,15 +34,13 @@ function close.new(game)
 		self.fixture:setSensor(true)
 		-- self.fixture:setMask(player.mask)
 
-		self.body:setPosition(self.origin.x, self.origin.y)
+		self.body:setPosition(origin.x, origin.y)
 		self.body:setActive(true)
 	end
 
 	function self.initialize(properties)
-		self.origin = properties.origin
-	
-		self.userdata.name =  "Sword of "..self.origin.name
-		self.userdata.owner = self.origin.name		
+		self.userdata.name =  "Sword of "..origin.name
+		self.userdata.owner = origin.name		
 	end
 
 	function self.setRange(range)

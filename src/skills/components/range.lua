@@ -1,6 +1,6 @@
 range = {}
 
-function range.new(game)
+function range.new(game, origin)
 	local self = {}
 	self.scene = game.scene
 	
@@ -12,7 +12,6 @@ function range.new(game)
 	end
 
 	function self.initialize(properties)
-		self.origin = properties.origin
 	end
 
 	function self.execute()
@@ -20,12 +19,12 @@ function range.new(game)
 			self.lastShot = 0 
 
 			local properties = self.weapon.properties 
-			properties.origin = self.origin
+			properties.origin = origin
 
 			for i=1,self.weapon.properties.nrBulletsPerShot do				
 				-- calculate projectile spawn position and offset
-				local projectileSpawnPosX = self.origin.x + 29*math.cos( self.origin.aim )
-				local projectileSpawnPosY = self.origin.y + 29*math.sin( self.origin.aim )
+				local projectileSpawnPosX = origin.x + 29*math.cos( origin.aim )
+				local projectileSpawnPosY = origin.y + 29*math.sin( origin.aim )
 
 				-- create projectile
 				local projectile = self.scene.newEntity( "projectile", {projectileSpawnPosX, projectileSpawnPosY, 0}, properties )
@@ -39,7 +38,7 @@ function range.new(game)
 				if love.math.random(0,1) == 1 then
 					spread = - spread
 				end
-				local aimSpread =  self.origin.aim + spread
+				local aimSpread =  origin.aim + spread
 				local vectorSpreadX = math.cos( aimSpread )
 				local vectorSpreadY = math.sin( aimSpread )
 				
