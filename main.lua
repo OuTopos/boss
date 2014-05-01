@@ -36,6 +36,8 @@ function love.load()
 	game.scene = yama.newScene()
 	game.scene.enablePhysics()
 	game.scene.loadMap("test/start")
+
+	game.buttonStates = {}
 	
 	-- todo: check joy
 	local nbJoy = love.joystick.getJoystickCount( )
@@ -53,6 +55,10 @@ function love.load()
 			local ab2 = game.skills.base.new(game, p)
 			ab2.initialize({mandatory = { { name = "close", } } })
 			p.setSkill("leftshoulder", ab2)
+
+			local ab3 = game.skills.base.new(game, p)
+			ab3.initialize({mandatory = { { name = "shield", } } })
+			p.setSkill("lefttrigger", ab3)
 
 			p.setJoystick(love.joystick.getJoysticks()[i])		
 			table.insert(game.players, p)
@@ -74,6 +80,23 @@ end
 
 function love.update(dt)
 	yama.update(dt)
+	for i in ipairs(game.players) do
+		-- simulate gamepadpressed/released on axis 5
+		if game.players[i].joystick:getAxis(5) > 0.2 and not game.buttonStates["lefttrigger"] then
+			game.buttonStates["lefttrigger"] = true
+			game.players[i].gamepadpressed( "lefttrigger" )
+		elseif game.players[i].joystick:getAxis(5) < 0.2 then
+			game.buttonStates["lefttrigger"] = false
+		end
+		if game.players[i].joystick:isGamepadDown("rightshoulder") then
+			game.players[i].gamepaddown( "rightshoulder" )
+			game.buttonStates["rightshoulder"] = true
+		end
+		if not game.players[i].joystick:isGamepadDown("rightshoulder") then
+			game.buttonStates["rightshoulder"] = false
+		end
+
+	end
 end
 
 function love.draw()

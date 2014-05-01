@@ -90,24 +90,25 @@ function player.new(map, x, y, z)
 		self.fixtures.weapon:setMask(16)
 
 		if self.state == "stand" or self.state == "walk" then
+			--[[
 			if self.joystick:isGamepadDown("leftshoulder") and not self.buttonStates["leftshoulder"] then				
 				-- melee				
 				--self.skills["leftshoulder"].execute()
 				self.buttonStates["leftshoulder"] = true				
 			elseif self.joystick:isGamepadDown("rightshoulder") then
 				-- shoot
-				-- self.shoot( dt )
-				self.skills["rightshoulder"].execute()
-				self.buttonStates["rightshoulder"] = true				
+				--self.skills["rightshoulder"].execute()
+				--self.buttonStates["rightshoulder"] = true				
 			end
 
 			if not self.joystick:isGamepadDown("leftshoulder") then
-				self.buttonStates["leftshoulder"] = false
+				--self.buttonStates["leftshoulder"] = false
 			end
 
 			if not self.joystick:isGamepadDown("rightshoulder") then
 				self.buttonStates["rightshoulder"] = false
 			end
+			--]]
 
 			if yama.tools.getDistance(0, 0, self.joystick:getAxis(1), self.joystick:getAxis(2)) > 0.2 then
 				self.state = "walk"
@@ -159,6 +160,12 @@ function player.new(map, x, y, z)
 		vmultiplier = nil
 	end
 
+	function self.gamepaddown( button )
+		if self.skills[button] then
+			self.skills[button].execute()
+		end
+	end
+
 	function self.gamepadpressed( button )
 		if self.skills[button] then
 			self.skills[button].execute()
@@ -166,43 +173,6 @@ function player.new(map, x, y, z)
 	end
 	function self.gamepadreleased( button )
 		--
-	end
-
-	function self.shoot( dt )
-		-- projectiles --
-
-		self.projectileSpawnCooldown = self.projectileSpawnCooldown - dt
-		if self.projectileSpawnCooldown <= 0 then
-			local leftover = math.abs( self.projectileSpawnCooldown )
-			self.projectileSpawnCooldown = self.weapon.properties.rps - leftover
-
-			-- calculate projectile spawn position and offset
-			local projectileSpawnPosX = self.x + 29*math.cos( self.aim )
-			local projectileSpawnPosY = self.y + 29*math.sin( self.aim )
-
-			-- create projectile
-			local projectile = scene.newEntity( "projectile", {projectileSpawnPosX, projectileSpawnPosY, 0}, self.weapon.properties )
-
-			-- calculate spread 
-			local spread = love.math.random(0,self.weapon.properties.spread)
-			spread = spread/100	
-			if spread > self.weapon.properties.spread then
-				spread = self.weapon.properties.spread
-			end
-			if love.math.random(0,1) == 1 then
-				spread = - spread
-			end
-			local aimSpread =  self.aim + spread
-			local vectorSpreadX = math.cos( aimSpread )
-			local vectorSpreadY = math.sin( aimSpread )
-
-			
-			local fxprojectile = self.weapon.properties.impulseForce * vectorSpreadX
-			local fyprojectile = self.weapon.properties.impulseForce * vectorSpreadY
-
-			projectile.shoot( projectileSpawnPosX, projectileSpawnPosY, fxprojectile, fyprojectile, self.weapon.properties )
-			projectile = nil
-		end
 	end
 
 	function self.updatePosition()

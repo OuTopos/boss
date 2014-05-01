@@ -1,11 +1,10 @@
 shield = {}
 
-function shield.new(player)
+function shield.new(game, origin)
 	local self = {}
 
 	self.range = 64
 	self.arc = 3.14/4
-	self.x, self.y = player.x, player.y
 	self.active = false
 
 	self.state = "idle" -- idle or active
@@ -21,12 +20,14 @@ function shield.new(player)
 		end
 	end
 
-	function self.execute()		
+	function self.execute()
+		print('execshield')
 		if self.state == "active" then return end
+		print('execshield not active')
 
 		self.state = "active"
 
-		self.body = love.physics.newBody(player.world, self.x, self.y, "dynamic")
+		self.body = love.physics.newBody(origin.world, self.x, self.y, "dynamic")
 
 		self.shape = love.physics.newCircleShape(self.range)
 
@@ -35,13 +36,13 @@ function shield.new(player)
 		self.fixture:setSensor(true)
 		-- self.fixture:setMask(player.mask)
 
-		self.body:setPosition(player.x, player.y)
+		self.body:setPosition(origin.x, origin.y)
 		self.body:setActive(true)
 	end
 
-	function self.initialize()
-		self.userdata.name =  "Sword of "..player.name
-		self.userdata.owner = player.name		
+	function self.initialize(properties)
+		self.userdata.name =  "Sword of "..origin.name
+		self.userdata.owner = origin.name		
 	end
 
 	function self.setRange(range)
