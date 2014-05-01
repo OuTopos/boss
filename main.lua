@@ -80,6 +80,14 @@ function love.draw()
 	yama.draw()
 end
 
+function love.gamepadpressed(joystick, button)
+	game.players[joystick:getID( )].gamepadpressed( button )
+end
+
+function love.gamepadreleased(joystick, button)
+	game.players[joystick:getID( )].gamepadreleased( button )
+end
+
 function love.keypressed(key)
 	if key == "escape" then
 		love.event.push("quit")

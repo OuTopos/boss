@@ -92,8 +92,8 @@ function player.new(map, x, y, z)
 		if self.state == "stand" or self.state == "walk" then
 			if self.joystick:isGamepadDown("leftshoulder") and not self.buttonStates["leftshoulder"] then				
 				-- melee				
-				self.skills["leftshoulder"].execute()
-				self.buttonStates["leftshoulder"] = true
+				--self.skills["leftshoulder"].execute()
+				self.buttonStates["leftshoulder"] = true				
 			elseif self.joystick:isGamepadDown("rightshoulder") then
 				-- shoot
 				-- self.shoot( dt )
@@ -103,6 +103,10 @@ function player.new(map, x, y, z)
 
 			if not self.joystick:isGamepadDown("leftshoulder") then
 				self.buttonStates["leftshoulder"] = false
+			end
+
+			if not self.joystick:isGamepadDown("rightshoulder") then
+				self.buttonStates["rightshoulder"] = false
 			end
 
 			if yama.tools.getDistance(0, 0, self.joystick:getAxis(1), self.joystick:getAxis(2)) > 0.2 then
@@ -153,6 +157,15 @@ function player.new(map, x, y, z)
 		nx, ny = nil, nil
 		fx, fy = nil, nil
 		vmultiplier = nil
+	end
+
+	function self.gamepadpressed( button )
+		if self.skills[button] then
+			self.skills[button].execute()
+		end
+	end
+	function self.gamepadreleased( button )
+		--
 	end
 
 	function self.shoot( dt )
