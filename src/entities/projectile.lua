@@ -33,8 +33,10 @@ function projectile.new(map, x, y, z )
 
 	-- public functions
 	function self.initialize(properties)
+		self.origin = properties.origin
 		self.weaponProperties = properties
 
+		bulletUserdata.name = self.origin.name
 		-- Physics		
 		self.bullet = love.physics.newFixture(love.physics.newBody( map.world, self.x, self.y, "dynamic"), love.physics.newCircleShape( self.weaponProperties.sizeX ) )
 

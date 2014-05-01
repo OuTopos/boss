@@ -1,11 +1,10 @@
 close = {}
 
-function close.new(player)
+function close.new(game)
 	local self = {}
 
 	self.range = 64
 	self.arc = 3.14/4
-	self.x, self.y = player.x, player.y
 	self.active = false
 
 	self.state = "idle" -- idle or active

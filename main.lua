@@ -22,8 +22,16 @@ function love.load()
 
 	love.graphics.setFont(love.graphics.newImageFont(yama.assets.loadImage("font")," abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\""))
 
-	-- All abilities loaded into game.abilities.
-	game.skills = yama.requireDir("src/skills")
+	-- All skills loaded into game.skills.
+	game.skills = {
+	 	base = require("src/skills/base"),
+	
+	 	components = yama.requireDir("src/skills/components"),
+
+		attacks = yama.requireDir("src/skills/attack"),
+		defends = yama.requireDir("src/skills/defend"),
+		heals = yama.requireDir("src/skills/heal"),
+	}
 
 	game.scene = yama.newScene()
 	game.scene.enablePhysics()
@@ -38,11 +46,11 @@ function love.load()
 			local p = game.scene.newEntity("player", {1000, 500, 0}, { name = "Player "..i })
 			
 			-- Temporary to test
-			local ab = game.skills.skill.new(game)
+			local ab = game.skills.base.new(game)
 			ab.initialize({mandatory = { { name = "range", properties = { origin = p}, } } })
 			p.setSkill("rightshoulder", ab)
 
-			local ab2 = game.skills.skill.new(game)
+			local ab2 = game.skills.base.new(game)
 			ab2.initialize({mandatory = { { name = "close", properties = { origin = p}, } } })
 			p.setSkill("leftshoulder", ab2)
 

@@ -1,8 +1,8 @@
 range = {}
 
-function range.new(map)
+function range.new(game)
 	local self = {}
-	local scene = map
+	self.scene = game.scene
 	
 	self.lastShot = 0
 
@@ -19,13 +19,16 @@ function range.new(map)
 	  	if self.lastShot > self.weapon.properties.rps then
 			self.lastShot = 0 
 
+			local properties = self.weapon.properties 
+			properties.origin = self.origin
+
 			for i=1,self.weapon.properties.nrBulletsPerShot do				
 				-- calculate projectile spawn position and offset
 				local projectileSpawnPosX = self.origin.x + 29*math.cos( self.origin.aim )
 				local projectileSpawnPosY = self.origin.y + 29*math.sin( self.origin.aim )
 
 				-- create projectile
-				local projectile = scene.newEntity( "projectile", {projectileSpawnPosX, projectileSpawnPosY, 0}, self.weapon.properties )
+				local projectile = self.scene.newEntity( "projectile", {projectileSpawnPosX, projectileSpawnPosY, 0}, properties )
 
 				-- calculate spread 
 				local spread = love.math.random(0,self.weapon.properties.spread)

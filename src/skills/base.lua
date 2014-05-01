@@ -33,7 +33,7 @@ function skill.new(game)
 
 		if properties.mandatory then
 			for k,v in pairs(properties.mandatory) do
-				local component = game.skills[v.name].new(game.scene)
+				local component = game.skills.components[v.name].new(game)
 				component.initialize(v.properties)
 
 				table.insert(self.components, component)
