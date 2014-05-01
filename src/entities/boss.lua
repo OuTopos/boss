@@ -36,6 +36,9 @@ function boss.new(map, x, y, z)
 	self.fixtures.anchor:getBody():setLinearDamping(10)
 	self.fixtures.anchor:getBody():setFixedRotation(true)
 	self.fixtures.anchor:setUserData({type = "pawn", callbacks = self, name = "i am the boss"})
+	self.fixtures.anchor:setGroupIndex( 1 )
+	self.fixtures.anchor:setCategory( 2 )
+
 
 
 	self.test = {}

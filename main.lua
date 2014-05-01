@@ -38,6 +38,7 @@ function love.load()
 	game.scene.loadMap("test/start")
 
 	game.buttonStates = {}
+	game.buttonStates["lefttrigger"] = false
 	
 	-- todo: check joy
 	local nbJoy = love.joystick.getJoystickCount( )
@@ -85,7 +86,8 @@ function love.update(dt)
 		if game.players[i].joystick:getAxis(5) > 0.2 and not game.buttonStates["lefttrigger"] then
 			game.buttonStates["lefttrigger"] = true
 			game.players[i].gamepadpressed( "lefttrigger" )
-		elseif game.players[i].joystick:getAxis(5) < 0.2 then
+		elseif game.players[i].joystick:getAxis(5) < 0.2 and game.buttonStates["lefttrigger"] then
+			game.players[i].gamepadreleased( "lefttrigger" )
 			game.buttonStates["lefttrigger"] = false
 		end
 		if game.players[i].joystick:isGamepadDown("rightshoulder") then
@@ -95,7 +97,6 @@ function love.update(dt)
 		if not game.players[i].joystick:isGamepadDown("rightshoulder") then
 			game.buttonStates["rightshoulder"] = false
 		end
-
 	end
 end
 

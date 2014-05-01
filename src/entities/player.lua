@@ -47,8 +47,6 @@ function player.new(map, x, y, z)
 		self.skills[slot] = skill
 	end
 
-
-
 	-- Movement variables
 	self.velocity = 700 * self.scale
 	self.direction = 0
@@ -90,25 +88,6 @@ function player.new(map, x, y, z)
 		self.fixtures.weapon:setMask(16)
 
 		if self.state == "stand" or self.state == "walk" then
-			--[[
-			if self.joystick:isGamepadDown("leftshoulder") and not self.buttonStates["leftshoulder"] then				
-				-- melee				
-				--self.skills["leftshoulder"].execute()
-				self.buttonStates["leftshoulder"] = true				
-			elseif self.joystick:isGamepadDown("rightshoulder") then
-				-- shoot
-				--self.skills["rightshoulder"].execute()
-				--self.buttonStates["rightshoulder"] = true				
-			end
-
-			if not self.joystick:isGamepadDown("leftshoulder") then
-				--self.buttonStates["leftshoulder"] = false
-			end
-
-			if not self.joystick:isGamepadDown("rightshoulder") then
-				self.buttonStates["rightshoulder"] = false
-			end
-			--]]
 
 			if yama.tools.getDistance(0, 0, self.joystick:getAxis(1), self.joystick:getAxis(2)) > 0.2 then
 				self.state = "walk"
@@ -168,11 +147,17 @@ function player.new(map, x, y, z)
 
 	function self.gamepadpressed( button )
 		if self.skills[button] then
+			print('gamepadpressed', button)
 			self.skills[button].execute()
 		end
 	end
 	function self.gamepadreleased( button )
-		--
+		if self.skills[button] then
+			print('gamepadpressed', button)
+			if button == 'lefttrigger' then
+				self.skills[button].execute()
+			end
+		end
 	end
 
 	function self.updatePosition()
@@ -194,27 +179,6 @@ function player.new(map, x, y, z)
 
 
 		--particle:setPosition(self.getX(), self.getY()-oy/2)
-	end
-
-	function self.weaponSetup()
-			-- WEAPON STUFF 
-		self.weapon.properties = {}
-		self.weapon.properties.name = 'bouncer'
-		self.weapon.properties.rps = 0.2
-		self.weapon.properties.damageBody = 9
-		self.weapon.properties.damageShield = 17
-		self.weapon.properties.impulseForce = 900
-		self.weapon.properties.nrBulletsPerShot = 1
-		self.weapon.properties.magCapacity = 50
-		self.weapon.properties.spread = 1
-		self.weapon.properties.nrBounces = 1
-		self.weapon.properties.blastRadius = 0
-		self.weapon.properties.lifetime = 5
-		self.weapon.properties.bulletWeight = 0.4
-		self.weapon.properties.sizeX = 1
-		self.weapon.properties.linearDamping = 0.5
-		self.weapon.properties.inertia = 0.2
-		self.weapon.properties.gravityScale = 0.01
 	end
 
 	-- CONTACT
@@ -276,6 +240,9 @@ function player.new(map, x, y, z)
 		self.fixtures.anchor:getBody():setLinearDamping(10)
 		self.fixtures.anchor:getBody():setFixedRotation(true)
 		self.fixtures.anchor:setUserData({type = "pawn", callbacks = self, name = properties.name })
+		self.fixtures.anchor:setGroupIndex( 1 )
+		self.fixtures.anchor:setCategory( 1 )
+		--self.fixtures.anchor:setMask( 2 )
 
 		self.weapon = {}
 		self.weapon.data = {}
@@ -292,8 +259,6 @@ function player.new(map, x, y, z)
 		print("zUG ZUG ZU GU ZUUSUZG ".. properties.name)
 
 		print("PLAYER INITAD", self.fixtures.anchor.type())
-
-		self.weaponSetup()
 
 	end
 
