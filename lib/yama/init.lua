@@ -1,5 +1,12 @@
-local yama = {}
+function script_path() 
+    -- remember to strip off the starting @ 
+    return debug.getinfo(2, "S").source:sub(2) 
+end 
 
+print(debug.getinfo(1).source:match("@(.*)$"))
+
+local yama = require("lib/yama/yama")
+yama.string = "test test"
 -- CONFIG
 
 -- Paths
@@ -262,19 +269,11 @@ end
 -- ######## END ASSETS ########
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 -- DEBUG FUNCTIONS
+yama.log = love.filesystem.newFile("yama.log")
+yama.log:open("w")
+
+
 yama.debug = {}
 yama.debug.level = 2
 yama.debug.warning2error = false
@@ -284,6 +283,7 @@ function info(text, i)
 	if yama.debug.level >= 2 then
 		local info = debug.getinfo(i or 2, "lS")
 		print("Info: " .. info.short_src .. ":" .. info.currentline .. ": " .. text)
+		yama.log:write("Info: " .. info.short_src .. ":" .. info.currentline .. ": " .. text .. "\r\n")
 	end
 end
 function warning(text, i)
@@ -293,6 +293,7 @@ function warning(text, i)
 		else
 			local info = debug.getinfo(i or 2, "lS")
 			print("Warning: " .. info.short_src .. ":" .. info.currentline .. ": " .. text)
+			yama.log:write("Warning: " .. info.short_src .. ":" .. info.currentline .. ": " .. text .. "\r\n")
 		end
 	end
 end
