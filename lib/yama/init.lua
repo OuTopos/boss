@@ -357,4 +357,42 @@ function yama.draw()
 	--]]
 end
 
+-- Love callbacks
+yama.keybindings = {}
+function love.keypressed(key)
+	if yama.keybindings[key] then
+		if type(yama.keybindings[key]) == "function" then
+			yama.keybindings[key]()
+		end
+	end
+end
+
+yama.keybindings["escape"] = function()
+	love.event.push("quit")
+end
+
+yama.keybindings["h"] = function()
+	if yama.hud.enabled then
+		yama.hud.enabled = false
+	else
+		yama.hud.enabled = true
+	end
+end
+
+yama.keybindings["j"] = function()
+	if yama.hud.physics then
+		yama.hud.physics = false
+	else
+		yama.hud.physics = true
+	end
+end
+
+yama.keybindings["p"] = function()
+	if yama.v.paused then
+		yama.v.paused = false
+	else
+		yama.v.paused = true
+	end
+end
+
 return yama
