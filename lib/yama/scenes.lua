@@ -412,7 +412,7 @@ function scenes.new()
 
 	function self.maps.new(path)
 
-		if love.filesystem.isFile(P.MAPS .. "/" .. path .. ".lua") then
+		if love.filesystem.isFile(yama.paths.maps .. "/" .. path .. ".lua") then
 			
 			-- DEBUG
 			local debug = {}
@@ -502,7 +502,7 @@ function scenes.new()
 
 
 
-			local map = require(P.MAPS .. "/" .. path)
+			local map = require(yama.paths.maps .. "/" .. path)
 
 			-- DEPTH
 			if map.properties.sortmode then

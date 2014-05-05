@@ -12,11 +12,11 @@ function assets.load()
 	love.graphics.setDefaultFilter("nearest", "nearest")
 
 	-- LOADING TILESETS
-	if love.filesystem.exists(P.TILESETS) then
-		local files = love.filesystem.getDirectoryItems(P.TILESETS)
+	if love.filesystem.exists(yama.paths.tilesets) then
+		local files = love.filesystem.getDirectoryItems(yama.paths.tilesets)
 		for k, file in ipairs(files) do
 			--info("Autoloading file #" .. k .. ": " .. file)
-			local chunk = love.filesystem.load(P.TILESETS .. "/" .. file)
+			local chunk = love.filesystem.load(yama.paths.tilesets .. "/" .. file)
 			local tilesets = chunk()
 			for i = 1, #tilesets do
 				assets.loadTileset(tilesets[i].name, tilesets[i].imagepath, tilesets[i].tilewidth, tilesets[i].tileheight, tilesets[i].spacing, tilesets[i].margin, tilesets[i].margin)
@@ -26,7 +26,7 @@ function assets.load()
 	end
 
 	-- LOADING ANIMATIONS
-	if love.filesystem.exists(P.ANIMATIONS) then
+	if love.filesystem.exists(yama.paths.animations) then
 		print("Animations eh?")
 		--[[
 		local files = love.filesystem.enumerate("animations")
@@ -50,8 +50,8 @@ function assets.loadImage(imagepath)
 		info("Image " .. imagepath .. " was already loaded.", 3)
 		return assets.images[imagepath]
 	else
-		if love.filesystem.exists(P.IMAGES .. "/" .. imagepath .. ".png") then
-			assets.images[imagepath] = love.graphics.newImage(P.IMAGES .. "/".. imagepath .. ".png")
+		if love.filesystem.exists(yama.paths.images .. "/" .. imagepath .. ".png") then
+			assets.images[imagepath] = love.graphics.newImage(yama.paths.images .. "/".. imagepath .. ".png")
 			info("Successfully loaded image: " .. imagepath, 3)
 			return assets.images[imagepath]
 		else
@@ -94,7 +94,7 @@ function assets.loadTileset(name, imagepath, tilewidth, tileheight, spacing, mar
 				self.imagewidth = self.width * 2 + self.width * self.tilewidth
 				self.imageheight = self.height * 2 + self.height * self.tileheight
 
-				self.srcimagedata = love.image.newImageData(P.IMAGES .. "/" ..imagepath .. ".png")
+				self.srcimagedata = love.image.newImageData(yama.paths.images .. "/" ..imagepath .. ".png")
 				self.imagedata = love.image.newImageData(self.imagewidth, self.imageheight)
 			end
 

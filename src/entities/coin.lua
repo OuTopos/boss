@@ -1,3 +1,4 @@
+local yama = require("lib.yama")
 local coin = {}
 
 function coin.new(scene, x, y, z)

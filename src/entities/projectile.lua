@@ -1,3 +1,4 @@
+local yama = require("lib.yama")
 local projectile = {}
 
 function projectile.new(map, x, y, z )
