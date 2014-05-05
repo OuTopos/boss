@@ -1,4 +1,4 @@
-
+local yama = require((...):match("(.+)%.[^%.]+$") .. "/table")
 local ai = {}
 
 function ai.new()

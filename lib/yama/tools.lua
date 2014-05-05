@@ -1,3 +1,4 @@
+local yama = require((...):match("(.+)%.[^%.]+$") .. "/table")
 local tools = {}
 
 function tools.serialize(t, d)

@@ -1,3 +1,4 @@
+local yama = require("lib.yama")
 local player = {}
 
 function player.new(map, x, y, z)

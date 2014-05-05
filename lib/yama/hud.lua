@@ -1,3 +1,4 @@
+local yama = require((...):match("(.+)%.[^%.]+$") .. "/table")
 local hud = {}
 hud.enabled = false
 hud.physics = false

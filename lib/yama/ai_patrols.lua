@@ -1,4 +1,5 @@
-patrols = {}
+local yama = require((...):match("(.+)%.[^%.]+$") .. "/table")
+local patrols = {}
 
 function patrols.new()
 	local public = {}

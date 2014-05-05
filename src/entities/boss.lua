@@ -1,3 +1,4 @@
+local yama = require("lib.yama")
 local boss = {}
 
 function boss.new(map, x, y, z)

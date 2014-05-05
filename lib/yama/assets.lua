@@ -1,3 +1,4 @@
+local yama = require((...):match("(.+)%.[^%.]+$") .. "/table")
 local assets = {}
 assets.images = {}
 assets.tilesets = {}

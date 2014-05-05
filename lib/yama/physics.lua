@@ -1,3 +1,4 @@
+local yama = require((...):match("(.+)%.[^%.]+$") .. "/table")
 local physics = {}
 
 function physics.draw(world)

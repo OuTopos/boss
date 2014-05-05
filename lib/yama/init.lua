@@ -1,11 +1,10 @@
-function script_path() 
-    -- remember to strip off the starting @ 
-    return debug.getinfo(2, "S").source:sub(2) 
-end 
+--print((...):match("(.+)%.[^%.]+$") or (...))
 
-print(debug.getinfo(1).source:match("@(.*)$"))
+--print(string.gsub(debug.getinfo(1).short_src, "^(.+\\)[^\\]+$", "%1"))
 
-local yama = require("lib/yama/yama")
+--print(debug.getinfo(1).source:match("@(.*)$"))
+
+local yama = require((...):match("(.+)%.[^%.]+$") .. "/yama/table")
 yama.string = "test test"
 -- CONFIG
 
@@ -35,7 +34,7 @@ yama.gui            = require(P.LIB .. "/yama.gui")
 yama.hud            = require(P.LIB .. "/yama.hud")
 yama.physics        = require(P.LIB .. "/yama.physics")
 
-yama.tools		    = require(P.LIB .. "/yama.tools")
+yama.tools		    = require(P.LIB .. ".yama.tools")
 
 -- Phase these out
 

@@ -1,8 +1,6 @@
 require("strict")
 
--- yama should be local. have to fix.
-yama = require("lib.yama")
-
+local yama = require("lib.yama")
 local game = {}
 
 function love.load()
