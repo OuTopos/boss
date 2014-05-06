@@ -6,8 +6,6 @@ local game = {}
 function love.load()
 	yama.load()
 
-	love.window.setTitle("Yama")
-	love.window.setIcon(love.image.newImageData("assets/images/icon.png"))
 	love.window.setMode(1920, 1080, {
 		fullscreen = false,
 		fullscreentype = "desktop",
@@ -67,6 +65,7 @@ function love.load()
 	end
 
 	game.boss = game.scene.newEntity("boss", {500,500, 0})
+	game.boss = game.scene.newEntity("boss", {500,600, 0})
 
 	game.vp1 = game.scene.newViewport()
 	game.vp1.camera.cx = love.window.getWidth() / 2

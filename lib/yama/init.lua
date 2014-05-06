@@ -94,7 +94,7 @@ function yama.load()
 
 
 	yama.assets.load()
-	yama.gui.load()
+	--yama.gui.load()
 
 	-- Loading entities
 	yama.entities = yama.requireDir(yama.paths.entities)

@@ -64,8 +64,9 @@ function viewports.new()
 
 		self.canvases = {}
 		for i = 1, 4 do
-			table.insert(self.canvases, love.graphics.newCanvas(self.width, self.height))
+			table.insert(self.canvases, love.graphics.newCanvas(self.width, self.height, "hdr"))
 		end
+
 		self.shader:send("canvas_diffuse", self.canvases[1])
 		self.shader:send("canvas_normal", self.canvases[2])
 		self.shader:send("canvas_depth", self.canvases[3])

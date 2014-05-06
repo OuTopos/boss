@@ -920,6 +920,7 @@ function scenes.new()
 		viewport.shader_pre:send("normalmap", sceneEntity.normalmap)
 		viewport.shader_pre:send("depthmap", sceneEntity.depthmap)
 		--viewport.shader_pre:send("z", sceneEntity.z / 256)
+		viewport.shader_pre:send("scale", (sceneEntity.sx + sceneEntity.sy) / 2)
 		
 		love.graphics.draw(sceneEntity.drawable, sceneEntity.x, sceneEntity.y, sceneEntity.r, sceneEntity.sx, sceneEntity.sy, sceneEntity.ox, sceneEntity.oy)
 		viewport.debug.drawcalls = viewport.debug.drawcalls + 1
