@@ -80,10 +80,10 @@ function boss.new(map, x, y, z)
 	local cooldown = 0
 
 	-- BUFFER BATCH
-	local bufferBatch = yama.buffers.newBatch(self.x, self.y, self.z)
+	-- local bufferBatch = yama.buffers.newBatch(self.x, self.y, self.z)
 
 	-- ANIMATION
-	local animation = yama.animations.new()
+	local animation = yama.newAnimation()
 
 	-- SPRITE
 	--local tileset = "LPC/body/male/light"
@@ -99,7 +99,7 @@ function boss.new(map, x, y, z)
 
 	-- local tilesetArrow = "directionarrow"
 	-- local spriteArrow = yama.buffers.newDrawable(yama.assets.loadImage(tilesetArrow), self.x, self.y-16, 640, 1, self.sx, self.sy, -24, 12)
-	table.insert(bufferBatch.data, sprite)
+	-- table.insert(bufferBatch.data, sprite)
 
 	
 
@@ -203,7 +203,7 @@ function boss.new(map, x, y, z)
 		--self.x, self.y = math.floor(self.x + 0.5), math.floor(self.y + 0.5)
 		self.fixtures.anchor:getBody():setAngle(self.direction)
 
-		yama.buffers.setBatchPosition(bufferBatch, self.x + self.aox, self.y + self.aoy)
+		-- yama.buffers.setBatchPosition(bufferBatch, self.x + self.aox, self.y + self.aoy)
 
 		sprite.x = self.x + self.aox
 		sprite.y = self.y + self.aoy

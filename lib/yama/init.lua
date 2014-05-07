@@ -19,8 +19,7 @@ yama.assets         = require(yama.paths.lib .. "/yama.assets")
 yama.animations     = require(yama.paths.lib .. "/yama.animations")
 yama.newAnimation = yama.animations.new
 
-yama.scenes         = require(yama.paths.lib .. "/yama.scenes")
-yama.newScene = yama.scenes.new
+yama.worlds         = require(yama.paths.lib .. "/yama.worlds")
 
 yama.viewports      = require(yama.paths.lib .. "/yama.viewports")
 yama.gui            = require(yama.paths.lib .. "/yama.gui")
@@ -75,7 +74,7 @@ end
 
 -- TOOLS
 
-function yama.requireDir(path)
+local function requireDir(path)
 	local table = {}
 	if love.filesystem.exists(path) then
 		local files = love.filesystem.getDirectoryItems(path)
@@ -88,7 +87,7 @@ function yama.requireDir(path)
 end
 
 
-function yama.load()
+local function load()
 	--love.graphics.setDefaultFilter("linear", "linear")
 	love.graphics.setDefaultFilter("nearest", "nearest")
 
@@ -97,7 +96,7 @@ function yama.load()
 	--yama.gui.load()
 
 	-- Loading entities
-	yama.entities = yama.requireDir(yama.paths.entities)
+	yama.entities = requireDir(yama.paths.entities)
 
 	--[[
 	local rgb = {0, 1, 0, 0}
@@ -114,14 +113,14 @@ function yama.load()
 	--]]
 end
 
-function yama.update(dt)
+local function update(dt)
 	if not yama.v.paused then
-		yama.scenes.update(dt * yama.v.timescale)
+		yama.worlds.update(dt * yama.v.timescale)
 	end
 end
 
-function yama.draw()
-	yama.scenes.draw()
+local function draw()
+	yama.worlds.draw()
 
 	---[[ FPS
 	love.graphics.setColor(0, 0, 0, 255)
@@ -170,4 +169,18 @@ yama.keybindings["p"] = function()
 	end
 end
 
-return yama
+return {
+	load = load,
+	update = update,
+	draw = draw,
+
+	newWorld = yama.worlds.new,
+	newAnimation = yama.animations.new,
+
+	keybindings = yama.keybindings,
+
+	requireDir = requireDir,
+
+	assets = yama.assets,
+	tools = yama.tools,
+}

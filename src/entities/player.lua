@@ -58,7 +58,7 @@ function player.new(map, x, y, z)
 	local cooldown = 0
 
 	-- BUFFER BATCH
-	local bufferBatch = yama.buffers.newBatch(self.x, self.y, self.z)
+	-- local bufferBatch = yama.buffers.newBatch(self.x, self.y, self.z)
 
 	-- ANIMATION
 	local animation = yama.newAnimation()
@@ -70,12 +70,12 @@ function player.new(map, x, y, z)
 	sprite.normalmap = yama.assets.loadImage("lightingtest/body_normal")
 	sprite.depthmap = yama.assets.loadImage("lightingtest/body_depth")
 
-	local tilesetArrow = "directionarrow"
+	-- local tilesetArrow = "directionarrow"
 	--images.load(tilesetArrow):setFilter("linear", "linear")
-	local spriteArrow = yama.buffers.newDrawable(yama.assets.loadImage(tilesetArrow), self.x, self.y-16, 640, 1, self.sx, self.sy, -24, 12)
+	-- local spriteArrow = yama.buffers.newDrawable(yama.assets.loadImage(tilesetArrow), self.x, self.y-16, 640, 1, self.sx, self.sy, -24, 12)
 	--sprite.shader = glow_effect
 
-	table.insert(bufferBatch.data, sprite)
+	-- table.insert(bufferBatch.data, sprite)
 
 	function self.updateInput(dt)
 					
@@ -169,14 +169,14 @@ function player.new(map, x, y, z)
 		--self.x, self.y = math.floor(self.x + 0.5), math.floor(self.y + 0.5)
 		--self.fixtures.anchor:getBody():setAngle(self.direction)
 
-		yama.buffers.setBatchPosition(bufferBatch, self.x + self.aox, self.y + self.aoy)
+		-- yama.buffers.setBatchPosition(bufferBatch, self.x + self.aox, self.y + self.aoy)
 
 		sprite.x = self.x + self.aox
 		sprite.y = self.y + self.aoy
 
-		spriteArrow.x = self.x --math.floor(x + 0.5)
-		spriteArrow.y = self.y-16 --math.floor(y-16 + 0.5)
-		spriteArrow.r = self.aim
+		-- spriteArrow.x = self.x --math.floor(x + 0.5)
+		-- spriteArrow.y = self.y-16 --math.floor(y-16 + 0.5)
+		-- spriteArrow.r = self.aim
 
 
 		--particle:setPosition(self.getX(), self.getY()-oy/2)

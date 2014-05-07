@@ -11,4 +11,15 @@ function love.gamepadreleased(joystick, button)
 	end
 end
 
+input.joysticks = {}
+
+function love.joystickadded(joystick)
+	table.insert(input.joysticks, joystick)
+end
+
+
+function love.joystickremoved(joystick)
+	
+end
+
 return input

@@ -29,7 +29,7 @@ function love.load()
 		heals = yama.requireDir("src/skills/heal"),
 	}
 
-	game.scene = yama.newScene()
+	game.scene = yama.newWorld()
 	game.scene.enablePhysics()
 	game.scene.loadMap("test/start")
 
