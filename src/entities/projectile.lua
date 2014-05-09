@@ -27,10 +27,10 @@ function projectile.new(map, x, y, z )
 	self.bulletTimer = 0
 	self.bounces = 0
 
-	local bufferBatch = yama.buffers.newBatch( self.x, self.y, self.z )
-	local bulletsprite = yama.buffers.newDrawable( yama.assets.loadImage( "projectile" ), self.x, self.y, self.z, r, sx, sy, ox, oy )
+	-- local bufferBatch = yama.buffers.newBatch( self.x, self.y, self.z )
+	-- local bulletsprite = yama.buffers.newDrawable( yama.assets.loadImage( "projectile" ), self.x, self.y, self.z, r, sx, sy, ox, oy )
 
-	table.insert( bufferBatch.data, bulletsprite )
+	-- table.insert( bufferBatch.data, bulletsprite )
 
 	-- public functions
 	function self.initialize(properties)
@@ -111,14 +111,14 @@ function projectile.new(map, x, y, z )
 		y = self.bullet:getBody( ):getY( )
 		r = self.bullet:getBody( ):getAngle( )
 
-		bufferBatch.x = x
-		bufferBatch.y = y
-		bufferBatch.z = 100
-		bufferBatch.r = r
+		-- bufferBatch.x = x
+		-- bufferBatch.y = y
+		-- bufferBatch.z = 100
+		-- bufferBatch.r = r
 		
-		bulletsprite.x = x --math.floor(x + 0.5)
-		bulletsprite.y = y --math.floor(y-16 + 0.5)
-		bulletsprite.r = self.aim
+		-- bulletsprite.x = x --math.floor(x + 0.5)
+		-- bulletsprite.y = y --math.floor(y-16 + 0.5)
+		-- bulletsprite.r = self.aim
 
 	end
 

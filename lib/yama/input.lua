@@ -19,7 +19,18 @@ end
 
 
 function love.joystickremoved(joystick)
-	
+
 end
 
-return input
+local function newGamepad(joystick)
+	
+
+
+	return {
+		joystick = joystick,
+	}
+end
+
+return {
+	newGamepad = newGamepad,
+}
