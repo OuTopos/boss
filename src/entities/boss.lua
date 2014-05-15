@@ -1,11 +1,8 @@
 local yama = require("lib.yama")
 local boss = {}
 
-function boss.new(map, x, y, z)
+function boss.new(world, x, y, z)
 	local self = {}
-	local scene = map
-
-	self.world = map.world
 
 	self.name = "The Boss Name"
 	self.type = "boss"
@@ -32,7 +29,7 @@ function boss.new(map, x, y, z)
 	-- PHYSICS OBJECTS
 	self.fixtures = {}
 
-	self.fixtures.anchor = love.physics.newFixture(love.physics.newBody(self.world, self.x, self.y, "dynamic"), love.physics.newCircleShape(self.radius * self.scale), self.mass)
+	self.fixtures.anchor = love.physics.newFixture(love.physics.newBody(world.physics, self.x, self.y, "dynamic"), love.physics.newCircleShape(self.radius * self.scale), self.mass)
 	self.fixtures.anchor:setRestitution(0)
 	self.fixtures.anchor:getBody():setLinearDamping(10)
 	self.fixtures.anchor:getBody():setFixedRotation(true)
@@ -90,7 +87,7 @@ function boss.new(map, x, y, z)
 	--images.quads.add(tileset, self.width, self.height)
 
 	local tileset = yama.assets.tilesets["body"]
-	local sprite = scene.newSceneEntity()
+	local sprite = world.scene.newEntity()
 	sprite.sx, sprite.sy = self.sx, self.sy
 	sprite.drawable = tileset.tiles[1]
 	sprite.normalmap = yama.assets.loadImage("lightingtest/body_normal")
@@ -301,7 +298,7 @@ function boss.new(map, x, y, z)
 
 		self.setBoundingBox()
 
-		scene.lights.position[1] = {math.floor(self.x + 0.5), math.floor(self.y + 0.5), 64}
+		-- scene.lights.position[1] = {math.floor(self.x + 0.5), math.floor(self.y + 0.5), 64}
 	end
 
 	function self.addToBuffer(vp)

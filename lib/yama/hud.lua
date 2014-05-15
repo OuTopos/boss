@@ -8,8 +8,8 @@ joysticks = love.joystick.getJoysticks()
 --love.graphics.setPointStyle("smooth")
 love.graphics.setPointSize(8)
 
-local function drawPaths(scene, viewport)
-	for k, path in pairs(scene.paths) do
+local function drawPaths(world)
+	for k, path in pairs(world.paths) do
 		local vertices = {}
 		for k = 1, #path.vertices do
 			local vertex = path.vertices[k]
@@ -25,8 +25,8 @@ local function drawPaths(scene, viewport)
 	love.graphics.setColor(255, 255, 255, 255)
 end
 
-local function drawLocations(scene, viewport)
-	for k, location in pairs(scene.locations) do
+local function drawLocations(world)
+	for k, location in pairs(world.locations) do
 		love.graphics.setColor(255, 255, 0, 255)
 		love.graphics.point(location.x, location.y)
 		love.graphics.setColor(0, 0, 0, 255)
@@ -36,26 +36,28 @@ local function drawLocations(scene, viewport)
 	love.graphics.setColor(255, 255, 255, 255)
 end
 
-function hud.draw(viewport, scene)
+function hud.draw(viewport, world)
 	local vp = viewport
+	local scene = world.scene
 	if hud.enabled then
+		viewport.debug.update()
 		
 		-- CAMERA SPACE STUFF
 		viewport.translate()
 		
 		if hud.physics then
-			yama.physics.draw(scene.world, viewport.camera)
+			yama.physics.draw(world.physics, viewport.camera)
 
-			drawPaths(scene)
-			drawLocations(scene)
+			drawPaths(world)
+			drawLocations(world)
 		end
 
-		local entities = scene.entities
-		for i = 1, #entities.list do
-			if vp.isEntityInside(entities.list[i]) then
-				local x, y, z = entities.list[i].x, entities.list[i].y, entities.list[i].z
-				if entities.list[i].boundingbox then
-					local left, top, width, height = entities.list[i].boundingbox.x, entities.list[i].boundingbox.y, entities.list[i].boundingbox.width, entities.list[i].boundingbox.height
+		-- local entities = world.entities
+		for i = 1, #world.entities do
+			if vp.isEntityInside(world.entities[i]) then
+				local x, y, z = world.entities[i].x, world.entities[i].y, world.entities[i].z
+				if world.entities[i].boundingbox then
+					local left, top, width, height = world.entities[i].boundingbox.x, world.entities[i].boundingbox.y, world.entities[i].boundingbox.width, world.entities[i].boundingbox.height
 
 					love.graphics.setColor(255, 0, 0, 127)
 					love.graphics.rectangle( "line", left, top, width, height)
@@ -65,11 +67,11 @@ function hud.draw(viewport, scene)
 				love.graphics.setColor(255, 255, 255, 255)
 				--love.graphics.print(i, left + 2, top + 2)
 				love.graphics.point(x, y)
-				if entities.list[i].health then
+				if world.entities[i].health then
 					love.graphics.setColor(0, 0, 0, 255)
-					love.graphics.print(entities.list[i].health, x + 5, y + 5)
+					love.graphics.print(world.entities[i].health, x + 5, y + 5)
 					love.graphics.setColor(255, 255, 255, 255)
-					love.graphics.print(entities.list[i].health, x + 4, y + 4)
+					love.graphics.print(world.entities[i].health, x + 4, y + 4)
 				end
 				--love.graphics.setColor(0, 0, 0, 255)
 				--love.graphics.print(math.floor(x + 0.5), left + 2, top + 12)
@@ -112,7 +114,7 @@ function hud.draw(viewport, scene)
 		--love.graphics.print("FPS: "..love.timer.getFPS(), right - 39, top + 2)
 
 		-- Entities
-		--love.graphics.print("Entities: "..#entities.list, left + 2, top + 2)
+		--love.graphics.print("Entities: "..#world.entities, left + 2, top + 2)
 		--love.graphics.print("  Visible: "..entities.visible[vp], left + 2, top + 12)
 		-- Map
 		if false then
@@ -154,12 +156,8 @@ function hud.draw(viewport, scene)
 
 		local text = ""
 
-		-- Buffer
-		text = text .. "Scene entities: " .. vp.debug.sceneEntities
-		text = text .. "\n Drawcalls: " .. vp.debug.drawcalls
-
 		-- Screen
-		text = text .. "\n\nViewport: " .. vp.width .. "x".. vp.height
+		text = text .. "\nViewport: " .. vp.width .. "x".. vp.height
 		text = text .. "\nsx: " .. vp.sx .. " sy: " .. vp.sy
 		text = text .. "\nx: " .. vp.x .. " y: " .. vp.y
 		text = text .. "\n"
@@ -185,6 +183,13 @@ function hud.draw(viewport, scene)
 		-- Time
 		text = text .. "\n\nDay: " .. tostring(scene.env.day)
 		text = text .. "\nHour: " .. math.floor(scene.env.time * 24)
+
+
+
+		-- Buffer
+		text = text .. "\n World entities: " .. viewport.debug.worldEntities
+		text = text .. "\n Scene entities: " .. viewport.debug.sceneEntities
+		text = text .. "\n Drawcalls: " .. viewport.debug.drawCalls
 
 
 

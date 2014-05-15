@@ -1,11 +1,8 @@
 local yama = require("lib.yama")
 local player = {}
 
-function player.new(map, x, y, z)
+function player.new(world, x, y, z)
 	local self = {}
-	local scene = map
-
-	self.world = scene.world
 
 	self.name = ""
 	self.type = "player"
@@ -64,7 +61,7 @@ function player.new(map, x, y, z)
 	local animation = yama.newAnimation()
 
 	local tileset = yama.assets.tilesets["body"]
-	local sprite = scene.newSceneEntity()
+	local sprite = world.scene.newEntity()
 
 	sprite.drawable = tileset.tiles[1]
 	sprite.normalmap = yama.assets.loadImage("lightingtest/body_normal")
@@ -236,7 +233,7 @@ function player.new(map, x, y, z)
 		-- PHYSICS OBJECTS
 		self.fixtures = {}
 
-		self.fixtures.anchor = love.physics.newFixture(love.physics.newBody(self.world, self.x, self.y, "dynamic"), love.physics.newCircleShape(self.radius * self.scale), self.mass)
+		self.fixtures.anchor = love.physics.newFixture(love.physics.newBody(world.physics, self.x, self.y, "dynamic"), love.physics.newCircleShape(self.radius * self.scale), self.mass)
 		self.fixtures.anchor:setRestitution(0)
 		self.fixtures.anchor:getBody():setLinearDamping(10)
 		self.fixtures.anchor:getBody():setFixedRotation(true)
@@ -290,7 +287,7 @@ function player.new(map, x, y, z)
 
 		a = nil
 
-		scene.lights.position[1] = {math.floor(self.x + 0.5), math.floor(self.y + 0.5), 64}
+		-- world.scene.lights.position[1] = {math.floor(self.x + 0.5), math.floor(self.y + 0.5), 64}
 
 	end
 

@@ -29,9 +29,9 @@ function love.load()
 		heals = yama.requireDir("src/skills/heal"),
 	}
 
-	game.scene = yama.newWorld()
-	game.scene.enablePhysics()
-	game.scene.loadMap("test/start")
+	game.world = yama.newWorld()
+	game.world.enablePhysics()
+	game.world.loadMap("test/start")
 
 	game.buttonStates = {}
 	game.buttonStates["lefttrigger"] = false
@@ -42,7 +42,7 @@ function love.load()
 	game.players = {}
 	if nbJoy > 0 then 
 		for i=1, nbJoy do
-			local p = game.scene.newEntity("player", {1000, 500, 0}, { name = "Player "..i })
+			local p = game.world.newEntity("player", {1000, 500, 0}, { name = "Player "..i })
 			
 			-- Temporary to test
 			local ab = game.skills.base.new(game, p)
@@ -64,10 +64,11 @@ function love.load()
 		assert("no joysticks found")
 	end
 
-	game.boss = game.scene.newEntity("boss", {500,500, 0})
-	game.boss = game.scene.newEntity("boss", {500,600, 0})
+	game.boss = game.world.newEntity("boss", {500,500, 0})
+	game.boss = game.world.newEntity("boss", {500,600, 0})
 
-	game.vp1 = game.scene.newViewport()
+	game.vp1 = yama.newViewport()
+	game.vp1.attach(game.world)
 	game.vp1.camera.cx = love.window.getWidth() / 2
 	game.vp1.camera.cy = love.window.getHeight() / 2
 	-- game.vp1.follow(game.players[1])
@@ -76,19 +77,19 @@ function love.load()
 
 	-- Adding keybindings for drawmodes
 	yama.keybindings["q"] = function()
-		game.scene.drawmode = 0
+		game.world.drawmode = 0
 	end
 
 	yama.keybindings["w"] = function()
-		game.scene.drawmode = 1
+		game.world.drawmode = 1
 	end
 
 	yama.keybindings["e"] = function()
-		game.scene.drawmode = 2
+		game.world.drawmode = 2
 	end
 
 	yama.keybindings["r"] = function()
-		game.scene.drawmode = 3
+		game.world.drawmode = 3
 	end
 
 

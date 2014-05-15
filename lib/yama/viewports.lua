@@ -1,17 +1,30 @@
 local yama = require((...):match("(.+)%.[^%.]+$") .. "/table")
---[[
-VIEWPORTS
-To do:
- Make smooth camera movement. 
-]]--
+
 local viewports = {}
 
-function viewports.new()
+local function new()
 	local self = {}
 
 	-- DEBUG
 	self.debug = {}
 	self.debug.drawcalls = 0
+	self.debug.worldEntities = 0
+	self.debug.sceneEntities = 0
+	self.debug.drawCalls = 0
+
+	function self.debug.update()
+		if self.world then
+			self.debug.worldEntities = #self.world.entities
+			if self.world.scene then
+				self.debug.sceneEntities = #self.world.scene.entities
+			else
+				self.debug.sceneEntities = 0
+			end
+		else
+			self.debug.worldEntities = 0
+			self.debug.sceneEntities = 0
+		end
+	end
 
 	-- CANVASES
 	self.x = 0
@@ -64,7 +77,7 @@ function viewports.new()
 
 		self.canvases = {}
 		for i = 1, 4 do
-			table.insert(self.canvases, love.graphics.newCanvas(self.width, self.height, "hdr"))
+			table.insert(self.canvases, love.graphics.newCanvas(self.width, self.height))
 		end
 
 		self.shader:send("canvas_diffuse", self.canvases[1])
@@ -229,11 +242,8 @@ function viewports.new()
 	end
 
 
-	-- UPDATE
-	function self.update(dt)
-		self.camera.update()
-		self.cursor.update()
-	end
+
+
 
 	-- BOUNDING VOLUME CHECK
 	function self.isEntityInside(entity)
@@ -254,7 +264,187 @@ function viewports.new()
 		end
 	end
 
+	-- SCENES
+
+	function self.attach(world, transition)
+		if world then
+			self.world = world
+			if world.scene then
+				self.scene = world.scene
+				-- Set the sort mode on the viewport.
+				-- vp.setDepthMode(depthmode)
+
+				-- Set camera boundaries for the viewport.
+				-- if scene == "false" then
+				-- 	vp.boundaries.x = 0
+				-- 	vp.boundaries.x = 0
+				-- 	vp.boundaries.width = 0
+				-- 	vp.boundaries.height = 0
+				-- else
+				-- 	vp.boundaries.x = boundingbox.x
+				-- 	vp.boundaries.x = boundingbox.y
+				-- 	vp.boundaries.width = boundingbox.width --map.width * map.tilewidth
+				-- 	vp.boundaries.height = boundingbox.height --map.height * map.tileheight
+				-- end
+				-- Do all other things needed for good attachment.
+
+				-- TO DO: Transition
+			end
+		end
+	end
+
+	function self.detach()
+		self.world = nil
+		self.scene = nil
+	end
+
+
+
+
+	local function drawSceneEntity(sceneEntity)
+		self.shader_pre:send("normalmap", sceneEntity.normalmap)
+		self.shader_pre:send("depthmap", sceneEntity.depthmap)
+		--self.shader_pre:send("z", sceneEntity.z / 256)
+		self.shader_pre:send("scale", (sceneEntity.sx + sceneEntity.sy) / 2)
+		
+		love.graphics.draw(sceneEntity.drawable, sceneEntity.x, sceneEntity.y, sceneEntity.r, sceneEntity.sx, sceneEntity.sy, sceneEntity.ox, sceneEntity.oy)
+		self.debug.drawcalls = self.debug.drawcalls + 1
+	end
+
+
+	-- UPDATE
+	function self.update(dt)
+		self.camera.update()
+		self.cursor.update()
+	end
+
+	function self.draw()
+		if self.scene then
+			local scene = self.scene
+			local entities = self.scene.entities
+			--scene.sort()
+
+			-- DEBUG
+			self.debug.drawcalls = 0
+			-- self.debug.sceneEntities = #self.entities
+			
+			-- SET CAMERA
+			self.translate()
+
+			self.translationmatrix2 = {
+				{1, 0, 0, self.camera.x},
+				{0, 1, 0, -self.camera.y},
+				{0, 0, 1, 0},
+				{0, 0, 0, 1}
+			}
+		
+			-- SET CANVAS
+			self.canvases[1]:clear(0, 0, 0, 255)
+			self.canvases[2]:clear(127, 127, 255, 255)
+			self.canvases[3]:clear(0, 0, 0, 255)
+			love.graphics.setCanvas(self.canvases[1], self.canvases[2], self.canvases[3])
+
+			-- SET SHADER
+			love.graphics.setShader(self.shader_pre)
+
+			-- Draw static entities
+
+			--table.sort(self.entities, self.depthsorts.yz)
+
+			-- Drawing dynamic entities
+			for k = #entities, 1, -1 do
+				local sceneEntity = entities[k]
+				-- Check if inside viewport.
+				if sceneEntity.destroyed then
+					table.remove(entities, k)
+				elseif sceneEntity.batch then
+					for k = 1, #sceneEntity.batch do
+						drawSceneEntity(sceneEntity.batch[k])
+					end
+				elseif sceneEntity.drawable then
+					drawSceneEntity(sceneEntity)
+				end
+			end
+
+			-- UNSET CAMERA
+			love.graphics.pop()
+
+			-- LIGHT PASS
+			love.graphics.setCanvas(self.canvases[4])
+			love.graphics.setShader(self.shader_light)
+
+			--viewport.shader_light:send("offset", {viewport.camera.x, viewport.camera.y})
+
+			--viewport.shader_light:send("ambient_color", {0.05, 0.03, 0.1, 0.5})
+			--viewport.shader_light:send("ambient_color", {0.02, 0.02, 0.02, 0})
+			self.shader_light:send("light_position", unpack(scene.lights.position))
+			self.shader_light:send("light_color", unpack(scene.lights.color))
+			self.shader_light:send("hour", scene.env.time)
+			self.shader_light:send("screen_to_world", self.translationmatrix2)
+
+			love.graphics.draw(self.canvases[1])
+			love.graphics.setShader()
+
+			-- DRAW GUI
+			--yama.gui.draw(viewport)
+
+			-- DRAW DEBUG TEXT
+			yama.hud.draw(self, self.world)
+
+
+
+
+			-- DRAW MODES
+			if self.drawmode == 1 then
+				-- DRAWING THE DIFFUSEMAP
+				love.graphics.setCanvas()
+				love.graphics.setShader()
+				love.graphics.draw(self.canvases[1], self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy)
+			elseif self.drawmode == 2 then
+				-- DRAWING THE NORMALMAP
+				love.graphics.setCanvas()
+				love.graphics.setShader()
+				love.graphics.draw(self.canvases[2], self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy)
+			elseif self.drawmode == 3 then
+				-- DRAWING THE DEPTHMAP
+				love.graphics.setCanvas()
+				love.graphics.setShader()
+				love.graphics.draw(self.canvases[3], self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy)
+			else
+				-- DRAWING THE FINAL RESULT
+				love.graphics.setCanvas()
+				love.graphics.setShader()
+				love.graphics.draw(self.canvases[4], self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy)
+			end
+		end
+	end
+
+	table.insert(viewports, self)
 	return self
 end
 
-return viewports
+local function remove(viewport)
+	for k = #viewports, 1, -1 do
+		if viewports[k] == viewport
+			then table.remove(viewports, k)
+		end
+	end
+end
+
+local function update(dt)
+	for k = 1, #viewports do
+		viewports[k].update(dt)
+	end
+end
+
+local function draw()
+	for k = 1, #viewports do
+		viewports[k].draw()
+	end
+end
+
+return {
+	new = new,
+	update = update,
+	draw = draw,
+}

@@ -2,7 +2,9 @@ range = {}
 
 function range.new(game, origin)
 	local self = {}
-	self.scene = game.scene
+
+	local world = game.world
+	local scene = game.world.scene
 	
 	self.lastShot = 0
 
@@ -27,7 +29,7 @@ function range.new(game, origin)
 				local projectileSpawnPosY = origin.y + 29*math.sin( origin.aim )
 
 				-- create projectile
-				local projectile = self.scene.newEntity( "projectile", {projectileSpawnPosX, projectileSpawnPosY, 0}, properties )
+				local projectile = world.newEntity( "projectile", {projectileSpawnPosX, projectileSpawnPosY, 0}, properties )
 
 				-- calculate spread 
 				local spread = love.math.random(0,self.weapon.properties.spread)

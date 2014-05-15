@@ -20,8 +20,10 @@ yama.animations     = require(yama.paths.lib .. "/yama.animations")
 yama.newAnimation = yama.animations.new
 
 yama.worlds         = require(yama.paths.lib .. "/yama.worlds")
-
+yama.scenes         = require(yama.paths.lib .. "/yama.scenes")
 yama.viewports      = require(yama.paths.lib .. "/yama.viewports")
+yama.maps           = require(yama.paths.lib .. "/yama.maps")
+
 yama.gui            = require(yama.paths.lib .. "/yama.gui")
 yama.hud            = require(yama.paths.lib .. "/yama.hud")
 yama.physics        = require(yama.paths.lib .. "/yama.physics")
@@ -37,7 +39,6 @@ yama.ai.patrols     = require(yama.paths.lib .. "/yama.ai_patrols")
 -- VARIABLES
 yama.v = {}
 yama.v.paused = false
-yama.v.timescale = 1
 yama.v.gcInterval = 10
 yama.v.gcTimer = 10
 
@@ -115,12 +116,14 @@ end
 
 local function update(dt)
 	if not yama.v.paused then
-		yama.worlds.update(dt * yama.v.timescale)
+		yama.worlds.update(dt)
 	end
+	yama.viewports.update()
 end
 
 local function draw()
-	yama.worlds.draw()
+	-- yama.worlds.draw()
+	yama.viewports.draw()
 
 	---[[ FPS
 	love.graphics.setColor(0, 0, 0, 255)
@@ -175,6 +178,7 @@ return {
 	draw = draw,
 
 	newWorld = yama.worlds.new,
+	newViewport = yama.viewports.new,
 	newAnimation = yama.animations.new,
 
 	keybindings = yama.keybindings,

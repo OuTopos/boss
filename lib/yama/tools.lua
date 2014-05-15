@@ -99,5 +99,8 @@ function tools.rgba2num(rgba)
 	end
 	return number
 end
+function tools.rgba2num(rgba)
+	return 
+end
 
 return tools
