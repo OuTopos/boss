@@ -77,19 +77,19 @@ function love.load()
 
 	-- Adding keybindings for drawmodes
 	yama.keybindings["q"] = function()
-		game.world.drawmode = 0
+		game.vp1.drawmode = 0
 	end
 
 	yama.keybindings["w"] = function()
-		game.world.drawmode = 1
+		game.vp1.drawmode = 1
 	end
 
 	yama.keybindings["e"] = function()
-		game.world.drawmode = 2
+		game.vp1.drawmode = 2
 	end
 
 	yama.keybindings["r"] = function()
-		game.world.drawmode = 3
+		game.vp1.drawmode = 3
 	end
 
 

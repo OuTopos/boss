@@ -10,7 +10,6 @@ local function new()
 	self.boundingbox.width = 0
 	self.boundingbox.height = 0
 
-
 	-- LIGHTS
 	self.lights = {}
 	self.lights.position = {{600, 300, 75}, {0, 0, 75}, {320, 600, 40}, {300, 200, 50}, {500, 100, 100}}
@@ -49,7 +48,6 @@ local function new()
 	end
 
 	-- ENV
-
 	self.env = {}
 
 	self.env.time = 0
@@ -102,15 +100,10 @@ local function new()
 
 	-- MISC
 
-
-
-
-
-		
-
 	-- DEPTH SORTING
 	--self.depthmode = "z"
-	self.depthsorts = {}
+	local sorted = false
+	local depthsorts = {}
 
 	--function self.setDepthMode(mode)
 	--	if self.depthsorts[mode] then
@@ -120,21 +113,21 @@ local function new()
 	--	end
 	--end
 
-	function self.depthsorts.z(a, b)
+	function depthsorts.z(a, b)
 		if a.z > b.z then
 			return true
 		end
 		return false
 	end
 
-	function self.depthsorts.y(a, b)
+	function depthsorts.y(a, b)
 		if a.y > b.y then
 			return true
 		end
 		return false
 	end
 
-	function self.depthsorts.yz(a, b)
+	function depthsorts.yz(a, b)
 		if a.y+a.z < b.y+b.z then
 			return true
 		end
@@ -149,6 +142,12 @@ local function new()
 			end
 		end
 		return false
+	end
+
+	function self.sort()
+		if not sorted then
+			-- sort!
+		end
 	end
 
 

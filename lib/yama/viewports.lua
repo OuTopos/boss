@@ -26,6 +26,9 @@ local function new()
 		end
 	end
 
+	-- SHADER ON/OFF
+	local shadersEnabled = true
+
 	-- CANVASES
 	self.x = 0
 	self.y = 0
@@ -37,12 +40,6 @@ local function new()
 	self.width, self.height = love.window.getDimensions()
 
 	self.canvases = {}
-
-	-- SHADERS
-	self.shader = love.graphics.newShader("shader.glsl")
-	self.shader_pre = love.graphics.newShader("shader_pre.glsl")
-	self.shader_light = love.graphics.newShader("shader_light.glsl")
-	self.shader_fog = love.graphics.newShader("shader_fog.glsl")
 
 	-- CAMERA
 	self.camera = {}
@@ -69,39 +66,46 @@ local function new()
 	self.camera.vx = 0
 	self.camera.vy = 0
 
+	local function setupShaders()
+		if shadersEnabled then
+			self.shaders = {}
+			self.shaders.pre = love.graphics.newShader("shader_pre.glsl")
+			self.shaders.post = love.graphics.newShader("shader_light.glsl")
+		else
+			self.shaders = {}
+		end
+	end
+
+	local function setupCanvases()
+		if shadersEnabled then
+			self.canvases = {}
+			self.canvases.diffuse = love.graphics.newCanvas(self.width, self.height)
+			self.canvases.normal = love.graphics.newCanvas(self.width, self.height)
+			self.canvases.depth = love.graphics.newCanvas(self.width, self.height)
+			self.canvases.final = love.graphics.newCanvas(self.width, self.height)
+
+			--self.shaders.pre:send("canvas_diffuse", self.canvases.diffuse)
+			--self.shaders.pre:send("canvas_normal", self.canvases.normal)
+			self.shaders.pre:send("canvas_depth", self.canvases.depth)
+
+			self.shaders.post:send("normalmap", self.canvases.normal)
+			self.shaders.post:send("depthmap", self.canvases.depth)
+			self.shaders.post:send("fogmap", yama.assets.loadImage("fog"))
+			self.shaders.post:send("ambientmap", yama.assets.loadImage("ambient"))
+
+		else
+			self.canvases = {}
+			self.canvases.final = love.graphics.newCanvas(self.width, self.height)
+		end
+	end
+
 	-- RESIZE & ZOOM
 	function self.resize(width, height)
 		print("KÖR EN RESIZE")
 		self.width = width or love.window.getWidth()
 		self.height = height or love.window.getHeight()
-
-		self.canvases = {}
-		for i = 1, 4 do
-			table.insert(self.canvases, love.graphics.newCanvas(self.width, self.height))
-		end
-
-		self.shader:send("canvas_diffuse", self.canvases[1])
-		self.shader:send("canvas_normal", self.canvases[2])
-		self.shader:send("canvas_depth", self.canvases[3])
-		self.shader:send("canvas_final", self.canvases[4])
-
-
-		--self.shader_pre:send("canvas_diffuse", self.canvases[1])
-		--self.shader_pre:send("canvas_normal", self.canvases[2])
-		self.shader_pre:send("canvas_depth", self.canvases[3])
-
-		self.shader_light:send("normalmap", self.canvases[2])
-		self.shader_light:send("depthmap", self.canvases[3])
-		self.shader_light:send("fogmap", yama.assets.loadImage("fog"))
-		self.shader_light:send("ambientmap", yama.assets.loadImage("ambient"))
-
-
-		--self.shader_fog:send("normalmap", self.canvases[2])
-		self.shader_fog:send("depthmap", self.canvases[3])
-		self.shader_fog:send("fogmap", yama.assets.loadImage("fog"))
-
-
-		--self.shader_light:send("love_ScreenSize", {self.width, self.height})
+		
+		setupCanvases()
 
 		self.zoom(self.camera.sx, self.camera.sy)
 	end
@@ -290,6 +294,11 @@ local function new()
 
 				-- TO DO: Transition
 			end
+
+			if transition then
+				self.canvases.previous = self.canvases.final
+				-- Set transitions to active.
+			end
 		end
 	end
 
@@ -302,10 +311,10 @@ local function new()
 
 
 	local function drawSceneEntity(sceneEntity)
-		self.shader_pre:send("normalmap", sceneEntity.normalmap)
-		self.shader_pre:send("depthmap", sceneEntity.depthmap)
-		--self.shader_pre:send("z", sceneEntity.z / 256)
-		self.shader_pre:send("scale", (sceneEntity.sx + sceneEntity.sy) / 2)
+		self.shaders.pre:send("normalmap", sceneEntity.normalmap)
+		self.shaders.pre:send("depthmap", sceneEntity.depthmap)
+		--self.shaders.pre:send("z", sceneEntity.z / 256)
+		self.shaders.pre:send("scale", (sceneEntity.sx + sceneEntity.sy) / 2)
 		
 		love.graphics.draw(sceneEntity.drawable, sceneEntity.x, sceneEntity.y, sceneEntity.r, sceneEntity.sx, sceneEntity.sy, sceneEntity.ox, sceneEntity.oy)
 		self.debug.drawcalls = self.debug.drawcalls + 1
@@ -320,104 +329,110 @@ local function new()
 
 	function self.draw()
 		if self.scene then
-			local scene = self.scene
-			local entities = self.scene.entities
-			--scene.sort()
+			if shadersEnabled then
+				local scene = self.scene
+				local entities = self.scene.entities
+				--scene.sort()
 
-			-- DEBUG
-			self.debug.drawcalls = 0
-			-- self.debug.sceneEntities = #self.entities
+				-- DEBUG
+				self.debug.drawcalls = 0
+				-- self.debug.sceneEntities = #self.entities
+				
+				-- SET CAMERA
+				self.translate()
+
+				self.translationmatrix2 = {
+					{1, 0, 0, self.camera.x},
+					{0, 1, 0, -self.camera.y},
+					{0, 0, 1, 0},
+					{0, 0, 0, 1}
+				}
 			
-			-- SET CAMERA
-			self.translate()
+				-- SET CANVAS
+				self.canvases.diffuse:clear(0, 0, 0, 255)
+				self.canvases.normal:clear(127, 127, 255, 255)
+				self.canvases.depth:clear(0, 0, 0, 255)
+				love.graphics.setCanvas(self.canvases.diffuse, self.canvases.normal, self.canvases.depth)
 
-			self.translationmatrix2 = {
-				{1, 0, 0, self.camera.x},
-				{0, 1, 0, -self.camera.y},
-				{0, 0, 1, 0},
-				{0, 0, 0, 1}
-			}
-		
-			-- SET CANVAS
-			self.canvases[1]:clear(0, 0, 0, 255)
-			self.canvases[2]:clear(127, 127, 255, 255)
-			self.canvases[3]:clear(0, 0, 0, 255)
-			love.graphics.setCanvas(self.canvases[1], self.canvases[2], self.canvases[3])
+				-- SET SHADER
+				love.graphics.setShader(self.shaders.pre)
 
-			-- SET SHADER
-			love.graphics.setShader(self.shader_pre)
+				-- Draw static entities
 
-			-- Draw static entities
+				--table.sort(self.entities, self.depthsorts.yz)
 
-			--table.sort(self.entities, self.depthsorts.yz)
-
-			-- Drawing dynamic entities
-			for k = #entities, 1, -1 do
-				local sceneEntity = entities[k]
-				-- Check if inside viewport.
-				if sceneEntity.destroyed then
-					table.remove(entities, k)
-				elseif sceneEntity.batch then
-					for k = 1, #sceneEntity.batch do
-						drawSceneEntity(sceneEntity.batch[k])
+				-- Drawing dynamic entities
+				for k = #entities, 1, -1 do
+					local sceneEntity = entities[k]
+					-- Check if inside viewport.
+					if sceneEntity.destroyed then
+						table.remove(entities, k)
+					elseif sceneEntity.batch then
+						for k = 1, #sceneEntity.batch do
+							drawSceneEntity(sceneEntity.batch[k])
+						end
+					elseif sceneEntity.drawable then
+						drawSceneEntity(sceneEntity)
 					end
-				elseif sceneEntity.drawable then
-					drawSceneEntity(sceneEntity)
 				end
-			end
 
-			-- UNSET CAMERA
-			love.graphics.pop()
+				-- UNSET CAMERA
+				love.graphics.pop()
 
-			-- LIGHT PASS
-			love.graphics.setCanvas(self.canvases[4])
-			love.graphics.setShader(self.shader_light)
+				-- LIGHT PASS
+				love.graphics.setCanvas(self.canvases.final)
+				love.graphics.setShader(self.shaders.post)
 
-			--viewport.shader_light:send("offset", {viewport.camera.x, viewport.camera.y})
+				--viewport.shader_light:send("offset", {viewport.camera.x, viewport.camera.y})
 
-			--viewport.shader_light:send("ambient_color", {0.05, 0.03, 0.1, 0.5})
-			--viewport.shader_light:send("ambient_color", {0.02, 0.02, 0.02, 0})
-			self.shader_light:send("light_position", unpack(scene.lights.position))
-			self.shader_light:send("light_color", unpack(scene.lights.color))
-			self.shader_light:send("hour", scene.env.time)
-			self.shader_light:send("screen_to_world", self.translationmatrix2)
+				--viewport.shader_light:send("ambient_color", {0.05, 0.03, 0.1, 0.5})
+				--viewport.shader_light:send("ambient_color", {0.02, 0.02, 0.02, 0})
+				self.shaders.post:send("light_position", unpack(scene.lights.position))
+				self.shaders.post:send("light_color", unpack(scene.lights.color))
+				self.shaders.post:send("hour", scene.env.time)
+				self.shaders.post:send("screen_to_world", self.translationmatrix2)
 
-			love.graphics.draw(self.canvases[1])
-			love.graphics.setShader()
-
-			-- DRAW GUI
-			--yama.gui.draw(viewport)
-
-			-- DRAW DEBUG TEXT
-			yama.hud.draw(self, self.world)
-
-
-
-
-			-- DRAW MODES
-			if self.drawmode == 1 then
-				-- DRAWING THE DIFFUSEMAP
-				love.graphics.setCanvas()
+				love.graphics.draw(self.canvases.diffuse)
 				love.graphics.setShader()
-				love.graphics.draw(self.canvases[1], self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy)
-			elseif self.drawmode == 2 then
-				-- DRAWING THE NORMALMAP
-				love.graphics.setCanvas()
-				love.graphics.setShader()
-				love.graphics.draw(self.canvases[2], self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy)
-			elseif self.drawmode == 3 then
-				-- DRAWING THE DEPTHMAP
-				love.graphics.setCanvas()
-				love.graphics.setShader()
-				love.graphics.draw(self.canvases[3], self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy)
+
+				-- DRAW GUI
+				--yama.gui.draw(viewport)
+
+				-- DRAW DEBUG TEXT
+				yama.hud.draw(self, self.world)
+
+
+
+
+				-- DRAW MODES
+				if self.drawmode == 1 then
+					-- DRAWING THE DIFFUSEMAP
+					love.graphics.setCanvas()
+					love.graphics.setShader()
+					love.graphics.draw(self.canvases.diffuse, self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy)
+				elseif self.drawmode == 2 then
+					-- DRAWING THE NORMALMAP
+					love.graphics.setCanvas()
+					love.graphics.setShader()
+					love.graphics.draw(self.canvases.normal, self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy)
+				elseif self.drawmode == 3 then
+					-- DRAWING THE DEPTHMAP
+					love.graphics.setCanvas()
+					love.graphics.setShader()
+					love.graphics.draw(self.canvases.depth, self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy)
+				else
+					-- DRAWING THE FINAL RESULT
+					love.graphics.setCanvas()
+					love.graphics.setShader()
+					love.graphics.draw(self.canvases.final, self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy)
+				end
 			else
-				-- DRAWING THE FINAL RESULT
-				love.graphics.setCanvas()
-				love.graphics.setShader()
-				love.graphics.draw(self.canvases[4], self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy)
+				-- Draw without shaders.
 			end
 		end
 	end
+
+	setupShaders()
 
 	table.insert(viewports, self)
 	return self
