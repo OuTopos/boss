@@ -72,7 +72,7 @@ local function new()
 			self.shaders.pre = love.graphics.newShader("shader_pre.glsl")
 			self.shaders.post = love.graphics.newShader("shader_light.glsl")
 		else
-			self.shaders = {}
+			self.shaders = nil
 		end
 	end
 
@@ -310,12 +310,17 @@ local function new()
 
 
 
-	local function drawSceneEntity(sceneEntity)
+	local function drawSceneEntityShaders(sceneEntity)
 		self.shaders.pre:send("normalmap", sceneEntity.normalmap)
 		self.shaders.pre:send("depthmap", sceneEntity.depthmap)
 		--self.shaders.pre:send("z", sceneEntity.z / 256)
 		self.shaders.pre:send("scale", (sceneEntity.sx + sceneEntity.sy) / 2)
 		
+		love.graphics.draw(sceneEntity.drawable, sceneEntity.x, sceneEntity.y, sceneEntity.r, sceneEntity.sx, sceneEntity.sy, sceneEntity.ox, sceneEntity.oy)
+		self.debug.drawcalls = self.debug.drawcalls + 1
+	end
+
+	local function drawSceneEntity(sceneEntity)
 		love.graphics.draw(sceneEntity.drawable, sceneEntity.x, sceneEntity.y, sceneEntity.r, sceneEntity.sx, sceneEntity.sy, sceneEntity.ox, sceneEntity.oy)
 		self.debug.drawcalls = self.debug.drawcalls + 1
 	end
@@ -361,7 +366,6 @@ local function new()
 
 				--table.sort(self.entities, self.depthsorts.yz)
 
-				-- Drawing dynamic entities
 				for k = #entities, 1, -1 do
 					local sceneEntity = entities[k]
 					-- Check if inside viewport.
@@ -369,10 +373,10 @@ local function new()
 						table.remove(entities, k)
 					elseif sceneEntity.batch then
 						for k = 1, #sceneEntity.batch do
-							drawSceneEntity(sceneEntity.batch[k])
+							drawSceneEntityShaders(sceneEntity.batch[k])
 						end
 					elseif sceneEntity.drawable then
-						drawSceneEntity(sceneEntity)
+						drawSceneEntityShaders(sceneEntity)
 					end
 				end
 
@@ -428,6 +432,39 @@ local function new()
 				end
 			else
 				-- Draw without shaders.
+
+				-- SET CANVAS
+				love.graphics.setCanvas(self.canvases.final)
+
+				-- SET CAMERA
+				self.translate()
+
+				-- ITERATE AND DRAW ENTITIES
+				for k = #self.scene.entities, 1, -1 do
+					local entity = self.scene.entities[k]
+					-- Check if inside viewport.
+					if entity.destroyed then
+						table.remove(self.scene.entities, k)
+					elseif entity.batch then
+						for k = 1, #entity.batch do
+							drawSceneEntity(entity.batch[k])
+						end
+					elseif entity.drawable then
+						drawSceneEntity(entity)
+					end
+				end
+
+				-- DRAW HUD
+				yama.hud.draw(self, self.world)
+
+				-- UNSET CAMERA
+				love.graphics.pop()
+
+				-- UNSET CANVAS
+				love.graphics.setCanvas()
+
+				-- DRAWING THE FINAL RESULT
+				love.graphics.draw(self.canvases.final, self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy)
 			end
 		end
 	end
