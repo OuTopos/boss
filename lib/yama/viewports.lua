@@ -69,7 +69,7 @@ local function new()
 	local function setupShaders()
 		if shadersEnabled then
 			self.shaders = {}
-			self.shaders.pre = love.graphics.newShader("shader_pre.glsl")
+			self.shaders.pre = love.graphics.newShader("shader_pre.glsl", "vert.glsl")
 			self.shaders.post = love.graphics.newShader("shader_light.glsl")
 		else
 			self.shaders = nil

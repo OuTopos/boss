@@ -257,8 +257,8 @@ end
 
 -- Load layers
 local function loadLayers(map, world)
-	for i = 1, #map.layers do
-		local layer = map.layers[i]
+	for k = 1, #map.layers do
+		local layer = map.layers[k]
 
 		if layer.type == "tilelayer" then
 			
