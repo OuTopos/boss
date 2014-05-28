@@ -20,10 +20,10 @@ local function new()
 
 	function self.newEntity()
 		local entity = {}
-		--entity.batch = {}
-		--entity.drawables = {}
-		--entity.shader = nil -- Should be default shader. Maybe.
-		--entity.samplers = {}
+		-- entity.batch = {}
+		-- entity.drawables = {}
+		-- entity.shader = nil -- Should be default shader. Maybe.
+		-- entity.samplers = {}
 		entity.depthmap = yama.assets.loadImage("colors/0.0.0")
 		entity.normalmap = yama.assets.loadImage("colors/127.127.255")
 		entity.x = 0
@@ -146,7 +146,7 @@ local function new()
 
 	function self.sort()
 		if not sorted then
-			-- sort!
+			table.sort(self.entities, depthsorts.y)
 		end
 	end
 

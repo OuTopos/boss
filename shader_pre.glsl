@@ -9,11 +9,12 @@ void effects(vec4 color, sampler2D texture, vec2 texture_coords, vec2 screen_coo
 {
 	vec2 canvas_coords = screen_coords / love_ScreenSize.xy;
 	canvas_coords.y = 1 - canvas_coords.y;
-	vec4 canvas_depth_color = Texel(canvas_depth, canvas_coords);
+	float canvas_depth = float(Texel(canvas_depth, canvas_coords));
 	
-	float depth = Texel(depthmap, texture_coords).r * scale + color.r + z;
+	float depth = float(Texel(depthmap, texture_coords)) * scale + color.r + z;
+	//float depth = Texel(depthmap, texture_coords).r * scale + gl_FragCoord.z;
 
-	if(canvas_depth_color.r < depth)
+	if(canvas_depth < depth)
 	{
 		vec4 diffuse = Texel(texture, texture_coords);
 		vec4 normal = Texel(normalmap, texture_coords);
@@ -23,7 +24,7 @@ void effects(vec4 color, sampler2D texture, vec2 texture_coords, vec2 screen_coo
 
 		love_Canvases[0] = diffuse;
 		love_Canvases[1] = vec4(normal.rgb, diffuse.a);
-		love_Canvases[2] = vec4(depth, 0.0, 0.0, diffuse.a);
+		love_Canvases[2] = vec4(depth);
 	}
 	else
 	{

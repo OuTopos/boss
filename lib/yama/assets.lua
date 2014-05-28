@@ -114,8 +114,8 @@ function assets.loadTileset(name, imagepath, tilewidth, tileheight, spacing, mar
 
 					local vertices = {
 					--    x,                                y,                                u,                                        v
-						{ 0,                                -self.tileheight,                 imagex/self.imagewidth,                    imagey/self.imageheight                   ,32, 0, 0},
-						{ self.tilewidth,                   -self.tileheight,                 (imagex+self.tilewidth)/self.imagewidth,   imagey/self.imageheight                   ,32, 0, 0},
+						{ 0,                                -self.tileheight,                 imagex/self.imagewidth,                    imagey/self.imageheight                   ,255, 255, 255},
+						{ self.tilewidth,                   -self.tileheight,                 (imagex+self.tilewidth)/self.imagewidth,   imagey/self.imageheight                   ,255, 255, 255},
 						{ self.tilewidth,                   0,                                (imagex+self.tilewidth)/self.imagewidth,   (imagey+self.tileheight)/self.imageheight ,32, 0, 0},
 						{ 0,                                0,                                imagex/self.imagewidth,                    (imagey+self.tileheight)/self.imageheight ,32, 0, 0},
 					}

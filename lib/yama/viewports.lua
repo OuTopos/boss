@@ -432,6 +432,8 @@ local function new()
 				end
 			else
 				-- Draw without shaders.
+				-- SORT THE SCENE
+				self.scene.sort()
 
 				-- SET CANVAS
 				love.graphics.setCanvas(self.canvases.final)
@@ -454,11 +456,11 @@ local function new()
 					end
 				end
 
-				-- DRAW HUD
-				yama.hud.draw(self, self.world)
-
 				-- UNSET CAMERA
 				love.graphics.pop()
+
+				-- DRAW HUD
+				yama.hud.draw(self, self.world)
 
 				-- UNSET CANVAS
 				love.graphics.setCanvas()

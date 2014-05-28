@@ -6,7 +6,7 @@ local game = {}
 function love.load()
 	yama.load()
 
-	love.window.setMode(1920, 1080, {
+	love.window.setMode(1280, 720, {
 		fullscreen = false,
 		fullscreentype = "desktop",
 		vsync = false,
@@ -71,7 +71,7 @@ function love.load()
 	game.vp1.attach(game.world)
 	game.vp1.camera.cx = love.window.getWidth() / 2
 	game.vp1.camera.cy = love.window.getHeight() / 2
-	-- game.vp1.follow(game.players[1])
+	game.vp1.follow(game.players[1])
 
 
 

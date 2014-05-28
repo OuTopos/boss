@@ -105,7 +105,9 @@ return {
       height = 100,
       visible = true,
       opacity = 1,
-      properties = {},
+      properties = {
+        ["z"] = "0"
+      },
       encoding = "lua",
       data = {
         3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 224, 1, 123, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 241, 5, 443, 5, 5, 5, 5, 444, 5, 5, 445, 5, 5, 5, 5, 444, 5, 5, 5, 5, 5, 443, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 443, 5,
@@ -452,7 +454,7 @@ return {
       visible = true,
       opacity = 1,
       properties = {
-        ["z"] = "1.01"
+        ["z"] = "1"
       },
       encoding = "lua",
       data = {
@@ -568,7 +570,7 @@ return {
       visible = true,
       opacity = 1,
       properties = {
-        ["z"] = "1.02"
+        ["z"] = "1"
       },
       encoding = "lua",
       data = {
@@ -800,7 +802,7 @@ return {
       visible = true,
       opacity = 1,
       properties = {
-        ["z"] = "2.01"
+        ["z"] = "2"
       },
       encoding = "lua",
       data = {
@@ -916,7 +918,7 @@ return {
       visible = true,
       opacity = 1,
       properties = {
-        ["z"] = "2.02"
+        ["z"] = "2"
       },
       encoding = "lua",
       data = {
@@ -1148,7 +1150,7 @@ return {
       visible = true,
       opacity = 1,
       properties = {
-        ["z"] = "3.01"
+        ["z"] = "3"
       },
       encoding = "lua",
       data = {
@@ -1380,7 +1382,7 @@ return {
       visible = true,
       opacity = 1,
       properties = {
-        ["z"] = "4.01"
+        ["z"] = "4"
       },
       encoding = "lua",
       data = {

@@ -128,34 +128,39 @@ end
 
 
 -- MESHES
-local function addToMeshes(map, x, y, z, gid)
+local function addToMeshes(map, x, y, z, gid, layerKey)
 	local meshData = map.meshData
 	if gid then
 		if gid > 0 then
 			local tileset = yama.assets.tilesets[getTileset(map, gid).name]
 			local tile = tileset.vertices[getTileKey(map, gid)]
 			local depth = getDepth[map.depthmode](x, y, z)
+			depth = z
 			local image = tileset.image
 			local imagepath = tileset.imagepath
 
-			if not meshData[1] then
-				meshData[1] = {}
+			if not meshData[depth] then
+				meshData[depth] = {}
 			end
 
-			if not meshData[1][image] then
-				meshData[1][image] = {}
-				meshData[1][image].vertexmap = {}
-				meshData[1][image].vertices = {}
-				meshData[1][image].tiles = {}
-				meshData[1][image].imagepath = imagepath
+			if not meshData[depth][layerKey] then
+				meshData[depth][layerKey] = {}
 			end
 
-			table.insert(meshData[1][image].vertexmap, #meshData[1][image].vertices + 1)
-			table.insert(meshData[1][image].vertexmap, #meshData[1][image].vertices + 2)
-			table.insert(meshData[1][image].vertexmap, #meshData[1][image].vertices + 3)
-			table.insert(meshData[1][image].vertexmap, #meshData[1][image].vertices + 1)
-			table.insert(meshData[1][image].vertexmap, #meshData[1][image].vertices + 3)
-			table.insert(meshData[1][image].vertexmap, #meshData[1][image].vertices + 4)
+			if not meshData[depth][layerKey][image] then
+				meshData[depth][layerKey][image] = {}
+				meshData[depth][layerKey][image].vertexmap = {}
+				meshData[depth][layerKey][image].vertices = {}
+				meshData[depth][layerKey][image].tiles = {}
+				meshData[depth][layerKey][image].imagepath = imagepath
+			end
+
+			table.insert(meshData[depth][layerKey][image].vertexmap, #meshData[depth][layerKey][image].vertices + 1)
+			table.insert(meshData[depth][layerKey][image].vertexmap, #meshData[depth][layerKey][image].vertices + 2)
+			table.insert(meshData[depth][layerKey][image].vertexmap, #meshData[depth][layerKey][image].vertices + 3)
+			table.insert(meshData[depth][layerKey][image].vertexmap, #meshData[depth][layerKey][image].vertices + 1)
+			table.insert(meshData[depth][layerKey][image].vertexmap, #meshData[depth][layerKey][image].vertices + 3)
+			table.insert(meshData[depth][layerKey][image].vertexmap, #meshData[depth][layerKey][image].vertices + 4)
 
 			local x1, y1, u1, v1, r1, g1, b1, a1 = tile[1][1], tile[1][2], tile[1][3], tile[1][4], math.floor(z + 0.5), 0, 0, 255
 			local x2, y2, u2, v2, r2, g2, b2, a2 = tile[2][1], tile[2][2], tile[2][3], tile[2][4], math.floor(z + 0.5), 0, 0, 255
@@ -171,10 +176,10 @@ local function addToMeshes(map, x, y, z, gid)
 			x4 = x4 + x
 			y4 = y4 + y
 
-			table.insert(meshData[1][image].vertices, {x1, y1, u1, v1, r1, g1, b1, a1})
-			table.insert(meshData[1][image].vertices, {x2, y2, u2, v2, r2, g2, b2, a2})
-			table.insert(meshData[1][image].vertices, {x3, y3, u3, v3, r3, g3, b3, a3})
-			table.insert(meshData[1][image].vertices, {x4, y4, u4, v4, r4, g4, b4, a4})
+			table.insert(meshData[depth][layerKey][image].vertices, {x1, y1, u1, v1, r1, g1, b1, a1})
+			table.insert(meshData[depth][layerKey][image].vertices, {x2, y2, u2, v2, r2, g2, b2, a2})
+			table.insert(meshData[depth][layerKey][image].vertices, {x3, y3, u3, v3, r3, g3, b3, a3})
+			table.insert(meshData[depth][layerKey][image].vertices, {x4, y4, u4, v4, r4, g4, b4, a4})
 
 			--meshData[depth][image].tiles =
 
@@ -183,8 +188,6 @@ local function addToMeshes(map, x, y, z, gid)
 
 			--print( tiles[1], tiles[2])
 			--print(self.getTiles(x1, y1, x2-x1, y3-y1))
-
-
 
 			-- have to add to the grid
 			tileset = nil
@@ -196,46 +199,49 @@ local function addToMeshes(map, x, y, z, gid)
 end
 
 local function createMeshes(map, world)
-	--local entity = self.newEntity("mesh", {0, 0, 0})
-	local meshData = map.meshData
-
-	for depth, v in pairs(meshData) do
+	local testint = 0
+	for depth, v in pairs(map.meshData) do
+		-- DEPTH
+		testint = testint + 1
 		local batchEntity = world.scene.newEntity()
 		batchEntity.z = depth
 		batchEntity.batch = {}
 
-		for image, meshdata in pairs(v) do
-			local mesh = love.graphics.newMesh(meshdata.vertices, image)
-			mesh:setVertexMap(meshdata.vertexmap)
-			mesh:setDrawMode("triangles")
-			local sceneEntity = world.scene.newEntity()
-			sceneEntity.z = depth
-			sceneEntity.drawable = mesh
-			print(meshdata.imagepath)
-			if yama.assets.loadImage(meshdata.imagepath .. "_depth") then
-				sceneEntity.depthmap = yama.assets.loadImage(meshdata.imagepath.. "_depth")
+		for layer, vv in pairs(v) do
+			-- LAYER
+
+			for image, meshdata in pairs(vv) do
+				-- IMAGE
+
+				local sceneEntity = world.scene.newEntity()
+				sceneEntity.z = depth
+				sceneEntity.drawable = love.graphics.newMesh(meshdata.vertices, image)
+				sceneEntity.drawable:setVertexMap(meshdata.vertexmap)
+				sceneEntity.drawable:setDrawMode("triangles")
+
+				print(meshdata.imagepath)
+				if yama.assets.loadImage(meshdata.imagepath .. "_depth") then
+					sceneEntity.depthmap = yama.assets.loadImage(meshdata.imagepath.. "_depth")
+				end
+				
+				if yama.assets.loadImage(meshdata.imagepath .. "_normal") then
+					sceneEntity.normalmap = yama.assets.loadImage(meshdata.imagepath.. "_normal")
+				end
+				
+				table.insert(batchEntity.batch, sceneEntity)
+
+				--for i = 1, #meshdata.tiles do
+					--print(meshdata.tiles[i][1], meshdata.tiles[i][2], meshdata.tiles[i][3], meshdata.tiles[i][4])
+				--	self.addToGrid(batch, meshdata.tiles[i][1], meshdata.tiles[i][2], meshdata.tiles[i][1]+meshdata.tiles[i][3], meshdata.tiles[i][2]+meshdata.tiles[i][4])
+				--end
+
+				debug.vertexcount = debug.vertexcount + #meshdata.vertices
 			end
-			
-			if yama.assets.loadImage(meshdata.imagepath .. "_normal") then
-				sceneEntity.normalmap = yama.assets.loadImage(meshdata.imagepath.. "_normal")
-			end
-			
-			table.insert(batchEntity.batch, sceneEntity)
-
-			--for i = 1, #meshdata.tiles do
-				--print(meshdata.tiles[i][1], meshdata.tiles[i][2], meshdata.tiles[i][3], meshdata.tiles[i][4])
-			--	self.addToGrid(batch, meshdata.tiles[i][1], meshdata.tiles[i][2], meshdata.tiles[i][1]+meshdata.tiles[i][3], meshdata.tiles[i][2]+meshdata.tiles[i][4])
-			--end
-
-			debug.vertexcount = debug.vertexcount + #meshdata.vertices
-
-			mesh = nil
+			print(yama.tools.serialize(batchEntity))
 		end
-
-		--table.insert(entity.batches, batchEntity)
-		batchEntity = nil
 	end
-	--entity = nil
+
+
 end
 
 
@@ -259,6 +265,18 @@ end
 local function loadLayers(map, world)
 	for k = 1, #map.layers do
 		local layer = map.layers[k]
+		local layerKey = k
+
+		info("Loading layer #" .. k .. " " ..layer.name)
+		if layer.properties then
+			if layer.properties.z then
+				print(layer.properties.z)
+			else
+				print(" no z")
+			end
+		else
+			print("no properties")
+		end
 
 		if layer.type == "tilelayer" then
 			
@@ -268,7 +286,7 @@ local function loadLayers(map, world)
 					local x, y = index2xy(map, i)
 					local z = tonumber(layer.properties.z) or 0
 					x, y, z = getSpritePosition(map, x, y, z)
-					addToMeshes(map, x, y + map.tileheight, z, gid)
+					addToMeshes(map, x, y + map.tileheight, z, gid, layerKey)
 
 					debug.tilecount = debug.tilecount + 1
 				end
@@ -285,7 +303,7 @@ local function loadLayers(map, world)
 				-- Block add to physics.
 				for i, object in ipairs(layer.objects) do
 					-- Creating a fixture from the object.
-					local fixture = createFixture(object, "static")
+					local fixture = createFixture(world.physics, object, "static")
 
 					if fixture then
 						-- And setting the userdata from the object.
@@ -331,7 +349,7 @@ local function loadLayers(map, world)
 						-- STATIC TILE
 						local z = tonumber(object.properties.z) or 1
 						z = z * map.tileheight
-						addToMeshes(map, object.x, object.y, z, object.gid)
+						addToMeshes(map, object.x, object.y, z, object.gid, layerKey)
 
 						debug.tilecount = debug.tilecount + 1
 
