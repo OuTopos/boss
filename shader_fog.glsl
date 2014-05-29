@@ -18,7 +18,7 @@ float getfog(vec3 position)
 	else
 	{
 		// Above the fog
-		return vec4(0, 0, 0, 0);
+		return 0.0;
 	}
 }
 
