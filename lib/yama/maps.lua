@@ -136,6 +136,7 @@ local function addToMeshes(map, x, y, z, gid, layerKey)
 			local tile = tileset.vertices[getTileKey(map, gid)]
 			local depth = getDepth[map.depthmode](x, y, z)
 			depth = z
+			layerKey = 1
 			local image = tileset.image
 			local imagepath = tileset.imagepath
 
