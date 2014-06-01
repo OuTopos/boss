@@ -314,7 +314,7 @@ local function new()
 		self.shaders.pre:send("normalmap", sceneEntity.normalmap)
 		self.shaders.pre:send("depthmap", sceneEntity.depthmap)
 		--self.shaders.pre:send("z", sceneEntity.z / 256)
-		self.shaders.pre:send("scale", (sceneEntity.sx + sceneEntity.sy) / 2)
+		self.shaders.pre:sendInt("scale", 1) -- (sceneEntity.sx + sceneEntity.sy) / 2)
 		
 		love.graphics.draw(sceneEntity.drawable, sceneEntity.x, sceneEntity.y, sceneEntity.r, sceneEntity.sx, sceneEntity.sy, sceneEntity.ox, sceneEntity.oy)
 		self.debug.drawcalls = self.debug.drawcalls + 1
