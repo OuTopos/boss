@@ -18,22 +18,19 @@ void effects(vec4 color, sampler2D texture, vec2 texture_coords, vec2 screen_coo
 	int depth = int(depth_color.r * 255);
 	depth = depth * scale + int(color.r * 255) + z;
 	//float depth = Texel(depthmap, texture_coords).r * scale + gl_FragCoord.z;
-
+	
+	vec4 diffuse = Texel(texture, texture_coords);
 
 	if(canvas_depth < depth)
 	{
-		vec4 diffuse = Texel(texture, texture_coords);
-		//float test = DecodeFloatRGBA(vec4(1, 1, 0, 1));
-		//diffuse = EncodeFloatRGBA(test);
-
 		vec4 normal = Texel(normalmap, texture_coords);
 		//normal = normal * 2 - 1;
 		//normal = normal * rotation;
 		//normal = normal / 2 + 0.5;
 
-		love_Canvases[0] = diffuse;
-		love_Canvases[1] = vec4(normal.rgb, diffuse.a);
-		love_Canvases[2] = vec4(float(depth / 255.0), 0.0, 0.0, diffuse.a);
+		love_Canvases[0] = vec4(diffuse.rgb, floor(diffuse.a));
+		love_Canvases[1] = vec4(normal.rgb, floor(diffuse.a));
+		love_Canvases[2] = vec4(float(depth / 255.0), 0.0, 0.0, floor(diffuse.a));
 	}
 	else
 	{

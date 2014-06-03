@@ -47,12 +47,12 @@ end
 -- IMAGE
 function assets.loadImage(imagepath)
 	if assets.images[imagepath] then
-		info("Image " .. imagepath .. " was already loaded.", 3)
+		-- info("Image " .. imagepath .. " was already loaded.", 3)
 		return assets.images[imagepath]
 	else
 		if love.filesystem.exists(yama.paths.images .. "/" .. imagepath .. ".png") then
 			assets.images[imagepath] = love.graphics.newImage(yama.paths.images .. "/".. imagepath .. ".png")
-			info("Successfully loaded image: " .. imagepath, 3)
+			-- info("Successfully loaded image: " .. imagepath, 3)
 			return assets.images[imagepath]
 		else
 			warning("Couldn't load image: " .. imagepath .. ". File not found.", 3)

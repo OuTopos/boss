@@ -128,7 +128,10 @@ end
 
 
 -- MESHES
-local function addToMeshes(map, x, y, z, gid, layerKey)
+local function addToMeshes(map, x, y, z, gid, layerKey, flat)
+	if flat then
+		print("jag är platt")
+	end
 	local meshData = map.meshData
 	if gid then
 		if gid > 0 then
@@ -163,10 +166,23 @@ local function addToMeshes(map, x, y, z, gid, layerKey)
 			table.insert(meshData[depth][layerKey][image].vertexmap, #meshData[depth][layerKey][image].vertices + 3)
 			table.insert(meshData[depth][layerKey][image].vertexmap, #meshData[depth][layerKey][image].vertices + 4)
 
-			local x1, y1, u1, v1, r1, g1, b1, a1 = tile[1][1], tile[1][2], tile[1][3], tile[1][4], math.floor(z + 0.5), 0, 0, 255
-			local x2, y2, u2, v2, r2, g2, b2, a2 = tile[2][1], tile[2][2], tile[2][3], tile[2][4], math.floor(z + 0.5), 0, 0, 255
-			local x3, y3, u3, v3, r3, g3, b3, a3 = tile[3][1], tile[3][2], tile[3][3], tile[3][4], math.floor(z + 0.5), 0, 0, 255
-			local x4, y4, u4, v4, r4, g4, b4, a4 = tile[4][1], tile[4][2], tile[4][3], tile[4][4], math.floor(z + 0.5), 0, 0, 255
+
+			local x1, y1, u1, v1, r1, g1, b1, a1
+			local x2, y2, u2, v2, r2, g2, b2, a2
+			local x3, y3, u3, v3, r3, g3, b3, a3
+			local x4, y4, u4, v4, r4, g4, b4, a4
+
+			if flat then
+				x1, y1, u1, v1, r1, g1, b1, a1 = tile[1][1], tile[1][2], tile[1][3], tile[1][4], math.floor(z + 0.5), 0, 0, 255
+				x2, y2, u2, v2, r2, g2, b2, a2 = tile[2][1], tile[2][2], tile[2][3], tile[2][4], math.floor(z + 0.5), 0, 0, 255
+				x3, y3, u3, v3, r3, g3, b3, a3 = tile[3][1], tile[3][2], tile[3][3], tile[3][4], math.floor(z + 0.5), 0, 0, 255
+				x4, y4, u4, v4, r4, g4, b4, a4 = tile[4][1], tile[4][2], tile[4][3], tile[4][4], math.floor(z + 0.5), 0, 0, 255
+			else
+				x1, y1, u1, v1, r1, g1, b1, a1 = tile[1][1], tile[1][2], tile[1][3], tile[1][4], math.floor(z + 0.5), 0, 0, 255
+				x2, y2, u2, v2, r2, g2, b2, a2 = tile[2][1], tile[2][2], tile[2][3], tile[2][4], math.floor(z + 0.5), 0, 0, 255
+				x3, y3, u3, v3, r3, g3, b3, a3 = tile[3][1], tile[3][2], tile[3][3], tile[3][4], math.floor(z -32 + 0.5), 0, 0, 255
+				x4, y4, u4, v4, r4, g4, b4, a4 = tile[4][1], tile[4][2], tile[4][3], tile[4][4], math.floor(z -32 + 0.5), 0, 0, 255
+			end
 
 			x1 = x1 + x
 			y1 = y1 + y
@@ -238,7 +254,7 @@ local function createMeshes(map, world)
 
 				debug.vertexcount = debug.vertexcount + #meshdata.vertices
 			end
-			print(yama.tools.serialize(batchEntity))
+			--print(yama.tools.serialize(batchEntity))
 		end
 	end
 
@@ -269,25 +285,30 @@ local function loadLayers(map, world)
 		local layerKey = k
 
 		info("Loading layer #" .. k .. " " ..layer.name)
-		if layer.properties then
-			if layer.properties.z then
-				print(layer.properties.z)
-			else
-				print(" no z")
-			end
-		else
-			print("no properties")
-		end
+		-- if layer.properties then
+		-- 	if layer.properties.z then
+		-- 		print(layer.properties.z)
+		-- 	else
+		-- 		print(" no z")
+		-- 	end
+		-- else
+		-- 	print("no properties")
+		-- end
 
 		if layer.type == "tilelayer" then
 			
 			-- TILE LAYERS
+			local flat = false
+			if layer.properties.flat == "true" then
+				flat = true
+			end
+			flat = true
 			for i, gid in ipairs(layer.data) do
 				if gid > 0 then
 					local x, y = index2xy(map, i)
 					local z = tonumber(layer.properties.z) or 0
 					x, y, z = getSpritePosition(map, x, y, z)
-					addToMeshes(map, x, y + map.tileheight, z, gid, layerKey)
+					addToMeshes(map, x, y + map.tileheight, z, gid, layerKey, flat)
 
 					debug.tilecount = debug.tilecount + 1
 				end

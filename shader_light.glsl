@@ -21,19 +21,19 @@ uniform sampler2D fogmap;
 uniform float fogz = 0.2;
 uniform float fogheight = 0.3;
 
-float getfog(vec3 position)
+vec4 getfog(vec3 position)
 {
 	float fog_thickness = min(fogz + fogheight - position.z, fogheight);
 	if(fog_thickness > 0.0)
 	{
 		float fog_color = texture2D(fogmap, position.xy).g * (fog_thickness / fogheight);
 
-		return fog_color;
+		return vec4(0.14, 0.13, 0.25, fog_color);
 	}
 	else
 	{
 		// Above the fog
-		return 0.0;
+		return vec4(0.0, 0.0, 0.0, 0.0);
 	}
 }
 
@@ -57,9 +57,9 @@ vec4 effect(vec4 color, sampler2D texture, vec2 texture_coords, vec2 screen_coor
 	// Get the depth.
 	float depth = texture2D(depthmap, texture_coords).r;
 
-	float fogv = getfog(vec3(texture_coords, depth));
+	vec4 fog_color = getfog(vec3(texture_coords, depth));
 
-	depth *= 256;
+	depth *= 255;
 
 	// Sum of the lights.
 	vec3 sum = vec3(0.0);
@@ -93,5 +93,5 @@ vec4 effect(vec4 color, sampler2D texture, vec2 texture_coords, vec2 screen_coor
 	}
 
 	//return vec4(sum, diffuse_color.a);
-	return vec4(mix(sum.rgb, vec3(0.14, 0.13, 0.25), fogv), diffuse_color.a);
+	return vec4(mix(sum.rgb, fog_color.rgb, fog_color.a), diffuse_color.a);
 }

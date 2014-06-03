@@ -21,9 +21,17 @@ return {
       imagewidth = 512,
       imageheight = 928,
       properties = {
+        ["flat"] = "true",
         ["pad"] = "false"
       },
-      tiles = {}
+      tiles = {
+        {
+          id = 0,
+          properties = {
+            ["flat"] = "true"
+          }
+        }
+      }
     },
     {
       name = "build_atlas",
@@ -106,6 +114,7 @@ return {
       visible = true,
       opacity = 1,
       properties = {
+        ["flat"] = "true",
         ["z"] = "0"
       },
       encoding = "lua",

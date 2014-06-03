@@ -5,6 +5,7 @@
  </properties>
  <tileset firstgid="1" name="Terrain" tilewidth="32" tileheight="32">
   <properties>
+   <property name="flat" value="true"/>
    <property name="pad" value="false"/>
   </properties>
   <image source="../../images/terrain.png" width="512" height="928"/>
@@ -19,7 +20,11 @@
    <terrain name="PlowedSoil" tile="337"/>
    <terrain name="Sand" tile="338"/>
   </terraintypes>
-  <tile id="0" terrain="0,0,0,0"/>
+  <tile id="0" terrain="0,0,0,0">
+   <properties>
+    <property name="flat" value="true"/>
+   </properties>
+  </tile>
   <tile id="1" terrain="1,1,1,1"/>
   <tile id="2" terrain="2,2,2,2"/>
   <tile id="3" terrain="3,3,3,3"/>
@@ -502,6 +507,7 @@
  </tileset>
  <layer name="Terrain" width="100" height="100">
   <properties>
+   <property name="flat" value="true"/>
    <property name="z" value="0"/>
   </properties>
   <data encoding="base64" compression="zlib">
