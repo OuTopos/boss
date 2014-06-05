@@ -129,16 +129,17 @@ end
 
 -- MESHES
 local function addToMeshes(map, x, y, z, gid, layerKey, flat)
-	if flat then
-		print("jag är platt")
-	end
 	local meshData = map.meshData
 	if gid then
 		if gid > 0 then
+			map.debug.tiles = map.debug.tiles + 1
+			map.debug.vertices = map.debug.vertices + 4
+			map.debug.triangles = map.debug.triangles + 2
+
 			local tileset = yama.assets.tilesets[getTileset(map, gid).name]
 			local tile = tileset.vertices[getTileKey(map, gid)]
 			local depth = getDepth[map.depthmode](x, y, z)
-			depth = z
+			depth = 1
 			layerKey = 1
 			local image = tileset.image
 			local imagepath = tileset.imagepath
@@ -172,17 +173,17 @@ local function addToMeshes(map, x, y, z, gid, layerKey, flat)
 			local x3, y3, u3, v3, r3, g3, b3, a3
 			local x4, y4, u4, v4, r4, g4, b4, a4
 
-			if flat then
+			-- if flat then
 				x1, y1, u1, v1, r1, g1, b1, a1 = tile[1][1], tile[1][2], tile[1][3], tile[1][4], math.floor(z + 0.5), 0, 0, 255
 				x2, y2, u2, v2, r2, g2, b2, a2 = tile[2][1], tile[2][2], tile[2][3], tile[2][4], math.floor(z + 0.5), 0, 0, 255
 				x3, y3, u3, v3, r3, g3, b3, a3 = tile[3][1], tile[3][2], tile[3][3], tile[3][4], math.floor(z + 0.5), 0, 0, 255
 				x4, y4, u4, v4, r4, g4, b4, a4 = tile[4][1], tile[4][2], tile[4][3], tile[4][4], math.floor(z + 0.5), 0, 0, 255
-			else
-				x1, y1, u1, v1, r1, g1, b1, a1 = tile[1][1], tile[1][2], tile[1][3], tile[1][4], math.floor(z + 0.5), 0, 0, 255
-				x2, y2, u2, v2, r2, g2, b2, a2 = tile[2][1], tile[2][2], tile[2][3], tile[2][4], math.floor(z + 0.5), 0, 0, 255
-				x3, y3, u3, v3, r3, g3, b3, a3 = tile[3][1], tile[3][2], tile[3][3], tile[3][4], math.floor(z -32 + 0.5), 0, 0, 255
-				x4, y4, u4, v4, r4, g4, b4, a4 = tile[4][1], tile[4][2], tile[4][3], tile[4][4], math.floor(z -32 + 0.5), 0, 0, 255
-			end
+			-- else
+			-- 	x1, y1, u1, v1, r1, g1, b1, a1 = tile[1][1], tile[1][2], tile[1][3], tile[1][4], math.floor(z + 0.5), 0, 0, 255
+			-- 	x2, y2, u2, v2, r2, g2, b2, a2 = tile[2][1], tile[2][2], tile[2][3], tile[2][4], math.floor(z + 0.5), 0, 0, 255
+			-- 	x3, y3, u3, v3, r3, g3, b3, a3 = tile[3][1], tile[3][2], tile[3][3], tile[3][4], math.floor(z -32 + 0.5), 0, 0, 255
+			-- 	x4, y4, u4, v4, r4, g4, b4, a4 = tile[4][1], tile[4][2], tile[4][3], tile[4][4], math.floor(z -32 + 0.5), 0, 0, 255
+			-- end
 
 			x1 = x1 + x
 			y1 = y1 + y
@@ -216,27 +217,30 @@ local function addToMeshes(map, x, y, z, gid, layerKey, flat)
 end
 
 local function createMeshes(map, world)
+	local testdepths = 0
+	local testlayers = 0
 	local testint = 0
 	for depth, v in pairs(map.meshData) do
+		testdepths = testdepths + 1
 		-- DEPTH
-		testint = testint + 1
-		local batchEntity = world.scene.newEntity()
-		batchEntity.z = depth
-		batchEntity.batch = {}
+		-- local batchEntity = world.scene.newEntity()
+		-- batchEntity.z = depth
 
 		for layer, vv in pairs(v) do
+			testlayers = testlayers + 1
 			-- LAYER
 
 			for image, meshdata in pairs(vv) do
 				-- IMAGE
 
+				testint = testint + 1
 				local sceneEntity = world.scene.newEntity()
 				sceneEntity.z = depth
 				sceneEntity.drawable = love.graphics.newMesh(meshdata.vertices, image)
 				sceneEntity.drawable:setVertexMap(meshdata.vertexmap)
 				sceneEntity.drawable:setDrawMode("triangles")
 
-				print(meshdata.imagepath)
+				-- print(meshdata.imagepath)
 				if yama.assets.loadImage(meshdata.imagepath .. "_depth") then
 					sceneEntity.depthmap = yama.assets.loadImage(meshdata.imagepath.. "_depth")
 				end
@@ -245,7 +249,7 @@ local function createMeshes(map, world)
 					sceneEntity.normalmap = yama.assets.loadImage(meshdata.imagepath.. "_normal")
 				end
 				
-				table.insert(batchEntity.batch, sceneEntity)
+				-- table.insert(batchEntity.batch, sceneEntity)
 
 				--for i = 1, #meshdata.tiles do
 					--print(meshdata.tiles[i][1], meshdata.tiles[i][2], meshdata.tiles[i][3], meshdata.tiles[i][4])
@@ -256,6 +260,8 @@ local function createMeshes(map, world)
 			end
 			--print(yama.tools.serialize(batchEntity))
 		end
+		print("number of SE from map loading: " .. testint, testdepths, testlayers)
+		info("Tiles: " .. map.debug.tiles .. " Triangles: " .. map.debug.triangles .. " Vertices: " .. map.debug.vertices)
 	end
 
 
@@ -457,6 +463,10 @@ local function load(world, path, offset)
 
 		-- TEMP VARS, should be nilled later.
 		map.meshData = {}
+		map.debug = {}
+		map.debug.tiles = 0
+		map.debug.vertices = 0
+		map.debug.triangles = 0
 
 		-- DEPTH
 		if map.properties.sortmode then

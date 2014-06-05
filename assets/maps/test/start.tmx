@@ -530,7 +530,7 @@
    eJzt3DlLHVEYxvGTXHGplICQmGj0I5g0GkFjG1PY2WWpIuRbWKiIRUo/ifsarcTS5V63bJYpU0RjxAe8xfEyjkevM3O85/+DB0EGGd7XOVtxjAEAAICPHuWyfgPEeZGLD5LxwFx8G3wffmov/v+/jOmPyzNAqH7XZf0GsP2hH8AlIY9RQx6uWxijAAAAAABIRukZSMhnIj4oPQPhTAQAAAAAAAAAAAAAgHBN1hozpUwrM8qsMqfMKwvKorKkLCsryldlVVmrzfrNK9O26rqj5JWCsqvsKfvKgXKofFO+Kz+Un8ov5Yh+AAAAAN4brjJmRBmtyvpNYKv38N4DAOEa05jUp7y1xqY3xd/ZGWfsSsVnxzq7Pofy0A+/pNmP6WpjZpRZZa66/L93H7Tf8B7eNPuRVw8Kyq6yF0g/Jh4a05i7+Fnam6g7YNPsx1/14Fg5Uf4F0o+biqvzmLW+2oh4rkX79+dKq9LmsJd/XGPME6VJeVpz+3euZOsRa9u4Hti61YMe5bXSe4uzlRDnkyS9Uw/eKx+Uj9f0Y171XlAWrbqHOJ+kpUHfUn/M97Sveh8oh1bdmU/ibSd4H8ep6v1fObPqznxydwZK6nfdWfAzPd+stFB3L4Q2d295fveP69wdWt+y4jp3s+ZKh+vczZrrbnVo3OxUXildxTE0au9xlUpcc22mMJd80v5v0HFPHrX3QHai9h5I1xdrP3Jf9x6+r1kBAED5kjwPBwAAAAAAAAAAcHUOG7p+Yw==
   </data>
  </layer>
- <layer name="1.01" width="100" height="100">
+ <layer name="1 A" width="100" height="100">
   <properties>
    <property name="z" value="1"/>
   </properties>
@@ -538,7 +538,7 @@
    eJzt1zsSwiAUBVBmLNTV2OjOdAm6v6jjerR0YiBBE/LxnJKkYC68B4QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALMF5E8JlM/YsSLlt09+P6xBO6zJzgb5ULfu6hN1q7BkMo61nMC/v6zmFulmyeu3k1NKQdbd/nfGHPz/nU/nmftMjm8VyeR+X3fw1reEQZ8t1oXvlmxqIZfFrPanHYbX1vljdWJdPfWaS6leyL6Mt53rt3CP/e9f8psq4n3XNWg1Nw1LvUCX09X7Xn/oVy7qe80PunTXt0fqYnj5d357L1rSMnDsW3eW+n53F8ElPmj5rBAAAAEDKE6DwNHU=
   </data>
  </layer>
- <layer name="1.02" width="100" height="100">
+ <layer name="1 B" width="100" height="100">
   <properties>
    <property name="z" value="1"/>
   </properties>
@@ -686,7 +686,7 @@
    <polygon points="0,0 32,32 64,32 64,0"/>
   </object>
   <object x="0" y="0">
-   <polyline points="0,0 0,1088 1888,1088 1888,0 0,0"/>
+   <polyline points="0,0 0,3200 3200,3200 3200,0 0,0"/>
   </object>
   <object x="832" y="480" width="32" height="32">
    <ellipse/>

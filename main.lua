@@ -146,4 +146,5 @@ end
 
 function game.resize()
 	game.vp1.resize(love.window.getWidth(), love.window.getHeight())
+	-- game.vp1.zoom(4, 4)
 end

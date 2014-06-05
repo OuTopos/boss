@@ -455,7 +455,7 @@ return {
     },
     {
       type = "tilelayer",
-      name = "1.01",
+      name = "1 A",
       x = 0,
       y = 0,
       width = 100,
@@ -571,7 +571,7 @@ return {
     },
     {
       type = "tilelayer",
-      name = "1.02",
+      name = "1 B",
       x = 0,
       y = 0,
       width = 100,
@@ -2187,9 +2187,9 @@ return {
           visible = true,
           polyline = {
             { x = 0, y = 0 },
-            { x = 0, y = 1088 },
-            { x = 1888, y = 1088 },
-            { x = 1888, y = 0 },
+            { x = 0, y = 3200 },
+            { x = 3200, y = 3200 },
+            { x = 3200, y = 0 },
             { x = 0, y = 0 }
           },
           properties = {}

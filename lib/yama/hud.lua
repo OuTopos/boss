@@ -104,7 +104,7 @@ function hud.draw(viewport, world)
 		love.graphics.setColor(0, 0, 0, 127)
 		love.graphics.rectangle("fill", left, top, 100, 92)--+#yama.screen.modes*lh)
 
-		love.graphics.rectangle("fill", right-122, top, 120, 160)--+#yama.screen.modes*lh)
+		love.graphics.rectangle("fill", right-122, top, 120, 180)--+#yama.screen.modes*lh)
 
 		-- Text color
 		love.graphics.setColor(0, 255, 0, 255)
@@ -189,7 +189,7 @@ function hud.draw(viewport, world)
 		-- Buffer
 		text = text .. "\n World entities: " .. viewport.debug.worldEntities
 		text = text .. "\n Scene entities: " .. viewport.debug.sceneEntities
-		text = text .. "\n Drawcalls: " .. viewport.debug.drawCalls
+		text = text .. "\n Drawcalls: " .. viewport.debug.drawcalls
 
 
 

@@ -118,7 +118,7 @@ local function update(dt)
 	if not yama.v.paused then
 		yama.worlds.update(dt)
 	end
-	yama.viewports.update()
+	yama.viewports.update(dt)
 end
 
 local function draw()

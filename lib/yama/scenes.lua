@@ -1,5 +1,38 @@
 local yama = require((...):match("(.+)%.[^%.]+$") .. "/table")
 
+local function newEntity()
+	local self = {}
+	-- entity.batch = {}
+	-- entity.drawables = {}
+	-- entity.shader = nil -- Should be default shader. Maybe.
+	-- entity.samplers = {}
+	self.depthmap = yama.assets.loadImage("colors/0.0.0")
+	self.normalmap = yama.assets.loadImage("colors/127.127.255")
+	self.x = 0
+	self.y = 0
+	self.z = 0
+	self.r = 0
+	self.sx = 1
+	self.sy = 1
+	self.ox = 0
+	self.oy = 0
+
+	self.width = 0
+	self.height = 0
+
+	function self.newEntity()
+		local entity = newEntity()
+		if type(self.batch) ~= "table" then
+			self.batch = {}
+		end
+		table.insert(self.batch, entity)
+		return entity
+	end
+
+	return self
+end
+
+
 local function new()
 	local self = {}
 
@@ -19,27 +52,8 @@ local function new()
 	self.entities = {}
 
 	function self.newEntity()
-		local entity = {}
-		-- entity.batch = {}
-		-- entity.drawables = {}
-		-- entity.shader = nil -- Should be default shader. Maybe.
-		-- entity.samplers = {}
-		entity.depthmap = yama.assets.loadImage("colors/0.0.0")
-		entity.normalmap = yama.assets.loadImage("colors/127.127.255")
-		entity.x = 0
-		entity.y = 0
-		entity.z = 0
-		entity.r = 0
-		entity.sx = 1
-		entity.sy = 1
-		entity.ox = 0
-		entity.oy = 0
-
-		entity.width = 0
-		entity.height = 0
-
+		local entity = newEntity()
 		table.insert(self.entities, entity)
-
 		return entity
 	end
 

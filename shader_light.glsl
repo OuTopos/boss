@@ -18,6 +18,11 @@ uniform float hour = 0.5;
 
 // FOG
 uniform sampler2D fogmap;
+uniform vec4 fog_position = vec4(0.2, 1.0, 1.0, 1.0);
+uniform vec4 fog_strength = vec4(1.0, 1.0, 1.0, 1.0);
+uniform vec4 fog_height = vec4(0.3, 1.0, 1.0, 1.0);
+
+// replace
 uniform float fogz = 0.2;
 uniform float fogheight = 0.3;
 
@@ -26,7 +31,7 @@ vec4 getfog(vec3 position)
 	float fog_thickness = min(fogz + fogheight - position.z, fogheight);
 	if(fog_thickness > 0.0)
 	{
-		float fog_color = texture2D(fogmap, position.xy).g * (fog_thickness / fogheight);
+		float fog_color = texture2D(fogmap, position.xy + 2 - floor(position.xy + 2)  ).g * (fog_thickness / fogheight);
 
 		return vec4(0.14, 0.13, 0.25, fog_color);
 	}
@@ -39,7 +44,7 @@ vec4 getfog(vec3 position)
 
 vec4 effect(vec4 color, sampler2D texture, vec2 texture_coords, vec2 screen_coords)
 {
-	vec4 world_coords = vec4(screen_coords, 0, 1) * screen_to_world;
+	//vec4 world_coords = vec4(screen_coords, 0, 1) * screen_to_world;
 
 	// RGBA of the diffuse color.
 	vec4 diffuse_color = texture2D(texture, texture_coords);
@@ -67,7 +72,7 @@ vec4 effect(vec4 color, sampler2D texture, vec2 texture_coords, vec2 screen_coor
 	for(int i = 0; i < 5; i++)
 	{
 		// The delta position of light.
-		vec3 light_direction = light_position[i] - vec3(world_coords.xy - vec2(0.0, depth * skew_ratio), depth);
+		vec3 light_direction = light_position[i] - vec3(screen_coords.xy - vec2(0.0, depth * skew_ratio), depth);
 
 		// Determine the distance (used for attenuation) BEFORE we normalize the light direction.
 		float D = length(light_direction);
