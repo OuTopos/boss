@@ -25,7 +25,7 @@ function close.new(game, origin)
 
 		self.state = "active"
 
-		self.body = love.physics.newBody(origin.world, self.x, self.y, "dynamic")
+		self.body = love.physics.newBody(game.world.physics, self.x, self.y, "dynamic")
 
 		self.shape = love.physics.newCircleShape(self.range)
 

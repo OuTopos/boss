@@ -63,9 +63,9 @@ function range.new(game, origin)
 		self.weapon.properties.damageBody = 9
 		self.weapon.properties.damageShield = 17
 		self.weapon.properties.impulseForce = 900
-		self.weapon.properties.nrBulletsPerShot = 100
+		self.weapon.properties.nrBulletsPerShot = 1
 		self.weapon.properties.magCapacity = 50
-		self.weapon.properties.spread = 360
+		self.weapon.properties.spread = 1
 		self.weapon.properties.nrBounces = 1
 		self.weapon.properties.blastRadius = 0
 		self.weapon.properties.lifetime = 5
