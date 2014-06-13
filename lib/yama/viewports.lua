@@ -82,7 +82,7 @@ local function new()
 
 		self.shaders.post:send("normalmap", self.canvases.normal)
 		self.shaders.post:send("depthmap", self.canvases.depth)
-		self.shaders.post:send("fogmap", yama.assets.loadImage("fog"))
+		self.shaders.post:send("fog_mask", yama.assets.loadImage("fog"))
 		self.shaders.post:send("ambientmap", yama.assets.loadImage("ambient"))
 
 		-- self.shaders.transition:send("pre_canvas", yama.assets.loadImage("test_canvas"))
@@ -305,10 +305,10 @@ local function new()
 	local function drawSceneEntity(sceneEntity)
 		self.shaders.pre:send("normalmap", sceneEntity.normalmap)
 		self.shaders.pre:send("depthmap", sceneEntity.depthmap)
-		--self.shaders.pre:send("z", sceneEntity.z / 256)
-		self.shaders.pre:sendInt("scale", 1) -- (sceneEntity.sx + sceneEntity.sy) / 2)
+		self.shaders.pre:send("z", sceneEntity.z)
+		self.shaders.pre:send("scale", sceneEntity.scale)
 		
-		love.graphics.draw(sceneEntity.drawable, sceneEntity.x, sceneEntity.y, sceneEntity.r, sceneEntity.sx, sceneEntity.sy, sceneEntity.ox, sceneEntity.oy)
+		love.graphics.draw(sceneEntity.drawable, sceneEntity.x, sceneEntity.y, sceneEntity.r, sceneEntity.sx * sceneEntity.scale, sceneEntity.sy * sceneEntity.scale, sceneEntity.ox, sceneEntity.oy)
 		self.debug.drawcalls = self.debug.drawcalls + 1
 	end
 
@@ -384,7 +384,7 @@ local function new()
 			--viewport.shader_light:send("ambient_color", {0.02, 0.02, 0.02, 0})
 
 			scene.lights.position[1][1] = self.camera.cx
-			scene.lights.position[1][2] = self.camera.cy + 32
+			scene.lights.position[1][2] = self.camera.cy + 64
 			scene.lights.position[1][3] = 64
 
 			local lights = {}

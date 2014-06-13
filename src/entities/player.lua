@@ -63,6 +63,10 @@ function player.new(world, x, y, z)
 	local tileset = yama.assets.tilesets["body"]
 	local sprite = world.scene.newEntity()
 
+	sprite.z = 32
+	sprite.sx, sprite.sy = self.sx, self.sy
+	sprite.ox, sprite.oy = self.ox, self.oy
+
 	sprite.drawable = tileset.tiles[1]
 	sprite.normalmap = yama.assets.loadImage("lightingtest/body_normal")
 	sprite.depthmap = yama.assets.loadImage("lightingtest/body_depth")

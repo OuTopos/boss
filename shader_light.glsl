@@ -1,3 +1,5 @@
+//uniform vec2 screen_origo;
+
 uniform sampler2D normalmap;
 uniform sampler2D depthmap;
 uniform vec2 offset = vec2(0.0, 0.0);
@@ -17,21 +19,24 @@ uniform sampler2D ambientmap;
 uniform float hour = 0.5;
 
 // FOG
-uniform sampler2D fogmap;
+uniform sampler2D fog_mask;
+vec2 fog_mask_size = vec2(512, 512);
 uniform vec4 fog_position = vec4(0.2, 1.0, 1.0, 1.0);
+uniform vec4 fog_scale = vec4(0.2, 1.0, 1.0, 1.0);
 uniform vec4 fog_strength = vec4(1.0, 1.0, 1.0, 1.0);
 uniform vec4 fog_height = vec4(0.3, 1.0, 1.0, 1.0);
-
+uniform vec4 fog_elevation = vec4(0.3, 1.0, 1.0, 1.0);
 // replace
 uniform float fogz = 0.2;
 uniform float fogheight = 0.3;
 
-vec4 getfog(vec3 position)
+vec4 getfog(vec3 coords)
 {
-	float fog_thickness = min(fogz + fogheight - position.z, fogheight);
+	//coords.xy -=
+	float fog_thickness = min(fogz + fogheight - coords.z, fogheight);
 	if(fog_thickness > 0.0)
 	{
-		float fog_color = texture2D(fogmap, position.xy + 2 - floor(position.xy + 2)  ).g * (fog_thickness / fogheight);
+		float fog_color = texture2D(fog_mask, coords.xy + 2 - floor(coords.xy + 2)  ).g * (fog_thickness / fogheight);
 
 		return vec4(0.14, 0.13, 0.25, fog_color);
 	}
@@ -62,7 +67,7 @@ vec4 effect(vec4 color, sampler2D texture, vec2 texture_coords, vec2 screen_coor
 	// Get the depth.
 	float depth = texture2D(depthmap, texture_coords).r;
 
-	vec4 fog_color = getfog(vec3(texture_coords, depth));
+	vec4 fog_color = getfog(vec3(screen_coords, depth));
 
 	depth *= 255;
 

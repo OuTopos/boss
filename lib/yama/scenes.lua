@@ -20,6 +20,8 @@ local function newEntity()
 	self.width = 0
 	self.height = 0
 
+	self.scale = 1
+
 	function self.newEntity()
 		local entity = newEntity()
 		if type(self.batch) ~= "table" then
@@ -45,8 +47,8 @@ local function new()
 
 	-- LIGHTS
 	self.lights = {}
-	self.lights.position = {{600, 300, 75}, {0, 0, 75}, {320, 600, 40}, {300, 200, 50}, {500, 100, 100}}
-	self.lights.color = {{10, 10, 10, 0.2}, {1, 1, 0, 1}, {0, 1, 1, 1}, {1, 0, 1, 1}, {0, 0, 10, 1}}
+	self.lights.position = {{600, 300, 75}, {496, 886, 100}, {624, 886, 100}, {300, 200, 50}, {500, 100, 100}}
+	self.lights.color = {{1, 1, 1, 1}, {1, 0.8, 0, 2}, {1, 0.8, 0, 2}, {1, 0, 1, 1}, {0, 0, 10, 1}}
 
 	-- SCENE ENTITIES
 	self.entities = {}
@@ -66,7 +68,7 @@ local function new()
 
 	self.env.time = 0
 	self.env.day = 0
-	self.env.timeMultiplier = 0.0001
+	self.env.timeMultiplier = 0.001
 
 	self.env.fog = {}
 	self.env.fog.layers = 4

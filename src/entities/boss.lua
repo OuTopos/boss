@@ -88,7 +88,9 @@ function boss.new(world, x, y, z)
 
 	local tileset = yama.assets.tilesets["body"]
 	local sprite = world.scene.newEntity()
-	sprite.sx, sprite.sy = self.sx, self.sy
+	sprite.ox, sprite.oy = self.ox, self.oy
+	sprite.z = 32
+	sprite.scale = 5
 	sprite.drawable = tileset.tiles[1]
 	sprite.normalmap = yama.assets.loadImage("lightingtest/body_normal")
 	sprite.depthmap = yama.assets.loadImage("lightingtest/body_depth")

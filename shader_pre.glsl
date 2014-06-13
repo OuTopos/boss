@@ -1,8 +1,8 @@
 uniform sampler2D canvas_depth;
 uniform sampler2D depthmap;
 uniform sampler2D normalmap;
-uniform int z = 1;
-uniform int scale = 1;
+uniform float z = 0;
+uniform float scale = 1;
 //extern mat3 rotation;
 
 
@@ -11,12 +11,12 @@ void effects(vec4 color, sampler2D texture, vec2 texture_coords, vec2 screen_coo
 	vec2 canvas_coords = screen_coords / love_ScreenSize.xy;
 	canvas_coords.y = 1 - canvas_coords.y;
 	vec4 canvas_depth_color = Texel(canvas_depth, canvas_coords);
-	int canvas_depth = int(canvas_depth_color.r * 255);
+	float canvas_depth = float(canvas_depth_color.r * 255);
 	
 	vec4 depth_color = Texel(depthmap, texture_coords);
 	//float depth = depth_color.r * 255 + depth_color.g * 65025.0 + depth_color.b * 160581375.0;
-	int depth = int(depth_color.r * 255);
-	depth = depth * scale + int(color.r * 255) + z;
+	float depth = depth_color.r * 255;
+	depth = depth * scale + color.r * 255 + z;
 	//float depth = Texel(depthmap, texture_coords).r * scale + gl_FragCoord.z;
 	
 	vec4 diffuse = Texel(texture, texture_coords);
