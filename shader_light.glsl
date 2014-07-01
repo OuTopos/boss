@@ -96,7 +96,7 @@ vec4 effect(vec4 color, sampler2D texture, vec2 texture_coords, vec2 screen_coor
 		float attenuation = 1.0 / (D/20);
 
 		// Calculate and return the final color.
-		vec3 intensity = ambient + diffuse * attenuation;
+		vec3 intensity = diffuse * attenuation;
 		vec3 final_color = diffuse_color.rgb * intensity;
 
 		sum += final_color;

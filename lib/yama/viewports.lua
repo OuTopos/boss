@@ -83,7 +83,7 @@ local function new()
 		self.shaders.post:send("normalmap", self.canvases.normal)
 		self.shaders.post:send("depthmap", self.canvases.depth)
 		self.shaders.post:send("fog_mask", yama.assets.loadImage("fog"))
-		self.shaders.post:send("ambientmap", yama.assets.loadImage("ambient"))
+		--self.shaders.post:send("ambientmap", yama.assets.loadImage("ambient"))
 
 		-- self.shaders.transition:send("pre_canvas", yama.assets.loadImage("test_canvas"))
 		-- self.shaders.transition:send("mask", yama.assets.loadImage("transitiontest"))
@@ -395,7 +395,7 @@ local function new()
 
 			self.shaders.post:send("light_position", unpack(lights))
 			self.shaders.post:send("light_color", unpack(scene.lights.color))
-			self.shaders.post:send("hour", scene.env.time)
+			-- self.shaders.post:send("hour", scene.env.time)
 			-- self.shaders.post:send("screen_to_world", self.translationmatrix2)
 
 			love.graphics.draw(self.canvases.diffuse)
