@@ -34,9 +34,7 @@ function getDepth.yz(x, y, z)
 end
 
 local function index2xy(map, index)
-	local x = (index-1) % map.width
-	local y = math.floor((index-1) / map.width)
-	return x, y
+	return (index-1) % map.width, math.floor((index-1) / map.width)
 end
 
 local function getSpritePosition(map, x, y, z)
@@ -139,8 +137,8 @@ local function addToMeshes(map, x, y, z, gid, layerKey, flat)
 			local tileset = yama.assets.tilesets[getTileset(map, gid).name]
 			local tile = tileset.vertices[getTileKey(map, gid)]
 			local depth = getDepth[map.depthmode](x, y, z)
-			depth = 1
-			layerKey = 1
+			-- depth = 1
+			-- layerKey = 1
 			local image = tileset.image
 			local imagepath = tileset.imagepath
 
@@ -223,8 +221,8 @@ local function createMeshes(map, world)
 	for depth, v in pairs(map.meshData) do
 		testdepths = testdepths + 1
 		-- DEPTH
-		-- local batchEntity = world.scene.newEntity()
-		-- batchEntity.z = depth
+		local batchEntity = world.scene.newEntity()
+		batchEntity.z = depth
 
 		for layer, vv in pairs(v) do
 			testlayers = testlayers + 1
@@ -234,8 +232,8 @@ local function createMeshes(map, world)
 				-- IMAGE
 
 				testint = testint + 1
-				local sceneEntity = world.scene.newEntity()
-				sceneEntity.z = depth
+				local sceneEntity = batchEntity.newEntity()
+				sceneEntity.z = 0
 				sceneEntity.drawable = love.graphics.newMesh(meshdata.vertices, image)
 				sceneEntity.drawable:setVertexMap(meshdata.vertexmap)
 				sceneEntity.drawable:setDrawMode("triangles")
@@ -260,11 +258,9 @@ local function createMeshes(map, world)
 			end
 			--print(yama.tools.serialize(batchEntity))
 		end
-		print("number of SE from map loading: " .. testint, testdepths, testlayers)
-		info("Tiles: " .. map.debug.tiles .. " Triangles: " .. map.debug.triangles .. " Vertices: " .. map.debug.vertices)
 	end
-
-
+	print("number of SE from map loading: " .. testint, testdepths, testlayers)
+	info("Tiles: " .. map.debug.tiles .. " Triangles: " .. map.debug.triangles .. " Vertices: " .. map.debug.vertices)
 end
 
 

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" source="../../images/terrain.tsx"/>
+ <tileset firstgid="465" name="build_atlas" tilewidth="32" tileheight="32">
+  <image source="../../images/LPC_Atlas/Atlas2/build_atlas.png" width="1024" height="1024"/>
+ </tileset>
+ <layer name="Terrain" width="100" height="100">
+  <properties>
+   <property name="z" value="0"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt1EEKgkAUgOEnnjQ6RbTsRHmaltIpolUNZWokFYSO+S0+mOXM/LxXRkQJfC2KiFO0zhncaYmaDofb8WGjyyTqToN90W+SbDO441KkD3+eCz2mU79p0ewtO2u6HlXR31vpbEbG61EVbYdf7azI4G1zVMdwi+6MmI9xHK9W8XomUo+m0yc9IoP3/IPUZH031MZ8TN+ma5fB3QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIB5ugA3D5Po
+  </data>
+ </layer>
+ <layer name="Tile Layer 2" width="100" height="100">
+  <properties>
+   <property name="z" value="1"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztzsEJACAMBMGDVGTsvzftQiEzsP9NAICpViV92/X6BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP5xAK3fAKA=
+  </data>
+ </layer>
+ <layer name="Tile Layer 3" width="100" height="100">
+  <properties>
+   <property name="z" value="2"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztzrENACAMBLGXMgFh/11hAGrS2NL1lwDAP6uSvu2aPgEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4O3mWAEA=
+  </data>
+ </layer>
+ <layer name="Tile Layer 4" width="100" height="100">
+  <properties>
+   <property name="z" value="3"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztzsEJACAMBMEj/TdrbEC7EMMM7H8TgNlWJX3b9foEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgB8cacEC3Q==
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="100" height="100">
+  <object gid="818" x="623" y="266"/>
+  <object gid="818" x="884" y="375"/>
+  <object gid="818" x="780" y="213"/>
+  <object gid="818" x="727" y="355"/>
+  <object gid="818" x="712" y="166"/>
+  <object gid="818" x="839" y="281"/>
+  <object gid="818" x="626" y="413"/>
+  <object gid="818" x="746" y="483"/>
+  <object gid="818" x="835" y="467"/>
+  <object gid="818" x="973" y="437"/>
+ </objectgroup>
+</map>

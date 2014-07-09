@@ -64,7 +64,7 @@ local function new()
 
 	local function setupShaders()
 		self.shaders = {}
-		self.shaders.pre = love.graphics.newShader("shader_pre.glsl")
+		self.shaders.pre = love.graphics.newShader("shader_pre2.glsl")
 		self.shaders.post = love.graphics.newShader("shader_light.glsl")
 		self.shaders.transition = love.graphics.newShader("transition.glsl")
 	end
@@ -76,14 +76,14 @@ local function new()
 		self.canvases.depth = love.graphics.newCanvas(self.width, self.height)
 		self.canvases.final = love.graphics.newCanvas(self.width, self.height)
 
-		--self.shaders.pre:send("canvas_diffuse", self.canvases.diffuse)
-		--self.shaders.pre:send("canvas_normal", self.canvases.normal)
-		self.shaders.pre:send("canvas_depth", self.canvases.depth)
+		-- self.shaders.pre:send("canvas_diffuse", self.canvases.diffuse)
+		-- self.shaders.pre:send("canvas_normal", self.canvases.normal)
+		-- self.shaders.pre:send("canvas_depth", self.canvases.depth)
 
 		self.shaders.post:send("normalmap", self.canvases.normal)
 		self.shaders.post:send("depthmap", self.canvases.depth)
 		self.shaders.post:send("fog_mask", yama.assets.loadImage("fog"))
-		--self.shaders.post:send("ambientmap", yama.assets.loadImage("ambient"))
+		-- self.shaders.post:send("ambientmap", yama.assets.loadImage("ambient"))
 
 		-- self.shaders.transition:send("pre_canvas", yama.assets.loadImage("test_canvas"))
 		-- self.shaders.transition:send("mask", yama.assets.loadImage("transitiontest"))
@@ -260,6 +260,16 @@ local function new()
 		end
 	end
 
+	local function inView(entity)
+		return (
+			( entity.x <= self.camera.x + self.camera.width ) and
+			( self.camera.x <= entity.x + entity.height ) and
+			( entity.y <= self.camera.y + self.camera.height ) and
+			( self.camera.y <= entity.y + entity.width )
+		)
+	end
+
+
 	-- SCENES
 
 	function self.attach(world, transition)
@@ -332,7 +342,17 @@ local function new()
 	function self.draw()
 		if self.scene then
 			local scene = self.scene
-			local entities = self.scene.entities
+			local entities = {}
+
+			for k = 1, #self.scene.entities do
+				local entity = self.scene.entities[k]
+				if inView(entity) then
+					table.insert(entities, self.scene.entities[k])
+				end
+			end
+			self.debug.sceneEntitiesInView = #entities
+
+			--scene.sort()
 
 			-- DEBUG
 			self.debug.drawcalls = 0

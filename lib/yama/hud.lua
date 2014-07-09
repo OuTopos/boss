@@ -189,6 +189,7 @@ function hud.draw(viewport, world)
 		-- Buffer
 		text = text .. "\n World entities: " .. viewport.debug.worldEntities
 		text = text .. "\n Scene entities: " .. viewport.debug.sceneEntities
+		text = text .. "\n Scene entities in view: " .. viewport.debug.sceneEntitiesInView
 		text = text .. "\n Drawcalls: " .. viewport.debug.drawcalls
 
 

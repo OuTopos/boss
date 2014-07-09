@@ -31,7 +31,7 @@ function love.load()
 
 	game.world = yama.newWorld()
 	game.world.enablePhysics()
-	game.world.loadMap("test/start")
+	game.world.loadMap("dev/dev")
 
 	game.buttonStates = {}
 	game.buttonStates["lefttrigger"] = false
@@ -146,5 +146,6 @@ end
 
 function game.resize()
 	game.vp1.resize(love.window.getWidth(), love.window.getHeight())
-	-- game.vp1.zoom(4, 4)
+	-- game.vp1.resize(love.window.getWidth()/4, love.window.getHeight()/4)
+	-- game.vp1.sx, game.vp1.sy = 4, 4
 end
