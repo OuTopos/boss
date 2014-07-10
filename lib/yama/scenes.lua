@@ -34,8 +34,18 @@ local function newEntity()
 	return self
 end
 
+local function newLight()
+	local self = {}
+	self.x = 0
+	self.y = 0
+	self.z = 0
+	self.radius = 0
+	self.color = {0, 0, 0, 0}
+	return self
+end
 
-local function new()
+
+local function newScene()
 	local self = {}
 
 	--BOUNDING VOLUME
@@ -176,5 +186,5 @@ local function new()
 end
 
 return {
-	new = new,
+	new = newScene,
 }
