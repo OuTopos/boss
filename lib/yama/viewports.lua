@@ -339,6 +339,10 @@ local function new()
 		-- self.shaders.transition:send("time", self.transitionTime)
 	end
 
+	local function depthsort(a, b)
+		return a.y + a.z > b.y + b.z
+	end
+
 	function self.draw()
 		if self.scene then
 			local scene = self.scene
@@ -352,7 +356,8 @@ local function new()
 			end
 			self.debug.sceneEntitiesInView = #entities
 
-			--scene.sort()
+			-- SORT
+			table.sort(entities, depthsort)
 
 			-- DEBUG
 			self.debug.drawcalls = 0
@@ -360,12 +365,12 @@ local function new()
 			-- SET CAMERA
 			self.translate()
 
-			self.translationmatrix2 = {
-				{1, 0, 0, self.camera.x},
-				{0, 1, 0, -self.camera.y},
-				{0, 0, 1, 0},
-				{0, 0, 0, 1}
-			}
+			-- self.translationmatrix2 = {
+			-- 	{1, 0, 0, self.camera.x},
+			-- 	{0, 1, 0, -self.camera.y},
+			-- 	{0, 0, 1, 0},
+			-- 	{0, 0, 0, 1}
+			-- }
 		
 			-- SET CANVAS
 			self.canvases.diffuse:clear(0, 0, 0, 255)
@@ -390,7 +395,7 @@ local function new()
 					drawSceneEntity(sceneEntity)
 				end
 			end
-
+ 
 			-- UNSET CAMERA
 			love.graphics.pop()
 

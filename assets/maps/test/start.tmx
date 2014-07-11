@@ -516,7 +516,7 @@
  </layer>
  <layer name="0 ----" width="100" height="100">
   <properties>
-   <property name="z" value="0.01"/>
+   <property name="z" value="0"/>
   </properties>
   <data encoding="base64" compression="zlib">
    eJzt3LdNg1EYheErQFiUwCTAJGCbuASZOQiGDYCWPAd5DnLLKSksCiR8Cc8jvbWvvlP8nUsBAACArxnpr/0CAAAAAAAAAAAAAAAA+NzkYClTqZlaqZ2m08xg7Zf9T0u5+3JaSatpLa2nDXtUsZm7b6XttJM6aTft2aOKo9z9OJ2k03SWztOFPaq4zN2v0nW6SbfpLt3bo4qH3P0xPaXn9JJe05s9AAAA+KP2B0o5SIcDtV8CAAB/z1Jf7Rfw0aY9fpSj7HHcpRM7lZ1GKZ1Gb39zOHcf6dKoPaoYy93HuzRhj08tftP/mE/m7lNdatoD+IJWvvHtHn/nAYDemB0qZS7Np4Wh2q8BAAAAAAAAAAB+s3czpiwc

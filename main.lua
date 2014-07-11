@@ -31,7 +31,7 @@ function love.load()
 
 	game.world = yama.newWorld()
 	game.world.enablePhysics()
-	game.world.loadMap("dev/dev")
+	game.world.loadMap("test/start")
 
 	game.buttonStates = {}
 	game.buttonStates["lefttrigger"] = false
