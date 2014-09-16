@@ -5,8 +5,8 @@ uniform float scale = 1;
 
 
 void effects(vec4 color, sampler2D texture, vec2 texture_coords, vec2 screen_coords)
-{
-	vec4 diffuse = Texel(texture, texture_coords);
+
+{	vec4 diffuse = Texel(texture, texture_coords);
 	vec4 normal = vec4(Texel(normalmap, texture_coords).rgb, floor(diffuse.a));
 	vec4 depth = vec4(Texel(depthmap, texture_coords).r * scale + color.r + z / 255, 0.0, 0.0, floor(diffuse.a));
 

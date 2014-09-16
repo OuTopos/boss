@@ -155,6 +155,10 @@ local function addToMeshes(map, x, y, z, gid, layerKey, flat)
 				meshData[depth][layerKey][image].vertexmap = {}
 				meshData[depth][layerKey][image].vertices = {}
 				meshData[depth][layerKey][image].tiles = {}
+				meshData[depth][layerKey][image].x1 = nil
+				meshData[depth][layerKey][image].y1 = nil
+				meshData[depth][layerKey][image].x2 = nil
+				meshData[depth][layerKey][image].y2 = nil
 				meshData[depth][layerKey][image].imagepath = imagepath
 			end
 
@@ -192,6 +196,38 @@ local function addToMeshes(map, x, y, z, gid, layerKey, flat)
 			x4 = x4 + x
 			y4 = y4 + y
 
+			if meshData[depth][layerKey][image].x1 then
+				if x < meshData[depth][layerKey][image].x1 then
+					meshData[depth][layerKey][image].x1 = x
+				end
+			else
+				meshData[depth][layerKey][image].x1 = x
+			end
+
+			if meshData[depth][layerKey][image].y1 then
+				if y < meshData[depth][layerKey][image].y1 then
+					meshData[depth][layerKey][image].y1 = y
+				end
+			else
+				meshData[depth][layerKey][image].y1 = y
+			end
+
+			if meshData[depth][layerKey][image].x2 then
+				if x3 > meshData[depth][layerKey][image].x2 then
+					meshData[depth][layerKey][image].x2 = x3
+				end
+			else
+				meshData[depth][layerKey][image].x2 = x3
+			end
+
+			if meshData[depth][layerKey][image].y2 then
+				if y3 > meshData[depth][layerKey][image].y2 then
+					meshData[depth][layerKey][image].y2 = y3
+				end
+			else
+				meshData[depth][layerKey][image].y2 = y3
+			end
+
 			table.insert(meshData[depth][layerKey][image].vertices, {x1, y1, u1, v1, r1, g1, b1, a1})
 			table.insert(meshData[depth][layerKey][image].vertices, {x2, y2, u2, v2, r2, g2, b2, a2})
 			table.insert(meshData[depth][layerKey][image].vertices, {x3, y3, u3, v3, r3, g3, b3, a3})
@@ -223,6 +259,7 @@ local function createMeshes(map, world)
 		-- DEPTH
 		local batchEntity = world.scene.newEntity()
 		batchEntity.z = depth
+		local x1, y1, x2, y2 = 3200, 3200, 0, 0
 
 		for layer, vv in pairs(v) do
 			testlayers = testlayers + 1
@@ -253,11 +290,33 @@ local function createMeshes(map, world)
 					--print(meshdata.tiles[i][1], meshdata.tiles[i][2], meshdata.tiles[i][3], meshdata.tiles[i][4])
 				--	self.addToGrid(batch, meshdata.tiles[i][1], meshdata.tiles[i][2], meshdata.tiles[i][1]+meshdata.tiles[i][3], meshdata.tiles[i][2]+meshdata.tiles[i][4])
 				--end
+				-- if batchEntity.x < 
+				-- batchEntity
+
+				if meshdata.x1 < x1 then
+					x1 = meshdata.x1
+				end
+				if meshdata.y1 < y1 then
+					y1 = meshdata.y1
+				end
+				if meshdata.x2 > x2 then
+					x2 = meshdata.x2
+				end
+				if meshdata.y2 > y2 then
+					y2 = meshdata.y2
+				end
 
 				debug.vertexcount = debug.vertexcount + #meshdata.vertices
 			end
 			--print(yama.tools.serialize(batchEntity))
 		end
+
+		batchEntity.x = x1
+		batchEntity.y = y1
+		batchEntity.width = x2 - x1
+		batchEntity.height = y2 - y1
+
+		print(batchEntity.x, batchEntity.y, batchEntity.width, batchEntity.height)
 	end
 	print("number of SE from map loading: " .. testint, testdepths, testlayers)
 	info("Tiles: " .. map.debug.tiles .. " Triangles: " .. map.debug.triangles .. " Vertices: " .. map.debug.vertices)

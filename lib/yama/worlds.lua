@@ -6,7 +6,7 @@ local function new()
 	local self = {}
 
 	-- TIME
-	local timescale = 1
+	self.timescale = 1
 
 	-- CALLBACKS
 	self.callbacks = {}
@@ -133,15 +133,13 @@ local function new()
 
 		self.physics = love.physics.newWorld()
 		self.physics:setCallbacks(self.callbacks.beginContact, self.callbacks.endContact, self.callbacks.preSolve, self.callbacks.postSolve)
-
-		self.world = self.physics
 	end
 
 	-- UPDATE
 	function self.update(dt)
-		dt = dt * timescale
-		if self.world then
-			self.world:update(dt)
+		dt = dt * self.timescale
+		if self.physics then
+			self.physics:update(dt)
 		end
 		self.updateEntities(dt)
 		self.scene.update(dt)
@@ -165,14 +163,7 @@ local function update(dt)
 	end
 end
 
-local function draw()
-	for k = 1, #worlds do
-		worlds[k].draw()
-	end
-end
-
 return {
 	new = new,
-	update = update,
-	draw = draw,
+	update = update
 }

@@ -6,8 +6,8 @@ local function newEntity()
 	-- entity.drawables = {}
 	-- entity.shader = nil -- Should be default shader. Maybe.
 	-- entity.samplers = {}
-	self.depthmap = yama.assets.loadImage("colors/0.0.0")
-	self.normalmap = yama.assets.loadImage("colors/127.127.255")
+	-- self.depthmap = yama.assets.loadImage("colors/0.0.0")
+	-- self.normalmap = yama.assets.loadImage("colors/127.127.255")
 	self.x = 0
 	self.y = 0
 	self.z = 0
@@ -46,7 +46,7 @@ end
 
 
 local function newScene()
-	local self = {}
+	local self = newEntity()
 
 	--BOUNDING VOLUME
 	self.boundingbox = {}

@@ -354,12 +354,12 @@ local function new()
 					table.insert(entities, self.scene.entities[k])
 				end
 			end
-			self.debug.sceneEntitiesInView = #entities
 
 			-- SORT
 			table.sort(entities, depthsort)
 
 			-- DEBUG
+			self.debug.sceneEntitiesInView = #entities
 			self.debug.drawcalls = 0
 			
 			-- SET CAMERA
@@ -384,7 +384,6 @@ local function new()
 			-- ITERATE AND DRAW ENTITIES
 			for k = #entities, 1, -1 do
 				local sceneEntity = entities[k]
-				-- Check if inside viewport.
 				if sceneEntity.destroyed then
 					table.remove(entities, k)
 				elseif sceneEntity.batch then
@@ -419,6 +418,7 @@ local function new()
 			end
 
 			self.shaders.post:send("light_position", unpack(lights))
+			-- self.shaders.post:sendInt("light_count", #lights)
 			self.shaders.post:send("light_color", unpack(scene.lights.color))
 			-- self.shaders.post:send("hour", scene.env.time)
 			-- self.shaders.post:send("screen_to_world", self.translationmatrix2)
