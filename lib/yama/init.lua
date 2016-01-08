@@ -148,28 +148,43 @@ yama.keybindings["escape"] = function()
 	love.event.push("quit")
 end
 
-yama.keybindings["h"] = function()
-	if yama.hud.enabled then
-		yama.hud.enabled = false
-	else
-		yama.hud.enabled = true
-	end
-end
-
-yama.keybindings["j"] = function()
-	if yama.hud.physics then
-		yama.hud.physics = false
-	else
-		yama.hud.physics = true
-	end
-end
-
 yama.keybindings["p"] = function()
-	if yama.v.paused then
-		yama.v.paused = false
-	else
-		yama.v.paused = true
-	end
+	yama.v.paused = not yama.v.paused
+end
+
+
+
+-- KEY BINDINGS
+yama.keybindings["0"] = function()
+	yama.hud.enabled = not yama.hud.enabled
+end
+
+yama.keybindings["1"] = function()
+	yama.hud.drawEntities = not yama.hud.drawEntities
+end
+
+yama.keybindings["2"] = function()
+	yama.hud.drawSceneEntities = not yama.hud.drawSceneEntities
+end
+
+yama.keybindings["3"] = function()
+	yama.hud.drawLocations = not yama.hud.drawLocations
+end
+
+yama.keybindings["4"] = function()
+	yama.hud.drawPaths = not yama.hud.drawPaths
+end
+
+yama.keybindings["5"] = function()
+	yama.hud.drawPhysics = not yama.hud.drawPhysics
+end
+
+yama.keybindings[","] = function()
+	yama.hud.drawSceneEntity = yama.hud.drawSceneEntity - 1
+end
+
+yama.keybindings["."] = function()
+	yama.hud.drawSceneEntity = yama.hud.drawSceneEntity + 1
 end
 
 return {

@@ -1,12 +1,57 @@
 local yama = require((...):match("(.+)%.[^%.]+$") .. "/table")
 local hud = {}
 hud.enabled = false
-hud.physics = false
+hud.drawEntities = false
+hud.drawSceneEntities = false
+hud.drawSceneEntity = 1
+hud.drawLocations = true
+hud.drawPaths = false
+hud.drawPhysics = false
 
 joysticks = love.joystick.getJoysticks()
 
 --love.graphics.setPointStyle("smooth")
 love.graphics.setPointSize(8)
+
+local function drawEntities(world, viewport)
+	for i = 1, #world.entities do
+		if viewport.isEntityInside(world.entities[i]) then
+			local x, y, z = world.entities[i].x, world.entities[i].y, world.entities[i].z
+			if world.entities[i].boundingbox then
+				local left, top, width, height = world.entities[i].boundingbox.x, world.entities[i].boundingbox.y, world.entities[i].boundingbox.width, world.entities[i].boundingbox.height
+
+				love.graphics.setColor(255, 0, 0, 127)
+				love.graphics.rectangle( "line", left, top, width, height)
+				love.graphics.line(left, top, left + width, top + height)
+			end
+		
+			love.graphics.setColor(255, 255, 255, 255)
+			--love.graphics.print(i, left + 2, top + 2)
+			love.graphics.point(x, y)
+			if world.entities[i].health then
+				love.graphics.setColor(0, 0, 0, 255)
+				love.graphics.print(world.entities[i].health, x + 5, y + 5)
+				love.graphics.setColor(255, 255, 255, 255)
+				love.graphics.print(world.entities[i].health, x + 4, y + 4)
+			end
+			--love.graphics.setColor(0, 0, 0, 255)
+			--love.graphics.print(math.floor(x + 0.5), left + 2, top + 12)
+			--love.graphics.print(math.floor(y + 0.5), left + 2, top + 22)
+			--love.graphics.print(math.floor(z + 0.5), left + 2, top + 32)
+		end
+	end
+end
+
+local function drawSceneEntities(viewport)
+	love.graphics.rotate( -0.1 )
+	local sEntity = viewport.scene.entities[hud.drawSceneEntity]
+	love.graphics.setColor(0, 255, 255, 255)
+	love.graphics.point(sEntity.x, sEntity.y)
+
+	love.graphics.setColor(255, 0, 0, 255)
+	love.graphics.rectangle( "line", sEntity.x, sEntity.y, sEntity.width, sEntity.height)
+	love.graphics.rotate( 0.1 )
+end
 
 local function drawPaths(world)
 	for k, path in pairs(world.paths) do
@@ -44,43 +89,28 @@ function hud.draw(viewport, world)
 		
 		-- CAMERA SPACE STUFF
 		viewport.translate()
-		
-		if hud.physics then
-			yama.physics.draw(world.physics, viewport.camera)
 
-			drawPaths(world)
+		if hud.drawEntities then
+			drawEntities(world, viewport)
+		end
+
+		if hud.drawSceneEntities then
+			drawSceneEntities(viewport)
+		end
+
+		if hud.drawLocations then
 			drawLocations(world)
 		end
 
-		-- local entities = world.entities
-		for i = 1, #world.entities do
-			if vp.isEntityInside(world.entities[i]) then
-				local x, y, z = world.entities[i].x, world.entities[i].y, world.entities[i].z
-				if world.entities[i].boundingbox then
-					local left, top, width, height = world.entities[i].boundingbox.x, world.entities[i].boundingbox.y, world.entities[i].boundingbox.width, world.entities[i].boundingbox.height
-
-					love.graphics.setColor(255, 0, 0, 127)
-					love.graphics.rectangle( "line", left, top, width, height)
-					love.graphics.line(left, top, left + width, top + height)
-				end
-			
-				love.graphics.setColor(255, 255, 255, 255)
-				--love.graphics.print(i, left + 2, top + 2)
-				love.graphics.point(x, y)
-				if world.entities[i].health then
-					love.graphics.setColor(0, 0, 0, 255)
-					love.graphics.print(world.entities[i].health, x + 5, y + 5)
-					love.graphics.setColor(255, 255, 255, 255)
-					love.graphics.print(world.entities[i].health, x + 4, y + 4)
-				end
-				--love.graphics.setColor(0, 0, 0, 255)
-				--love.graphics.print(math.floor(x + 0.5), left + 2, top + 12)
-				--love.graphics.print(math.floor(y + 0.5), left + 2, top + 22)
-				--love.graphics.print(math.floor(z + 0.5), left + 2, top + 32)
-			end
+		if hud.drawPaths then
+			drawPaths(world)
 		end
+		
+		if hud.drawPhysics then
+			yama.physics.draw(world.physics, viewport.camera)
+		end
+		
 		love.graphics.setColor(255, 255, 255, 255)
-
 		love.graphics.pop()
 
 
@@ -112,6 +142,9 @@ function hud.draw(viewport, world)
 		-- FPS
 		love.graphics.printf(love.timer.getFPS() .. " fps", 0, 2, vp.width, "right")
 		--love.graphics.print("FPS: "..love.timer.getFPS(), right - 39, top + 2)
+
+		
+
 
 		-- Entities
 		--love.graphics.print("Entities: "..#world.entities, left + 2, top + 2)

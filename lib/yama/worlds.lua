@@ -15,8 +15,15 @@ local function new()
 	self.locations = {}
 	self.paths = {}
 
-	-- SCENE
-	self.scene = yama.scenes.new()
+	-- SCENEENTITY
+	self.sceneentity = yama.scenes.new()
+
+	-- DEFAULT SCENEENTITY
+	self.scene = self.sceneentity.newSceneEntity()
+	self.gui = self.sceneentity.newSceneEntity()
+
+
+
 	self.newSceneEntity = self.scene.newSceneEntity  -- for backward compitibality. access it from world.scene instead.
 	self.updateViewports = self.scene.updateViewports  -- for backward compitibality. access it from world.scene instead.
 

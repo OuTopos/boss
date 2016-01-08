@@ -33,7 +33,7 @@ local function new()
 	self.sy = 1
 	self.ox = 0
 	self.oy = 0
-	self.width, self.height = love.window.getDimensions()
+	self.width, self.height = love.graphics.getDimensions()
 
 	self.canvases = {}
 
@@ -320,6 +320,32 @@ local function new()
 		
 		love.graphics.draw(sceneEntity.drawable, sceneEntity.x, sceneEntity.y, sceneEntity.r, sceneEntity.sx * sceneEntity.scale, sceneEntity.sy * sceneEntity.scale, sceneEntity.ox, sceneEntity.oy)
 		self.debug.drawcalls = self.debug.drawcalls + 1
+	end 
+
+	local buffer = {}
+
+	local function bufferSceneEntity(sceneEntity, x, y)
+		if sceneEntity.drawable then
+			if inView(sceneEntity) then
+				local figment = {
+					drawable = sceneEntity.drawable,
+					x = sceneEntity.x + x,
+					y = sceneEntity.y + y,
+					z = sceneEntity.z + z,
+					r = sceneEntity.r + r,
+					sx = sceneEntity.sx + sx,
+					sy = sceneEntity.sy + sy,
+					ox = sceneEntity.ox + ox,
+					oy = sceneEntity.oy + oy
+				}
+				table.insert(buffer, figment)
+			for k = 1, #sceneEntity.children do
+				local entity = self.scene.entities[k]
+				if inView(entity) then
+					table.insert(entities, self.scene.entities[k])
+				end
+			end
+		end
 	end
 
 
@@ -373,9 +399,9 @@ local function new()
 			-- }
 		
 			-- SET CANVAS
-			self.canvases.diffuse:clear(0, 0, 0, 255)
-			self.canvases.normal:clear(127, 127, 255, 255)
-			self.canvases.depth:clear(0, 0, 0, 255)
+			--self.canvases.diffuse:clear(0, 0, 0, 255)
+			--self.canvases.normal:clear(127, 127, 255, 255)
+			--self.canvases.depth:clear(0, 0, 0, 255)
 			love.graphics.setCanvas(self.canvases.diffuse, self.canvases.normal, self.canvases.depth)
 
 			-- SET SHADER

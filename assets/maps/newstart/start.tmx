@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" source="../../images/terrain.tsx"/>
+ <layer name="Tile Layer 1" width="100" height="100">
+  <properties>
+   <property name="z" value="1"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt1MEJwzAMQFE1naCQVQIdoCN3hl4LWSWQa6uDjem9oIPfg38XEnYEAPzPtfXJjtZZOtHc+v7f2dLaSieaW9//K7vFuAk1+g3uMd7I81I60tT2bM0e8ftnAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAhS/gEwuz
+  </data>
+ </layer>
+</map>

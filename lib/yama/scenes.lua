@@ -17,8 +17,8 @@ local function newEntity()
 	self.ox = 0
 	self.oy = 0
 
-	self.width = 0
-	self.height = 0
+	self.width = 32
+	self.height = -32
 
 	self.scale = 1
 

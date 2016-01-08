@@ -145,7 +145,9 @@ function assets.loadTileset(name, imagepath, tilewidth, tileheight, spacing, mar
 
 			if assets.generateMesh then
 				for i = 1, #self.vertices do
-					self.tiles[i] = love.graphics.newMesh(self.vertices[i], self.image)
+					--self.tiles[i] = love.graphics.newMesh(self.vertices[i], self.image)
+					self.tiles[i] = love.graphics.newMesh(self.vertices[i], 'fan', 'static')
+					self.tiles[i]:setTexture(self.image)
 				end
 			end
 

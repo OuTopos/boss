@@ -271,7 +271,8 @@ local function createMeshes(map, world)
 				testint = testint + 1
 				local sceneEntity = batchEntity.newEntity()
 				sceneEntity.z = 0
-				sceneEntity.drawable = love.graphics.newMesh(meshdata.vertices, image)
+				sceneEntity.drawable = love.graphics.newMesh(meshdata.vertices)
+				sceneEntity.drawable:setTexture(image)
 				sceneEntity.drawable:setVertexMap(meshdata.vertexmap)
 				sceneEntity.drawable:setDrawMode("triangles")
 

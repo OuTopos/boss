@@ -90,31 +90,39 @@ function player.new(world, x, y, z)
 		self.fixtures.weapon:setMask(16)
 
 		if self.state == "stand" or self.state == "walk" then
+			if self.joystick then
+				if yama.tools.getDistance(0, 0, self.joystick:getAxis(1), self.joystick:getAxis(2)) > 0.2 then
+					self.state = "walk"
+					nx = self.joystick:getAxis(1)
+					ny = self.joystick:getAxis(2)
+					
+					self.direction = math.atan2(ny, nx)
 
-			if yama.tools.getDistance(0, 0, self.joystick:getAxis(1), self.joystick:getAxis(2)) > 0.2 then
-				self.state = "walk"
-				nx = self.joystick:getAxis(1)
-				ny = self.joystick:getAxis(2)
+					vmultiplier = yama.tools.getDistance(0, 0, self.joystick:getAxis(1), self.joystick:getAxis(2))
+					if vmultiplier >  1 then
+						vmultiplier = 1
+					end			
+				end
 				
-				self.direction = math.atan2(ny, nx)
+				if yama.tools.getDistance(0, 0, self.joystick:getAxis(3), self.joystick:getAxis(4)) > 0.2 then
+					nx = self.joystick:getAxis(3)
+					ny = self.joystick:getAxis(4)
 
-				vmultiplier = yama.tools.getDistance(0, 0, self.joystick:getAxis(1), self.joystick:getAxis(2))
-				if vmultiplier >  1 then
-					vmultiplier = 1
-				end			
+					self.aim = math.atan2(ny, nx)
+				end
 			end
-			
-			if yama.tools.getDistance(0, 0, self.joystick:getAxis(3), self.joystick:getAxis(4)) > 0.2 then
-				nx = self.joystick:getAxis(3)
-				ny = self.joystick:getAxis(4)
 
-				self.aim = math.atan2(ny, nx)
+			if love.keyboard.isDown("up") then
+				nx = 0
+				ny = -1
+
+				self.direction = math.atan2(ny, nx)
 			end
 
 		end
 
 		if self.state == "walk" then
-			if love.keyboard.isDown("lshift") or self.joystick:isDown(5) then
+			if love.keyboard.isDown("lshift") then
 				vmultiplier = vmultiplier * 3
 			end
 			fx = self.velocity * vmultiplier * math.cos(self.direction)

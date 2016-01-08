@@ -6,16 +6,6 @@ local game = {}
 function love.load()
 	yama.load()
 
-	love.window.setMode(1280, 720, {
-		fullscreen = false,
-		fullscreentype = "desktop",
-		vsync = false,
-		fsaa = 0,
-		resizable = true,
-		borderless = false,
-		centered = true,
-	})
-
 	love.graphics.setFont(love.graphics.newImageFont(yama.assets.loadImage("font")," abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\""))
 
 	-- All skills loaded into game.skills.
@@ -31,7 +21,7 @@ function love.load()
 
 	game.world = yama.newWorld()
 	game.world.enablePhysics()
-	game.world.loadMap("test/start")
+	game.world.loadMap("newstart/start")
 
 	game.buttonStates = {}
 	game.buttonStates["lefttrigger"] = false
@@ -40,6 +30,11 @@ function love.load()
 	local nbJoy = love.joystick.getJoystickCount( )
 
 	game.players = {}
+
+
+	local p = game.world.newEntity("player", {1000, 500, 0}, { name = "Player Keyboard" })
+	table.insert(game.players, p)
+
 	if nbJoy > 0 then 
 		for i=1, nbJoy do
 			local p = game.world.newEntity("player", {1000, 500, 0}, { name = "Player "..i })
@@ -65,13 +60,14 @@ function love.load()
 	end
 
 	game.boss = game.world.newEntity("boss", {500,500, 0})
-	game.boss = game.world.newEntity("boss", {500,600, 0})
+	game.boss = game.world.newEntity("boss", {200,200, 0})
 
 	game.vp1 = yama.newViewport()
 	game.vp1.attach(game.world)
-	game.vp1.camera.cx = love.window.getWidth() / 2
-	game.vp1.camera.cy = love.window.getHeight() / 2
-	game.vp1.follow(game.players[1])
+	-- game.vp1.zoom(4, 4)
+	game.vp1.camera.cx = game.vp1.width / 2
+	game.vp1.camera.cy = game.vp1.height / 2
+	-- game.vp1.follow(game.players[1])
 
 
 
@@ -100,6 +96,7 @@ function love.update(dt)
 	yama.update(dt)
 	for i in ipairs(game.players) do
 		-- simulate gamepadpressed/released on axis 5
+		--[[
 		if game.players[i].joystick:getAxis(5) > 0.2 and not game.buttonStates["lefttrigger"] then
 			game.buttonStates["lefttrigger"] = true
 			game.players[i].gamepadpressed( "lefttrigger" )
@@ -114,6 +111,7 @@ function love.update(dt)
 		if not game.players[i].joystick:isGamepadDown("rightshoulder") then
 			game.buttonStates["rightshoulder"] = false
 		end
+		]]
 	end
 end
 
@@ -145,7 +143,7 @@ function love.threaderror(t, e)
 end
 
 function game.resize()
-	game.vp1.resize(love.window.getWidth(), love.window.getHeight())
+	game.vp1.resize(love.graphics.getWidth(), love.graphics.getHeight())
 	-- game.vp1.resize(love.window.getWidth()/4, love.window.getHeight()/4)
 	-- game.vp1.sx, game.vp1.sy = 4, 4
 end
